@@ -10,46 +10,37 @@ class AddTask extends StatefulWidget {
 class _AddTaskState extends State<AddTask> {
   //text field that input task name
   final taskController = TextEditingController();
+
   // task name store in string
   String taskName = '';
-
+  String categoryName = 'No Category';
 
   @override
   Widget build(BuildContext context) {
     return Container(
       color: Colors.transparent,
       child: Container(
+        clipBehavior: Clip.antiAliasWithSaveLayer,
         decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
+          color: Colors.white,
           borderRadius: BorderRadius.only(
-            topRight: Radius.circular(30.0),
-            topLeft: Radius.circular(30.0),
+            topRight: Radius.circular(15.0),
+            topLeft: Radius.circular(15.0),
           ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-
-            Text(
-              'Task Name',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.lightBlueAccent,
-                fontFamily: 'cute',
-                fontSize: 16.0,
-              ),
-            ),
             SizedBox(
-              height: 10,
+              height: 15,
             ),
             Container(
-              height: 65,
-              padding: EdgeInsets.only(left: 50, right: 50),
+              height: 70,
+              padding: EdgeInsets.only(left: 30, right: 30),
               child: TextField(
                 controller: taskController,
-                maxLength: 50,
                 autofocus: true,
-                textAlign: TextAlign.center,
+                textAlign: TextAlign.start,
                 style: TextStyle(
                   fontSize: 16.0,
                 ),
@@ -58,30 +49,100 @@ class _AddTaskState extends State<AddTask> {
                   taskName = newVal;
                 },
                 decoration: InputDecoration(
-                  fillColor: Colors.blue.shade50,
+                  fillColor: Colors.grey.shade100,
                   isDense: true,
                   enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                    borderSide:
-                    new BorderSide(color: Colors.blue.shade700, width: 1),
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    borderSide: new BorderSide(color: Colors.grey, width: 1),
                   ),
                   filled: true,
                   focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                    borderSide:
-                    new BorderSide(color: Colors.blue.shade700, width: 1),
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    borderSide: new BorderSide(color: Colors.grey, width: 1),
                   ),
-                  labelText: ' Task',
+                  labelText: 'Enter Task Name',
                   labelStyle: TextStyle(
-                    fontFamily: "Cutes",
+                    fontFamily: "mplus",
                     fontWeight: FontWeight.bold,
-                    color: Colors.blue.shade700,
-                    fontSize: 10,
+                    color: Colors.grey.shade600,
+                    fontSize: 14,
                   ),
                 ),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.only(
+                bottom: 10,
+                right: 8,
+                left: 8,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 22),
+                        child: Container(
+                          child: Text(
+                            categoryName,
+                            style: TextStyle(
+                              fontFamily: 'mplus',
+                              fontWeight: FontWeight.w600,
+                              fontSize: 10,
+                              color: categoryName == 'No Category'
+                                  ? Colors.grey
+                                  : Colors.blue,
+                            ),
+                          ),
+                          padding: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: Container(
+                          padding: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.blue),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            "Add Sub Task",
+                            style: TextStyle(
+                                fontFamily: 'mplus',
+                                fontWeight: FontWeight.w600,
+                                fontSize: 10,
+                                color: Colors.blue),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: Icon(
+                          Icons.calendar_month_outlined,
+                          color: Colors.blue,
+                          size: 20,
+                        ),
+                      ),
 
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.send_outlined,
+                        color: Colors.blue,
+                        size: 25,
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            )
           ],
         ),
       ),

@@ -33,6 +33,7 @@ class _LandingPageState extends State<LandingPage> {
         child: FloatingActionButton(
           onPressed: () {
             showModalBottomSheet(
+              backgroundColor: Colors.transparent,
               isScrollControlled: true,
               context: context,
               builder: (context) => SingleChildScrollView(
