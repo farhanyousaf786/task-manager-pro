@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:popover/popover.dart';
 import 'package:taskreminder/Components/SubTaskElement.dart';
 
@@ -16,8 +17,8 @@ class _AddTaskState extends State<AddTask> {
   String categoryName = 'No Category';
   String subTask = "";
   var cards = <Card>[];
-  late DateTime reminderDate;
-  late TimeOfDay reminderTime;
+  DateTime? reminderDate;
+  TimeOfDay? reminderTime;
 
   Card createCard() {
     var subCatController = TextEditingController();
@@ -50,6 +51,24 @@ class _AddTaskState extends State<AddTask> {
     );
   }
 
+  dataAndTimePicker() async {
+    reminderDate = (await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(DateTime.now().year + 2),
+    ))!;
+    reminderTime =
+        (await showTimePicker(context: context, initialTime: TimeOfDay.now()))!;
+  }
+
+  String formatTimeOfDay(TimeOfDay tod) {
+    final now = new DateTime.now();
+    final dt = DateTime(now.year, now.month, now.day, tod.hour, tod.minute);
+    final format = DateFormat.jm(); //"6:00 AM"
+    return format.format(dt);
+  }
+
   _onDone() {
     if (cards.isNotEmpty) {
       for (int i = 0; i < cards.length; i++) {
@@ -64,6 +83,8 @@ class _AddTaskState extends State<AddTask> {
     print(">>> Sub Task: $subTask");
     print("Task Controller: ${taskController.text}");
     print("Category: ${categoryName}");
+    print("Date: ${reminderDate.toString()}");
+    print("Time: ${reminderTime.toString()}");
 
     Navigator.pop(context);
   }
@@ -120,6 +141,63 @@ class _AddTaskState extends State<AddTask> {
                 ),
               ),
             ),
+            reminderTime == null
+                ? SizedBox(
+                    height: 0,
+                    width: 0,
+                  )
+                : Padding(
+                    padding: const EdgeInsets.only(bottom: 20),
+                    child: Container(
+                      decoration: BoxDecoration(color: Colors.blue.shade50),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 4),
+                            child: Text(
+                              "Reminder: ",
+                              style: TextStyle(
+                                  color: Colors.blue,
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'mplus'),
+                            ),
+                          ),
+                          Container(
+                              child: Text(
+                            DateFormat.yMMMd().format(reminderDate!) + "  ",
+                            style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 12,
+                                fontFamily: 'mplus'),
+                          )),
+                          Container(
+                            child: Text(
+                              formatTimeOfDay(reminderTime!) + "    ",
+                              style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 12,
+                                  fontFamily: 'mplus'),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                reminderTime = null;
+                                reminderTime = null;
+                              });
+                            },
+                            child: Icon(
+                              Icons.clear,
+                              size: 20,
+                              color: Colors.red,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
             SizedBox(
               height: cards.isEmpty
                   ? 0
@@ -177,7 +255,7 @@ class _AddTaskState extends State<AddTask> {
                                 fontWeight: FontWeight.w600,
                                 fontSize: 10,
                                 color: categoryName == 'No Category'
-                                    ? Colors.grey
+                                    ? Colors.blue
                                     : Colors.green,
                               ),
                             ),
@@ -185,7 +263,7 @@ class _AddTaskState extends State<AddTask> {
                             decoration: BoxDecoration(
                               border: Border.all(
                                 color: categoryName == 'No Category'
-                                    ? Colors.grey
+                                    ? Colors.blue
                                     : Colors.green,
                               ),
                               borderRadius: BorderRadius.circular(12),
@@ -214,33 +292,60 @@ class _AddTaskState extends State<AddTask> {
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: Icon(
-                          Icons.calendar_month_outlined,
-                          color: Colors.blue,
-                          size: 20,
+                      GestureDetector(
+                        onTap: () => {dataAndTimePicker()},
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Container(
+                            padding: EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.green
+                              ),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Row(
+                              children: [
+                                Text(
+                                  "Reminder ",
+                                  style: TextStyle(
+                                      fontFamily: 'mplus',
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 10,
+                                      color: Colors.green),
+                                ),
+                                Icon(
+                                  Icons.calendar_month_outlined,
+                                  color: Colors.green.shade700,
+                                  size: 15,
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                     ],
                   ),
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () => {
-                          _onDone(),
-                        },
-                        child: Icon(
-                          Icons.send_outlined,
-                          color: Colors.blue,
-                          size: 25,
+                  Padding(
+                    padding: const EdgeInsets.only(right: 20),
+                    child: Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () => {
+                            _onDone(),
+                          },
+                          child: Icon(
+                            Icons.send_outlined,
+                            color: Colors.blue,
+                            size: 35,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   )
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -249,6 +354,14 @@ class _AddTaskState extends State<AddTask> {
 
   _subTask() {
     showPopover(
+      shadow: <BoxShadow>[
+        BoxShadow(
+          color: Colors.transparent,
+          blurRadius: 0,
+          offset: Offset(0, 0),
+        ),
+      ],
+
         context: context,
         bodyBuilder: (context) => SingleChildScrollView(
               child: Column(
