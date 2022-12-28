@@ -10,11 +10,42 @@ class AddTask extends StatefulWidget {
 
 class _AddTaskState extends State<AddTask> {
   //text field that input task name
-  final taskController = TextEditingController();
 
   // task name store in string
   String taskName = '';
   String categoryName = 'No Category';
+  String subTask = "";
+  var nameTECs = <TextEditingController>[];
+  final taskController = TextEditingController();
+  var cards = <Card>[];
+
+  _onDone() {
+    List<PersonEntry> entries = [];
+    for (int i = 0; i < cards.length; i++) {
+      var name = nameTECs[i].text;
+      entries.add(PersonEntry(
+        name,
+      ));
+    }
+    Navigator.pop(context, entries);
+  }
+
+  Card createCard() {
+    var nameController = TextEditingController();
+
+    nameTECs.add(nameController);
+    return Card(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          TextField(
+              controller: nameController,
+              decoration: InputDecoration(labelText: 'subtask')),
+
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,6 +102,15 @@ class _AddTaskState extends State<AddTask> {
                 ),
               ),
             ),
+            Container(
+              height: cards.isEmpty ? 0 : 100,
+              child: ListView.builder(
+                itemCount: cards.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return cards[index];
+                },
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.only(
                 bottom: 10,
@@ -108,21 +148,24 @@ class _AddTaskState extends State<AddTask> {
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: Container(
-                          padding: EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.blue),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Text(
-                            "Add Sub Task",
-                            style: TextStyle(
-                                fontFamily: 'mplus',
-                                fontWeight: FontWeight.w600,
-                                fontSize: 10,
-                                color: Colors.blue),
+                      GestureDetector(
+                        onTap: () => {setState(() => cards.add(createCard()))},
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Container(
+                            padding: EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.blue),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Text(
+                              "Add Sub Task",
+                              style: TextStyle(
+                                  fontFamily: 'mplus',
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 10,
+                                  color: Colors.blue),
+                            ),
                           ),
                         ),
                       ),
@@ -223,7 +266,6 @@ class _AddTaskState extends State<AddTask> {
                   ),
                   GestureDetector(
                     onTap: () => {
-
                       setState(() {
                         categoryName = "Birthday";
                       }),
@@ -243,11 +285,13 @@ class _AddTaskState extends State<AddTask> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: ()=>{ setState(() {
-                      categoryName = "Urgent";
-                    }),
+                    onTap: () => {
+                      setState(() {
+                        categoryName = "Urgent";
+                      }),
                       print(categoryName),
-                      Navigator.pop(context),},
+                      Navigator.pop(context),
+                    },
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
@@ -261,11 +305,13 @@ class _AddTaskState extends State<AddTask> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: ()=>{ setState(() {
-                      categoryName = "Important";
-                    }),
+                    onTap: () => {
+                      setState(() {
+                        categoryName = "Important";
+                      }),
                       print(categoryName),
-                      Navigator.pop(context),},
+                      Navigator.pop(context),
+                    },
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
@@ -279,11 +325,13 @@ class _AddTaskState extends State<AddTask> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: ()=>{ setState(() {
-                      categoryName = "Home";
-                    }),
+                    onTap: () => {
+                      setState(() {
+                        categoryName = "Home";
+                      }),
                       print(categoryName),
-                      Navigator.pop(context),},
+                      Navigator.pop(context),
+                    },
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
@@ -296,13 +344,14 @@ class _AddTaskState extends State<AddTask> {
                       ),
                     ),
                   ),
-
                   GestureDetector(
-                    onTap: ()=>{ setState(() {
-                      categoryName = "Others";
-                    }),
+                    onTap: () => {
+                      setState(() {
+                        categoryName = "Others";
+                      }),
                       print(categoryName),
-                      Navigator.pop(context),},
+                      Navigator.pop(context),
+                    },
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
@@ -327,5 +376,16 @@ class _AddTaskState extends State<AddTask> {
         backgroundColor: Colors.white,
         barrierColor: Colors.transparent,
         transitionDuration: Duration(milliseconds: 500));
+  }
+}
+
+class PersonEntry {
+  final String name;
+
+  PersonEntry(this.name);
+
+  @override
+  String toString() {
+    return 'Person: name= $name';
   }
 }
