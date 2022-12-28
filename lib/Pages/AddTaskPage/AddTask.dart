@@ -23,6 +23,7 @@ class _AddTaskState extends State<AddTask> {
     List<PersonEntry> entries = [];
     for (int i = 0; i < cards.length; i++) {
       var name = nameTECs[i].text;
+      print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + nameTECs[i].text);
       entries.add(PersonEntry(
         name,
       ));
@@ -31,17 +32,48 @@ class _AddTaskState extends State<AddTask> {
   }
 
   Card createCard() {
-    var nameController = TextEditingController();
-
-    nameTECs.add(nameController);
+    var subCatController = TextEditingController();
+    nameTECs.add(subCatController);
     return Card(
+      color: Colors.transparent,
+      elevation: 0.0,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          TextField(
-              controller: nameController,
-              decoration: InputDecoration(labelText: 'subtask')),
-
+          Row(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 25),
+                  child: TextField(
+                    controller: subCatController,
+                    decoration: InputDecoration(
+                      fillColor: Colors.grey.shade100,
+                      isDense: true,
+                      border: InputBorder.none,
+                      filled: true,
+                      hintText: 'Sub Task ${cards.length + 1}',
+                      hintStyle: TextStyle(
+                        fontFamily: "mplus",
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey.shade600,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 10),
+                child: IconButton(
+                    onPressed: () => subCatController.clear(),
+                    icon: Icon(
+                      Icons.clear,
+                      color: Colors.grey,
+                    )),
+              )
+            ],
+          ),
         ],
       ),
     );
@@ -53,7 +85,7 @@ class _AddTaskState extends State<AddTask> {
       color: Colors.transparent,
       child: Container(
         clipBehavior: Clip.antiAliasWithSaveLayer,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
             topRight: Radius.circular(15.0),
@@ -63,7 +95,7 @@ class _AddTaskState extends State<AddTask> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             Container(
@@ -73,7 +105,7 @@ class _AddTaskState extends State<AddTask> {
                 controller: taskController,
                 autofocus: true,
                 textAlign: TextAlign.start,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16.0,
                 ),
                 textCapitalization: TextCapitalization.sentences,
@@ -84,15 +116,15 @@ class _AddTaskState extends State<AddTask> {
                   fillColor: Colors.grey.shade100,
                   isDense: true,
                   enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
                     borderSide: new BorderSide(color: Colors.grey, width: 1),
                   ),
                   filled: true,
                   focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
                     borderSide: new BorderSide(color: Colors.grey, width: 1),
                   ),
-                  labelText: 'Enter Task Name',
+                  labelText: 'Task Name',
                   labelStyle: TextStyle(
                     fontFamily: "mplus",
                     fontWeight: FontWeight.bold,
@@ -181,10 +213,15 @@ class _AddTaskState extends State<AddTask> {
                   ),
                   Row(
                     children: [
-                      Icon(
-                        Icons.send_outlined,
-                        color: Colors.blue,
-                        size: 25,
+                      GestureDetector(
+                        onTap: () => {
+                          _onDone(),
+                        },
+                        child: Icon(
+                          Icons.send_outlined,
+                          color: Colors.blue,
+                          size: 25,
+                        ),
                       ),
                     ],
                   )
