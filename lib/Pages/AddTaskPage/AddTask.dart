@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:popover/popover.dart';
+import 'package:taskreminder/Components/SubTaskElement.dart';
 
 class AddTask extends StatefulWidget {
   const AddTask({Key? key}) : super(key: key);
@@ -10,73 +11,61 @@ class AddTask extends StatefulWidget {
 
 class _AddTaskState extends State<AddTask> {
   //text field that input task name
-
-  // task name store in string
-  String taskName = '';
+  var subTaskList = <TextEditingController>[];
+  final taskController = TextEditingController();
   String categoryName = 'No Category';
   String subTask = "";
-  var nameTECs = <TextEditingController>[];
-  final taskController = TextEditingController();
   var cards = <Card>[];
-
-  _onDone() {
-    List<PersonEntry> entries = [];
-    for (int i = 0; i < cards.length; i++) {
-      var name = nameTECs[i].text;
-      print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + nameTECs[i].text);
-      entries.add(PersonEntry(
-        name,
-      ));
-    }
-    Navigator.pop(context, entries);
-  }
+  late DateTime reminderDate;
+  late TimeOfDay reminderTime;
 
   Card createCard() {
     var subCatController = TextEditingController();
-    nameTECs.add(subCatController);
+    subTaskList.add(subCatController);
     return Card(
       color: Colors.transparent,
       elevation: 0.0,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Row(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 25),
-                  child: TextField(
-                    controller: subCatController,
-                    decoration: InputDecoration(
-                      fillColor: Colors.grey.shade100,
-                      isDense: true,
-                      border: InputBorder.none,
-                      filled: true,
-                      hintText: 'Sub Task ${cards.length + 1}',
-                      hintStyle: TextStyle(
-                        fontFamily: "mplus",
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey.shade600,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ),
-                ),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 30),
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width / 1.4,
+          child: TextField(
+            controller: subCatController,
+            decoration: InputDecoration(
+              fillColor: Colors.grey.shade100,
+              isDense: true,
+              border: InputBorder.none,
+              filled: true,
+              hintText: 'Sub Task ${cards.length + 1}',
+              hintStyle: TextStyle(
+                fontFamily: "mplus",
+                fontWeight: FontWeight.bold,
+                color: Colors.grey.shade600,
+                fontSize: 12,
               ),
-              Padding(
-                padding: const EdgeInsets.only(right: 10),
-                child: IconButton(
-                    onPressed: () => subCatController.clear(),
-                    icon: Icon(
-                      Icons.clear,
-                      color: Colors.grey,
-                    )),
-              )
-            ],
+            ),
           ),
-        ],
+        ),
       ),
     );
+  }
+
+  _onDone() {
+    if (cards.isNotEmpty) {
+      for (int i = 0; i < cards.length; i++) {
+        // give Flag _F_ into string so when we retrieve it
+        // it makes us easy to separate each task
+        subTask = "${subTask}_F_${subTaskList[i].text}";
+      }
+    }
+    if (cards.isEmpty) {
+      subTask = "N/A";
+    }
+    print(">>> Sub Task: $subTask");
+    print("Task Controller: ${taskController.text}");
+    print("Category: ${categoryName}");
+
+    Navigator.pop(context);
   }
 
   @override
@@ -100,7 +89,7 @@ class _AddTaskState extends State<AddTask> {
             ),
             Container(
               height: 70,
-              padding: EdgeInsets.only(left: 30, right: 30),
+              padding: const EdgeInsets.only(left: 30, right: 30),
               child: TextField(
                 controller: taskController,
                 autofocus: true,
@@ -109,22 +98,19 @@ class _AddTaskState extends State<AddTask> {
                   fontSize: 16.0,
                 ),
                 textCapitalization: TextCapitalization.sentences,
-                onChanged: (newVal) {
-                  taskName = newVal;
-                },
                 decoration: InputDecoration(
                   fillColor: Colors.grey.shade100,
                   isDense: true,
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
-                    borderSide: new BorderSide(color: Colors.grey, width: 1),
+                  enabledBorder: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    borderSide: BorderSide(color: Colors.grey, width: 1),
                   ),
                   filled: true,
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
-                    borderSide: new BorderSide(color: Colors.grey, width: 1),
+                  focusedBorder: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    borderSide: BorderSide(color: Colors.grey, width: 1),
                   ),
-                  labelText: 'Task Name',
+                  labelText: 'My Task',
                   labelStyle: TextStyle(
                     fontFamily: "mplus",
                     fontWeight: FontWeight.bold,
@@ -134,12 +120,35 @@ class _AddTaskState extends State<AddTask> {
                 ),
               ),
             ),
-            Container(
-              height: cards.isEmpty ? 0 : 100,
+            SizedBox(
+              height: cards.isEmpty
+                  ? 0
+                  : cards.length < 3
+                      ? 100
+                      : 200,
               child: ListView.builder(
                 itemCount: cards.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return cards[index];
+                  return SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    child: Row(
+                      children: [
+                        cards[index],
+                        Padding(
+                          padding: const EdgeInsets.only(right: 10),
+                          child: IconButton(
+                              onPressed: () => {
+                                    cards.removeAt(index),
+                                    setState(() {}),
+                                  },
+                              icon: Icon(
+                                Icons.clear,
+                                color: Colors.grey,
+                              )),
+                        )
+                      ],
+                    ),
+                  );
                 },
               ),
             ),
@@ -169,12 +178,16 @@ class _AddTaskState extends State<AddTask> {
                                 fontSize: 10,
                                 color: categoryName == 'No Category'
                                     ? Colors.grey
-                                    : Colors.blue,
+                                    : Colors.green,
                               ),
                             ),
                             padding: EdgeInsets.all(5),
                             decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
+                              border: Border.all(
+                                color: categoryName == 'No Category'
+                                    ? Colors.grey
+                                    : Colors.green,
+                              ),
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
@@ -413,16 +426,5 @@ class _AddTaskState extends State<AddTask> {
         backgroundColor: Colors.white,
         barrierColor: Colors.transparent,
         transitionDuration: Duration(milliseconds: 500));
-  }
-}
-
-class PersonEntry {
-  final String name;
-
-  PersonEntry(this.name);
-
-  @override
-  String toString() {
-    return 'Person: name= $name';
   }
 }
