@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:popover/popover.dart';
 
 class AddTask extends StatefulWidget {
   const AddTask({Key? key}) : super(key: key);
@@ -81,24 +82,29 @@ class _AddTaskState extends State<AddTask> {
                 children: [
                   Row(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 22),
-                        child: Container(
-                          child: Text(
-                            categoryName,
-                            style: TextStyle(
-                              fontFamily: 'mplus',
-                              fontWeight: FontWeight.w600,
-                              fontSize: 10,
-                              color: categoryName == 'No Category'
-                                  ? Colors.grey
-                                  : Colors.blue,
+                      GestureDetector(
+                        onTap: () {
+                          _subTask();
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 22),
+                          child: Container(
+                            child: Text(
+                              categoryName,
+                              style: TextStyle(
+                                fontFamily: 'mplus',
+                                fontWeight: FontWeight.w600,
+                                fontSize: 10,
+                                color: categoryName == 'No Category'
+                                    ? Colors.grey
+                                    : Colors.blue,
+                              ),
                             ),
-                          ),
-                          padding: EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            borderRadius: BorderRadius.circular(12),
+                            padding: EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
                           ),
                         ),
                       ),
@@ -128,7 +134,6 @@ class _AddTaskState extends State<AddTask> {
                           size: 20,
                         ),
                       ),
-
                     ],
                   ),
                   Row(
@@ -147,5 +152,180 @@ class _AddTaskState extends State<AddTask> {
         ),
       ),
     );
+  }
+
+  _subTask() {
+    showPopover(
+        context: context,
+        bodyBuilder: (context) => SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  GestureDetector(
+                    onTap: () => {
+                      setState(() {
+                        categoryName = "Work";
+                      }),
+                      Navigator.pop(context),
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        "Work",
+                        style: TextStyle(
+                            fontFamily: 'mplus',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                            color: Colors.grey),
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () => {
+                      setState(() {
+                        categoryName = "Personal";
+                      }),
+                      print(categoryName),
+                      Navigator.pop(context),
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        "Personal",
+                        style: TextStyle(
+                            fontFamily: 'mplus',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                            color: Colors.grey),
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () => {
+                      setState(() {
+                        categoryName = "Watchlist";
+                      }),
+                      print(categoryName),
+                      Navigator.pop(context),
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        "Watchlist",
+                        style: TextStyle(
+                            fontFamily: 'mplus',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                            color: Colors.grey),
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () => {
+
+                      setState(() {
+                        categoryName = "Birthday";
+                      }),
+                      print(categoryName),
+                      Navigator.pop(context),
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        "Birthday",
+                        style: TextStyle(
+                            fontFamily: 'mplus',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                            color: Colors.grey),
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: ()=>{ setState(() {
+                      categoryName = "Urgent";
+                    }),
+                      print(categoryName),
+                      Navigator.pop(context),},
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        "Urgent",
+                        style: TextStyle(
+                            fontFamily: 'mplus',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                            color: Colors.grey),
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: ()=>{ setState(() {
+                      categoryName = "Important";
+                    }),
+                      print(categoryName),
+                      Navigator.pop(context),},
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        "Important",
+                        style: TextStyle(
+                            fontFamily: 'mplus',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                            color: Colors.grey),
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: ()=>{ setState(() {
+                      categoryName = "Home";
+                    }),
+                      print(categoryName),
+                      Navigator.pop(context),},
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        "Home",
+                        style: TextStyle(
+                            fontFamily: 'mplus',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                            color: Colors.grey),
+                      ),
+                    ),
+                  ),
+
+                  GestureDetector(
+                    onTap: ()=>{ setState(() {
+                      categoryName = "Others";
+                    }),
+                      print(categoryName),
+                      Navigator.pop(context),},
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        "Others",
+                        style: TextStyle(
+                            fontFamily: 'mplus',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                            color: Colors.grey),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+        onPop: () => print('Popover was popped!'),
+        direction: PopoverDirection.bottom,
+        width: 120,
+        height: MediaQuery.of(context).size.height / 3,
+        arrowHeight: 15,
+        arrowWidth: 25,
+        backgroundColor: Colors.white,
+        barrierColor: Colors.transparent,
+        transitionDuration: Duration(milliseconds: 500));
   }
 }
