@@ -3,10 +3,14 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:notification_permissions/notification_permissions.dart';
 import 'package:taskreminder/Components/TaskCard.dart';
 import 'package:taskreminder/Database/DBModel.dart';
+import 'package:taskreminder/Database/TaskModel.dart';
+import 'package:taskreminder/Pages/AddTaskPage/AddTask.dart';
 import 'package:taskreminder/main.dart';
 
 class ListViewTask extends StatefulWidget {
-  const ListViewTask({Key? key}) : super(key: key);
+  const ListViewTask({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<ListViewTask> createState() => _ListViewTaskState();
@@ -20,6 +24,9 @@ class _ListViewTaskState extends State<ListViewTask> {
   var permProvisional = "provisional";
   var currentPerm = "";
   var db = DatabaseConnect();
+  late AddTask feedPage;
+
+  late Widget currentPage;
 
   @override
   void initState() {
@@ -53,6 +60,7 @@ class _ListViewTaskState extends State<ListViewTask> {
         }
       });
     });
+
   }
 
   /// When the application has a resumed status, check for the permission
@@ -88,45 +96,60 @@ class _ListViewTaskState extends State<ListViewTask> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          backgroundColor: Colors.blueAccent,
-          actions: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Icon(Icons.question_mark_sharp),
-            )
-          ],
-          elevation: 0,
-          centerTitle: true,
-          title: const Text(
-            "TRACKER",
-            style: TextStyle(
-                fontSize: 22, fontWeight: FontWeight.bold, fontFamily: 'saira'),
-          ),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.blueAccent,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Icon(Icons.question_mark_sharp),
+          )
+        ],
+        elevation: 0,
+        centerTitle: true,
+        title: const Text(
+          "TRACKER",
+          style: TextStyle(
+              fontSize: 22, fontWeight: FontWeight.bold, fontFamily: 'saira'),
         ),
-        body: FutureBuilder(
-          future: db.getBpRecord(),
-          initialData: const [],
-          builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
-            var data = snapshot.data;
-            var dataLength = data!.length;
-            return dataLength == 0
-                ? Center(
-                    child: Padding(
-                      padding: EdgeInsets.all(12.0),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            Text("No data"),
-                          ],
-                        ),
+      ),
+      body: FutureBuilder(
+        future: db.getBpRecord(),
+        initialData: const [],
+        builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
+          var data = snapshot.data;
+          var dataLength = data!.length;
+          return dataLength == 0
+              ? Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(12.0),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Text("No data"),
+                        ],
                       ),
                     ),
-                  )
-                : Text(data.toString());
-          },
-        ));
+                  ),
+                )
+              : ListView.builder(
+                  itemCount: dataLength,
+                  itemBuilder: (context, i) {
+                    return TaskCard(
+                      id: data[i].id,
+                      task: data[i].task,
+                      subTask: data[i].subTask,
+                      category: data[i].category,
+                      date: data[i].date,
+                      time: data[i].time,
+                      isComplete: data[i].isComplete,
+                      deleteFunction: deleteItem,
+                    );
+                  },
+                );
+        },
+      ),
+    );
   }
 
   late String userData;
@@ -174,5 +197,10 @@ class _ListViewTaskState extends State<ListViewTask> {
         ));
       },
     );
+  }
+
+  void deleteItem(TaskModel taskModel) async {
+    await db.deleteBpRecord(taskModel);
+    setState(() {});
   }
 }

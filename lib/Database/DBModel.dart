@@ -33,7 +33,8 @@ class DatabaseConnect {
         subTask TEXT,
         category TEXT,
         date TEXT,
-        time TEXT
+        time TEXT,
+        isComplete TEXT
       )
     ''');
   }
@@ -82,7 +83,9 @@ class DatabaseConnect {
           subTask: items[i]['subTask'],
           category: items[i]['category'],
           date: items[i]['date'],
-          time: items[i]['time']), // this is in Text format right now. let's convert it to dateTime format
+          time: items[i]['time'],
+          isComplete: items[i][
+              'isComplete']), // this is in Text format right now. let's convert it to dateTime format
     );
   }
 

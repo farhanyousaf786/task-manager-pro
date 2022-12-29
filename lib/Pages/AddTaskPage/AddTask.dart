@@ -6,6 +6,7 @@ import 'package:popover/popover.dart';
 import 'package:taskreminder/Components/SubTaskElement.dart';
 import 'package:taskreminder/Database/DBModel.dart';
 import 'package:taskreminder/Database/TaskModel.dart';
+import 'package:taskreminder/Pages/LandingPage.dart';
 import 'package:taskreminder/main.dart';
 
 class AddTask extends StatefulWidget {
@@ -24,6 +25,7 @@ class _AddTaskState extends State<AddTask> {
   var cards = <Card>[];
   DateTime? reminderDate;
   TimeOfDay? reminderTime;
+  String isComplete = 'no';
 
   dataAndTimePicker() async {
     reminderDate = (await showDatePicker(
@@ -76,12 +78,19 @@ class _AddTaskState extends State<AddTask> {
 
     var taskInfo = TaskModel(
         task: taskController.text,
-        subTask: subTask,
-        category: categoryName,
+        subTask: subTask.toString(),
+        category: categoryName.toString(),
         time: reminderTime.toString(),
-        date: reminderDate.toString());
-        addItem(taskInfo);
-        Navigator.pop(context);
+        date: reminderDate.toString(),
+        isComplete: isComplete.toString());
+    addItem(taskInfo);
+    Navigator.pushAndRemoveUntil<dynamic>(
+      context,
+      MaterialPageRoute<dynamic>(
+        builder: (BuildContext context) => const LandingPage(),
+      ),
+      (route) => false, //if you want to disable back feature set to false
+    );
   }
 
   // create a database object so we can access database functions
