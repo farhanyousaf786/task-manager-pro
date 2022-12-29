@@ -30,7 +30,6 @@ class AllTask extends StatefulWidget {
 }
 
 class _AllTaskState extends State<AllTask> {
-
   @override
   Widget build(BuildContext context) {
     var otherTaskCard = TaskModel(
@@ -45,23 +44,25 @@ class _AllTaskState extends State<AllTask> {
 
     return Column(
       children: [
+        Text("Today"),
         Text(widget.subTask),
         GestureDetector(
           onTap: () => widget.deleteFunction(otherTaskCard),
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
-              color: Colors.blue.shade900,
+              color: Colors.blueAccent.shade200.withOpacity(0.85),
             ),
             child: Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20, bottom: 3, top: 3),
+              padding:
+                  const EdgeInsets.only(left: 20, right: 20, bottom: 3, top: 3),
               child: Text(
                 "Delete",
                 style: TextStyle(
                   fontWeight: FontWeight.w700,
                   fontFamily: 'bal',
                   fontSize: 15,
-                  color: Colors.blue.shade100,
+                  color: Colors.white,
                 ),
               ),
             ),

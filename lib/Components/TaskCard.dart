@@ -39,9 +39,8 @@ class _TaskCardState extends State<TaskCard> {
   String currentPage = "all";
 
   void currentTask() {
-    print("farhan");
     setState(() {
-     currentPage = Constants.currentPage;
+      currentPage = Constants.currentPage;
     });
   }
 
@@ -60,6 +59,15 @@ class _TaskCardState extends State<TaskCard> {
             isComplete: widget.isComplete,
             allTasks: widget.allTasks,
             deleteFunction: widget.deleteFunction)
-        : WorkTask();
+        : WorkTask(
+            id: widget.id,
+            task: widget.task,
+            subTask: widget.subTask,
+            category: widget.category,
+            time: widget.time,
+            date: widget.date,
+            isComplete: widget.isComplete,
+            allTasks: widget.allTasks,
+            deleteFunction: widget.deleteFunction);
   }
 }

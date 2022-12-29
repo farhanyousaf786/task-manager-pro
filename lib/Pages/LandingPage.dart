@@ -45,7 +45,7 @@ class _LandingPageState extends State<LandingPage> {
               ),
             );
           },
-          backgroundColor: Colors.blueAccent.shade200,
+          backgroundColor: Colors.blueAccent.shade200.withOpacity(0.85),
           child: const Icon(
             Icons.add,
             color: Colors.white,
@@ -58,7 +58,7 @@ class _LandingPageState extends State<LandingPage> {
   Container buildMyNavBar(BuildContext context) {
     return Container(
       height: 80,
-      color: Colors.blueAccent,
+      color: Colors.blueAccent.shade200.withOpacity(0.85),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [

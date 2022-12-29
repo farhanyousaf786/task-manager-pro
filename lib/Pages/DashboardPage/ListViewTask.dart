@@ -43,11 +43,12 @@ class _ListViewTaskState extends State<ListViewTask> {
       permissionStatusFuture = getCheckNotificationPermStatus();
       // With this, we will be able to check if the permission is granted or not
       // when returning to the application
-      permissionStatusFuture.then((snapshot) => {
-            setState(() {
-              currentPerm = snapshot.toString();
-            }),
-          });
+      permissionStatusFuture.then((snapshot) =>
+      {
+        setState(() {
+          currentPerm = snapshot.toString();
+        }),
+      });
 
       Future.delayed(const Duration(seconds: 2), () {
         if (currentPerm == "denied") {
@@ -55,12 +56,12 @@ class _ListViewTaskState extends State<ListViewTask> {
         } else if (currentPerm == "unknown") {
           flutterLocalNotificationsPlugin
               .resolvePlatformSpecificImplementation<
-                  AndroidFlutterLocalNotificationsPlugin>()
+              AndroidFlutterLocalNotificationsPlugin>()
               ?.requestPermission();
         } else {
           flutterLocalNotificationsPlugin
               .resolvePlatformSpecificImplementation<
-                  AndroidFlutterLocalNotificationsPlugin>()
+              AndroidFlutterLocalNotificationsPlugin>()
               ?.requestPermission();
         }
       });
@@ -113,38 +114,41 @@ class _ListViewTaskState extends State<ListViewTask> {
         return dataLength == 0
             ? const NoTask()
             : Scaffold(
-                backgroundColor: Colors.white,
-                appBar: AppBar(
-                  backgroundColor: Colors.white,
-                  elevation: 0.0,
-                  bottom: PreferredSize(
-                    preferredSize:
-                        Size(MediaQuery.of(context).size.width * 2, 0),
-                    child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: categoryList()),
-                  ),
-                ),
-                body: ListView.builder(
-                  itemCount: dataLength,
-                  itemBuilder: (context, i) {
-                    return TaskCard(
-                      id: data[i].id,
-                      task: data[i].task,
-                      subTask: data[i].subTask,
-                      category: data[i].category,
-                      date: data[i].date,
-                      time: data[i].time,
-                      isComplete: data[i].isComplete,
-                      allTasks: data,
-                      deleteFunction: deleteItem,
-                      builder: (BuildContext context, void Function() ct) {
-                        currentTask = ct;
-                      },
-                    );
-                  },
-                ),
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            elevation: 0.0,
+            bottom: PreferredSize(
+              preferredSize:
+              Size(MediaQuery
+                  .of(context)
+                  .size
+                  .width * 2, 0),
+              child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: categoryList()),
+            ),
+          ),
+          body: ListView.builder(
+            itemCount: dataLength,
+            itemBuilder: (context, i) {
+              return TaskCard(
+                id: data[i].id,
+                task: data[i].task,
+                subTask: data[i].subTask,
+                category: data[i].category,
+                date: data[i].date,
+                time: data[i].time,
+                isComplete: data[i].isComplete,
+                allTasks: data,
+                deleteFunction: deleteItem,
+                builder: (BuildContext context, void Function() ct) {
+                  currentTask = ct;
+                },
               );
+            },
+          ),
+        );
       },
     );
   }
@@ -158,40 +162,41 @@ class _ListViewTaskState extends State<ListViewTask> {
       builder: (BuildContext context) {
         return AlertDialog(
             title: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                "Please Eanble Notification For Reminder",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontFamily: 'mplus',
-                  fontSize: 15,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "Please Eanble Notification For Reminder",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontFamily: 'mplus',
+                      fontSize: 15,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            ElevatedButton(
-              child: Text(
-                "Click Here To Enable".toUpperCase(),
-                style:
+                ElevatedButton(
+                  child: Text(
+                    "Click Here To Enable".toUpperCase(),
+                    style:
                     TextStyle(fontFamily: 'mplus', fontWeight: FontWeight.bold),
-              ),
-              onPressed: () {
-                // show the dialog/open settings screen
-                NotificationPermissions.requestNotificationPermissions(
+                  ),
+                  onPressed: () {
+                    // show the dialog/open settings screen
+                    NotificationPermissions.requestNotificationPermissions(
                         iosSettings: const NotificationSettingsIos(
                             sound: true, badge: true, alert: true))
-                    .then((_) {
-                  // when finished, check the permission status
-                  setState(() {
-                    permissionStatusFuture = getCheckNotificationPermStatus();
-                  });
-                });
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ));
+                        .then((_) {
+                      // when finished, check the permission status
+                      setState(() {
+                        permissionStatusFuture =
+                            getCheckNotificationPermStatus();
+                      });
+                    });
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ));
       },
     );
   }
@@ -215,7 +220,7 @@ class _ListViewTaskState extends State<ListViewTask> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
                 color: Constants.currentPage == "all"
-                    ? Colors.blueAccent
+                    ? Colors.blueAccent.shade200.withOpacity(0.85)
                     : Colors.blueAccent.withOpacity(0.2),
               ),
               child: Text(
@@ -224,7 +229,7 @@ class _ListViewTaskState extends State<ListViewTask> {
                     fontFamily: 'mplus',
                     color: Constants.currentPage == "all"
                         ? Colors.white
-                        : Colors.blueAccent,
+                        : Colors.blueAccent.shade200.withOpacity(0.85),
                     fontWeight: FontWeight.bold,
                     fontSize: 12),
               ),
@@ -242,11 +247,11 @@ class _ListViewTaskState extends State<ListViewTask> {
             padding: const EdgeInsets.all(6),
             child: Container(
               padding:
-                  const EdgeInsets.only(left: 10, right: 10, top: 4, bottom: 4),
+              const EdgeInsets.only(left: 10, right: 10, top: 4, bottom: 4),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
                 color: Constants.currentPage == "work"
-                    ? Colors.blueAccent
+                    ? Colors.blueAccent.shade200.withOpacity(0.85)
                     : Colors.blueAccent.withOpacity(0.2),
               ),
               child: Text(
@@ -255,7 +260,8 @@ class _ListViewTaskState extends State<ListViewTask> {
                     fontFamily: 'mplus',
                     color: Constants.currentPage == "work"
                         ? Colors.white
-                        : Colors.blueAccent,
+                        : Colors.blueAccent.shade200.withOpacity(0.85),
+
                     fontWeight: FontWeight.bold,
                     fontSize: 12),
               ),
