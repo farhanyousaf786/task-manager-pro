@@ -3,7 +3,6 @@ import 'package:taskreminder/Database/TaskModel.dart';
 import 'package:taskreminder/Pages/DashboardPage/ListViewTask.dart';
 
 class TaskCard extends StatefulWidget {
-  final MyBuilder builder;
   final int id;
   final String task;
   final String subTask;
@@ -13,6 +12,7 @@ class TaskCard extends StatefulWidget {
   final String isComplete;
   final List allTasks;
   final Function deleteFunction;
+  final MyBuilder builder;
 
   const TaskCard({
     Key? key,
@@ -33,8 +33,9 @@ class TaskCard extends StatefulWidget {
 }
 
 class _TaskCardState extends State<TaskCard> {
+  String currentPage = "all";
 
-  void methodA() {
+  void currentTask() {
     print('test');
   }
 
@@ -49,7 +50,7 @@ class _TaskCardState extends State<TaskCard> {
       date: widget.date,
       isComplete: widget.isComplete,
     );
-    widget.builder.call(context, methodA);
+    widget.builder.call(context, currentTask);
 
     return Column(
       children: [
@@ -62,7 +63,7 @@ class _TaskCardState extends State<TaskCard> {
               color: Colors.blue.shade900,
             ),
             child: Padding(
-              padding: EdgeInsets.only(left: 20, right: 20, bottom: 3, top: 3),
+              padding: const EdgeInsets.only(left: 20, right: 20, bottom: 3, top: 3),
               child: Text(
                 "Delete",
                 style: TextStyle(

@@ -9,7 +9,7 @@ import 'package:taskreminder/Pages/AddTaskPage/AddTask.dart';
 import 'package:taskreminder/main.dart';
 
 typedef MyBuilder = void Function(
-    BuildContext context, void Function() methodA);
+    BuildContext context, void Function() currentTask);
 
 class ListViewTask extends StatefulWidget {
   const ListViewTask({
@@ -29,8 +29,9 @@ class _ListViewTaskState extends State<ListViewTask> {
   var currentPerm = "";
   var db = DatabaseConnect();
   late AddTask feedPage;
-
   late Widget currentPage;
+  late void Function() currentTask;
+
 
   @override
   void initState() {
@@ -96,7 +97,10 @@ class _ListViewTaskState extends State<ListViewTask> {
     });
   }
 
-  late void Function() myMethod;
+  void deleteItem(TaskModel taskModel) async {
+    await db.deleteBpRecord(taskModel);
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -109,13 +113,16 @@ class _ListViewTaskState extends State<ListViewTask> {
         return dataLength == 0
             ? const NoTask()
             : Scaffold(
+                backgroundColor: Colors.white,
                 appBar: AppBar(
-                  leading: IconButton(
-                    icon: Icon(Icons.help),
-                    onPressed: () {
-                      // how can I call methodA from here?
-                      myMethod.call();
-                    },
+                  backgroundColor: Colors.white,
+                  elevation: 0.0,
+                  bottom: PreferredSize(
+                    preferredSize:
+                        Size(MediaQuery.of(context).size.width * 2, 0),
+                    child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: categoryList()),
                   ),
                 ),
                 body: ListView.builder(
@@ -131,8 +138,8 @@ class _ListViewTaskState extends State<ListViewTask> {
                       isComplete: data[i].isComplete,
                       allTasks: data,
                       deleteFunction: deleteItem,
-                      builder: (BuildContext context, void Function() methodA) {
-                        myMethod = methodA;
+                      builder: (BuildContext context, void Function() ct) {
+                        currentTask = ct;
                       },
                     );
                   },
@@ -189,8 +196,34 @@ class _ListViewTaskState extends State<ListViewTask> {
     );
   }
 
-  void deleteItem(TaskModel taskModel) async {
-    await db.deleteBpRecord(taskModel);
-    setState(() {});
+  Widget categoryList() {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        TextButton(
+          onPressed: () {
+            currentTask.call();
+          },
+          child: Container(
+            padding:
+                const EdgeInsets.only(left: 10, right: 10, top: 4, bottom: 4),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: Colors.blueAccent.withOpacity(0.2)),
+            child: const Text(
+              "All",
+              style: TextStyle(
+                  fontFamily: 'mplus',
+                  color: Colors.blueAccent,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12),
+            ),
+          ),
+        ),
+
+      ],
+    );
   }
+
+
 }
