@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:lottie/lottie.dart';
 import 'package:notification_permissions/notification_permissions.dart';
 import 'package:taskreminder/Components/TaskCard.dart';
 import 'package:taskreminder/Database/DBModel.dart';
@@ -60,7 +61,6 @@ class _ListViewTaskState extends State<ListViewTask> {
         }
       });
     });
-
   }
 
   /// When the application has a resumed status, check for the permission
@@ -99,19 +99,7 @@ class _ListViewTaskState extends State<ListViewTask> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.blueAccent,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Icon(Icons.question_mark_sharp),
-          )
-        ],
         elevation: 0,
-        centerTitle: true,
-        title: const Text(
-          "TRACKER",
-          style: TextStyle(
-              fontSize: 22, fontWeight: FontWeight.bold, fontFamily: 'saira'),
-        ),
       ),
       body: FutureBuilder(
         future: db.getBpRecord(),
@@ -126,7 +114,40 @@ class _ListViewTaskState extends State<ListViewTask> {
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
-                          Text("No data"),
+                          SizedBox(
+                            width: 150,
+                            height: 150,
+                            child: Lottie.asset('assets/taskMan.json'),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          GestureDetector(
+                            onTap: () => {
+                              showModalBottomSheet(
+                                backgroundColor: Colors.transparent,
+                                isScrollControlled: true,
+                                context: context,
+                                builder: (context) => SingleChildScrollView(
+                                  child: Container(
+                                    padding: EdgeInsets.only(
+                                        bottom: MediaQuery.of(context)
+                                            .viewInsets
+                                            .bottom),
+                                    child: AddTask(),
+                                  ),
+                                ),
+                              )
+                            },
+                            child: const Text(
+                              "Click + to Add Task",
+                              style: TextStyle(
+                                  color: Colors.blueAccent,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'mplus'),
+                            ),
+                          )
                         ],
                       ),
                     ),

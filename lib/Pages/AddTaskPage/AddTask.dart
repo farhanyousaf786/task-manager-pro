@@ -46,6 +46,7 @@ class _AddTaskState extends State<AddTask> {
   }
 
   _onDone() {
+
     if (cards.isNotEmpty) {
       for (int i = 0; i < cards.length; i++) {
         // give Flag _F_ into string so when we retrieve it
@@ -53,6 +54,7 @@ class _AddTaskState extends State<AddTask> {
         subTask = "${subTask}_F_${subTaskList[i].text}";
       }
     }
+
     if (cards.isEmpty) {
       subTask = "N/A";
     }
@@ -70,12 +72,6 @@ class _AddTaskState extends State<AddTask> {
         textColor: Colors.white,
         fontSize: 16.0);
 
-    print(">>> Sub Task: $subTask");
-    print(">>> Task Controller: ${taskController.text}");
-    print(">>> Category: ${categoryName}");
-    print(">>> Date: ${reminderDate.toString()}");
-    print(">>> Time: ${reminderTime.toString()}");
-
     var taskInfo = TaskModel(
         task: taskController.text,
         subTask: subTask.toString(),
@@ -83,6 +79,7 @@ class _AddTaskState extends State<AddTask> {
         time: reminderTime.toString(),
         date: reminderDate.toString(),
         isComplete: isComplete.toString());
+
     addItem(taskInfo);
     Navigator.pushAndRemoveUntil<dynamic>(
       context,
@@ -95,17 +92,14 @@ class _AddTaskState extends State<AddTask> {
 
   // create a database object so we can access database functions
   var db = DatabaseConnect();
-
   // function to add BP
   void addItem(TaskModel taskInfo) async {
     await db.insertBpRecord(taskInfo);
   }
-
   setNotification() async {
     var scheduledNotificationDateTime = reminderDate
-        ?.add(
-            Duration(hours: reminderTime!.hour, minutes: reminderTime!.minute))
-        .subtract(Duration(seconds: 5));
+        ?.add(Duration(hours: reminderTime!.hour, minutes: reminderTime!.minute))
+        .subtract(const Duration(seconds: 5));
 
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
       taskController.text,
@@ -114,11 +108,11 @@ class _AddTaskState extends State<AddTask> {
       priority: Priority.max,
       importance: Importance.max,
       largeIcon: const DrawableResourceAndroidBitmap("@mipmap/ic_launcher"),
-      styleInformation: MediaStyleInformation(
+      styleInformation: const MediaStyleInformation(
         htmlFormatContent: true,
         htmlFormatTitle: true,
       ),
-      sound: RawResourceAndroidNotificationSound('notification1'),
+      sound: const RawResourceAndroidNotificationSound('notification1'),
       playSound: true,
     );
 
@@ -232,7 +226,7 @@ class _AddTaskState extends State<AddTask> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Padding(
+                          const Padding(
                             padding: EdgeInsets.only(bottom: 4),
                             child: Text(
                               "Reminder: ",
@@ -243,22 +237,19 @@ class _AddTaskState extends State<AddTask> {
                                   fontFamily: 'mplus'),
                             ),
                           ),
-                          Container(
-                              child: Text(
-                            DateFormat.yMMMd().format(reminderDate!) + "  ",
-                            style: TextStyle(
+                          Text(
+                            "${DateFormat.yMMMd().format(reminderDate!)}  ",
+                            style: const TextStyle(
+                            color: Colors.grey,
+                            fontSize: 12,
+                            fontFamily: 'mplus'),
+                          ),
+                          Text(
+                            "${formatTimeOfDay(reminderTime!)}    ",
+                            style: const TextStyle(
                                 color: Colors.grey,
                                 fontSize: 12,
                                 fontFamily: 'mplus'),
-                          )),
-                          Container(
-                            child: Text(
-                              formatTimeOfDay(reminderTime!) + "    ",
-                              style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 12,
-                                  fontFamily: 'mplus'),
-                            ),
                           ),
                           GestureDetector(
                             onTap: () {
@@ -267,7 +258,7 @@ class _AddTaskState extends State<AddTask> {
                                 reminderTime = null;
                               });
                             },
-                            child: Icon(
+                            child: const Icon(
                               Icons.clear,
                               size: 20,
                               color: Colors.red,
@@ -298,7 +289,7 @@ class _AddTaskState extends State<AddTask> {
                                     cards.removeAt(index),
                                     setState(() {}),
                                   },
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.clear,
                                 color: Colors.grey,
                               )),
@@ -387,7 +378,7 @@ class _AddTaskState extends State<AddTask> {
                             ),
                             child: Row(
                               children: [
-                                Text(
+                                const Text(
                                   "Reminder ",
                                   style: TextStyle(
                                       fontFamily: 'mplus',
@@ -415,7 +406,7 @@ class _AddTaskState extends State<AddTask> {
                           onTap: () => {
                             _onDone(),
                           },
-                          child: Icon(
+                          child: const Icon(
                             Icons.done_outline_rounded,
                             color: Colors.blueAccent,
                             size: 28,
@@ -436,7 +427,7 @@ class _AddTaskState extends State<AddTask> {
   _subTask() {
     showPopover(
         shadow: <BoxShadow>[
-          BoxShadow(
+          const BoxShadow(
             color: Colors.transparent,
             blurRadius: 0,
             offset: Offset(0, 0),
@@ -455,8 +446,8 @@ class _AddTaskState extends State<AddTask> {
                       }),
                       Navigator.pop(context),
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
                       child: Text(
                         "Work",
                         style: TextStyle(
@@ -472,11 +463,10 @@ class _AddTaskState extends State<AddTask> {
                       setState(() {
                         categoryName = "Personal";
                       }),
-                      print(categoryName),
                       Navigator.pop(context),
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
                       child: Text(
                         "Personal",
                         style: TextStyle(
@@ -492,11 +482,10 @@ class _AddTaskState extends State<AddTask> {
                       setState(() {
                         categoryName = "Watchlist";
                       }),
-                      print(categoryName),
                       Navigator.pop(context),
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
                       child: Text(
                         "Watchlist",
                         style: TextStyle(
@@ -512,11 +501,10 @@ class _AddTaskState extends State<AddTask> {
                       setState(() {
                         categoryName = "Birthday";
                       }),
-                      print(categoryName),
                       Navigator.pop(context),
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
                       child: Text(
                         "Birthday",
                         style: TextStyle(
@@ -532,11 +520,10 @@ class _AddTaskState extends State<AddTask> {
                       setState(() {
                         categoryName = "Urgent";
                       }),
-                      print(categoryName),
                       Navigator.pop(context),
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
                       child: Text(
                         "Urgent",
                         style: TextStyle(
@@ -552,11 +539,10 @@ class _AddTaskState extends State<AddTask> {
                       setState(() {
                         categoryName = "Important";
                       }),
-                      print(categoryName),
                       Navigator.pop(context),
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
                       child: Text(
                         "Important",
                         style: TextStyle(
@@ -572,11 +558,10 @@ class _AddTaskState extends State<AddTask> {
                       setState(() {
                         categoryName = "Home";
                       }),
-                      print(categoryName),
                       Navigator.pop(context),
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
                       child: Text(
                         "Home",
                         style: TextStyle(
@@ -592,11 +577,10 @@ class _AddTaskState extends State<AddTask> {
                       setState(() {
                         categoryName = "Others";
                       }),
-                      print(categoryName),
                       Navigator.pop(context),
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
                       child: Text(
                         "Others",
                         style: TextStyle(
