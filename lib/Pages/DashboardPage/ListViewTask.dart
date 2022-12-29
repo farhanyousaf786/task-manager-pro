@@ -3,6 +3,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:notification_permissions/notification_permissions.dart';
 import 'package:taskreminder/Components/NoTask.dart';
 import 'package:taskreminder/Components/TaskCard.dart';
+import 'package:taskreminder/Database/Constants.dart';
 import 'package:taskreminder/Database/DBModel.dart';
 import 'package:taskreminder/Database/TaskModel.dart';
 import 'package:taskreminder/Pages/AddTaskPage/AddTask.dart';
@@ -31,7 +32,6 @@ class _ListViewTaskState extends State<ListViewTask> {
   late AddTask feedPage;
   late Widget currentPage;
   late void Function() currentTask;
-
 
   @override
   void initState() {
@@ -200,30 +200,69 @@ class _ListViewTaskState extends State<ListViewTask> {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        TextButton(
-          onPressed: () {
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              Constants.currentPage = 'all';
+            });
             currentTask.call();
           },
-          child: Container(
-            padding:
-                const EdgeInsets.only(left: 10, right: 10, top: 4, bottom: 4),
-            decoration: BoxDecoration(
+          child: Padding(
+            padding: const EdgeInsets.all(6),
+            child: Container(
+              padding:
+              const EdgeInsets.only(left: 10, right: 10, top: 4, bottom: 4),
+              decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
-                color: Colors.blueAccent.withOpacity(0.2)),
-            child: const Text(
-              "All",
-              style: TextStyle(
-                  fontFamily: 'mplus',
-                  color: Colors.blueAccent,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12),
+                color: Constants.currentPage == "all"
+                    ? Colors.blueAccent
+                    : Colors.blueAccent.withOpacity(0.2),
+              ),
+              child: Text(
+                "All",
+                style: TextStyle(
+                    fontFamily: 'mplus',
+                    color: Constants.currentPage == "all"
+                        ? Colors.white
+                        : Colors.blueAccent,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12),
+              ),
             ),
           ),
         ),
-
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              Constants.currentPage = 'work';
+            });
+            currentTask.call();
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(6),
+            child: Container(
+              padding:
+                  const EdgeInsets.only(left: 10, right: 10, top: 4, bottom: 4),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: Constants.currentPage == "work"
+                    ? Colors.blueAccent
+                    : Colors.blueAccent.withOpacity(0.2),
+              ),
+              child: Text(
+                "Work",
+                style: TextStyle(
+                    fontFamily: 'mplus',
+                    color: Constants.currentPage == "work"
+                        ? Colors.white
+                        : Colors.blueAccent,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12),
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }
-
-
 }

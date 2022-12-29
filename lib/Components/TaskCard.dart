@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:taskreminder/Components/TaskCategory/All.dart';
+import 'package:taskreminder/Components/TaskCategory/Work.dart';
+import 'package:taskreminder/Database/Constants.dart';
 import 'package:taskreminder/Database/TaskModel.dart';
 import 'package:taskreminder/Pages/DashboardPage/ListViewTask.dart';
 
@@ -36,47 +39,27 @@ class _TaskCardState extends State<TaskCard> {
   String currentPage = "all";
 
   void currentTask() {
-    print('test');
+    print("farhan");
+    setState(() {
+     currentPage = Constants.currentPage;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    var otherTaskCard = TaskModel(
-      id: widget.id,
-      task: widget.subTask,
-      subTask: widget.subTask,
-      category: widget.category,
-      time: widget.time,
-      date: widget.date,
-      isComplete: widget.isComplete,
-    );
     widget.builder.call(context, currentTask);
 
-    return Column(
-      children: [
-        Text(widget.subTask),
-        GestureDetector(
-          onTap: () => widget.deleteFunction(otherTaskCard),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              color: Colors.blue.shade900,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20, bottom: 3, top: 3),
-              child: Text(
-                "Delete",
-                style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  fontFamily: 'bal',
-                  fontSize: 15,
-                  color: Colors.blue.shade100,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
+    return currentPage == 'all'
+        ? AllTask(
+            id: widget.id,
+            task: widget.task,
+            subTask: widget.subTask,
+            category: widget.category,
+            time: widget.time,
+            date: widget.date,
+            isComplete: widget.isComplete,
+            allTasks: widget.allTasks,
+            deleteFunction: widget.deleteFunction)
+        : WorkTask();
   }
 }
