@@ -114,8 +114,8 @@ class _LandingPageState extends State<LandingPage> {
                         size: 25,
                       ),
               ),
-              Text(
-                "HISTORY",
+              const Text(
+                "Calender",
                 style: TextStyle(
                     fontFamily: 'mplus',
                     color: Colors.white,

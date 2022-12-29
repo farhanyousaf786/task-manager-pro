@@ -1,9 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:taskreminder/Pages/LandingPage.dart';
+
+FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  var initializationSettingsAndroid =
+      const AndroidInitializationSettings('@mipmap/ic_launcher');
+  var initializationSettings = InitializationSettings(
+    android: initializationSettingsAndroid,
+  );
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   runApp(const MyApp());
 }
 
@@ -14,137 +31,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'To-Do Task Reminder',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const LandingPage()  // this page wil contain all pages along with bottom bar
-    );
+        debugShowCheckedModeBanner: false,
+        title: 'To-Do Task Reminder',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home:
+            const LandingPage() // this page wil contain all pages along with bottom bar
+        );
   }
 }
-
 
 // //flutter build appbundle --target-platform android-arm,android-arm64
 // //flutter build apk --target-platform=android-arm
 // //flutter build apk --target-platform=android-arm64
 // //flutter build appbundle --release
-
-// import 'package:flutter/material.dart';
-
-// void main() {
-//   runApp(App());
-// }
-//
-// class App extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       home: Home(),
-//     );
-//   }
-// }
-
-class Home extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: ElevatedButton(
-          child: Text('Add entries'),
-          onPressed: () async {
-            List<PersonEntry> persons = await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => SOF(),
-              ),
-            );
-            if (persons != null) persons.forEach(print);
-          },
-        ),
-      ),
-    );
-  }
-}
-
-class SOF extends StatefulWidget {
-  @override
-  _SOFState createState() => _SOFState();
-}
-
-class _SOFState extends State<SOF> {
-  var nameTECs = <TextEditingController>[];
-  var cards = <Card>[];
-
-  Card createCard() {
-    var nameController = TextEditingController();
-
-    nameTECs.add(nameController);
-    return Card(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Text('Person ${cards.length + 1}'),
-          TextField(
-              controller: nameController,
-              decoration: InputDecoration(labelText: 'Full Name')),
-
-        ],
-      ),
-    );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    cards.add(createCard());
-  }
-
-  _onDone() {
-    List<PersonEntry> entries = [];
-    for (int i = 0; i < cards.length; i++) {
-      var name = nameTECs[i].text;
-      entries.add(PersonEntry(name,));
-    }
-    Navigator.pop(context, entries);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: ListView.builder(
-              itemCount: cards.length,
-              itemBuilder: (BuildContext context, int index) {
-                return cards[index];
-              },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: ElevatedButton(
-              child: Text('add new'),
-              onPressed: () => setState(() => cards.add(createCard())),
-            ),
-          )
-        ],
-      ),
-      floatingActionButton:
-      FloatingActionButton(child: Icon(Icons.done), onPressed: _onDone),
-    );
-  }
-}
-
-class PersonEntry {
-  final String name;
-
-
-  PersonEntry(this.name);
-  @override
-  String toString() {
-    return 'Person: name= $name';
-  }
-}

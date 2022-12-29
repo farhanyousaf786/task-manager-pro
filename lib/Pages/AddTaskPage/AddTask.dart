@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:popover/popover.dart';
 import 'package:taskreminder/Components/SubTaskElement.dart';
+import 'package:taskreminder/main.dart';
 
 class AddTask extends StatefulWidget {
   const AddTask({Key? key}) : super(key: key);
@@ -19,37 +22,6 @@ class _AddTaskState extends State<AddTask> {
   var cards = <Card>[];
   DateTime? reminderDate;
   TimeOfDay? reminderTime;
-
-  Card createCard() {
-    var subCatController = TextEditingController();
-    subTaskList.add(subCatController);
-    return Card(
-      color: Colors.transparent,
-      elevation: 0.0,
-      child: Padding(
-        padding: const EdgeInsets.only(left: 30),
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width / 1.4,
-          child: TextField(
-            controller: subCatController,
-            decoration: InputDecoration(
-              fillColor: Colors.grey.shade100,
-              isDense: true,
-              border: InputBorder.none,
-              filled: true,
-              hintText: 'Sub Task ${cards.length + 1}',
-              hintStyle: TextStyle(
-                fontFamily: "mplus",
-                fontWeight: FontWeight.bold,
-                color: Colors.grey.shade600,
-                fontSize: 12,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 
   dataAndTimePicker() async {
     reminderDate = (await showDatePicker(
@@ -80,6 +52,10 @@ class _AddTaskState extends State<AddTask> {
     if (cards.isEmpty) {
       subTask = "N/A";
     }
+
+    if (reminderTime != null && reminderDate != null) {
+      setNotification();
+    }
     print(">>> Sub Task: $subTask");
     print("Task Controller: ${taskController.text}");
     print("Category: ${categoryName}");
@@ -87,6 +63,81 @@ class _AddTaskState extends State<AddTask> {
     print("Time: ${reminderTime.toString()}");
 
     Navigator.pop(context);
+  }
+
+  setNotification() async {
+    var scheduledNotificationDateTime = reminderDate
+        ?.add(
+            Duration(hours: reminderTime!.hour, minutes: reminderTime!.minute))
+        .subtract(Duration(seconds: 5));
+
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+      taskController.text,
+      'To Do Notification',
+      // 'Do the task',
+      priority: Priority.max,
+      importance: Importance.max,
+      largeIcon: DrawableResourceAndroidBitmap("@mipmap/ic_launcher"),
+      styleInformation: MediaStyleInformation(
+        htmlFormatContent: true,
+        htmlFormatTitle: true,
+      ),
+      sound: RawResourceAndroidNotificationSound('notification1'),
+      playSound: true,
+    );
+
+    NotificationDetails platformChannelSpecifics = NotificationDetails(
+      android: androidPlatformChannelSpecifics,
+    );
+
+    await flutterLocalNotificationsPlugin.schedule(
+        0,
+        'Task Reminder',
+        'Time For: ${taskController.text}',
+        scheduledNotificationDateTime!,
+        platformChannelSpecifics);
+
+    TimeOfDay _selectedTime;
+    String rTime;
+
+    if (reminderTime != null) {
+      setState(() {
+        _selectedTime =
+            reminderTime!.replacing(hour: reminderTime!.hourOfPeriod);
+
+        rTime = _selectedTime.hour.toString() +
+            ":" +
+            _selectedTime.minute.toString();
+      });
+    }
+
+    // await Provider.of<TaskData>(
+    //   context,
+    //   listen: false,
+    // ).addTask(
+    //   Task(
+    //     reminderTime: rTime,
+    //     title: currTask,
+    //     isChecked: false,
+    //     isRemindMe: remindMe,
+    //     reminderDate: reminderDate == null
+    //         ? null
+    //         : reminderDate.add(Duration(
+    //             hours: reminderTime.hour,
+    //             minutes: reminderTime.minute,
+    //           )),
+    //     reminderId: reminderDate != null ? id : null,
+    //   ),
+    // );
+
+    Fluttertoast.showToast(
+        msg: "Task Added to Reminder List",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.TOP,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0);
   }
 
   @override
@@ -299,9 +350,7 @@ class _AddTaskState extends State<AddTask> {
                           child: Container(
                             padding: EdgeInsets.all(5),
                             decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.green
-                              ),
+                              border: Border.all(color: Colors.green),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Row(
@@ -354,14 +403,13 @@ class _AddTaskState extends State<AddTask> {
 
   _subTask() {
     showPopover(
-      shadow: <BoxShadow>[
-        BoxShadow(
-          color: Colors.transparent,
-          blurRadius: 0,
-          offset: Offset(0, 0),
-        ),
-      ],
-
+        shadow: <BoxShadow>[
+          BoxShadow(
+            color: Colors.transparent,
+            blurRadius: 0,
+            offset: Offset(0, 0),
+          ),
+        ],
         context: context,
         bodyBuilder: (context) => SingleChildScrollView(
               child: Column(
@@ -539,5 +587,36 @@ class _AddTaskState extends State<AddTask> {
         backgroundColor: Colors.white,
         barrierColor: Colors.transparent,
         transitionDuration: Duration(milliseconds: 500));
+  }
+
+  Card createCard() {
+    var subCatController = TextEditingController();
+    subTaskList.add(subCatController);
+    return Card(
+      color: Colors.transparent,
+      elevation: 0.0,
+      child: Padding(
+        padding: const EdgeInsets.only(left: 30),
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width / 1.4,
+          child: TextField(
+            controller: subCatController,
+            decoration: InputDecoration(
+              fillColor: Colors.grey.shade100,
+              isDense: true,
+              border: InputBorder.none,
+              filled: true,
+              hintText: 'Sub Task ${cards.length + 1}',
+              hintStyle: TextStyle(
+                fontFamily: "mplus",
+                fontWeight: FontWeight.bold,
+                color: Colors.grey.shade600,
+                fontSize: 12,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
