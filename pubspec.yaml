@@ -46,6 +46,8 @@ dependencies:
   fluttertoast: ^8.0.7
   shared_preferences: ^2.0.6
   popover: ^0.2.7
+  permission_handler: ^10.2.0
+  notification_permissions: ^0.6.1
 
 
 
