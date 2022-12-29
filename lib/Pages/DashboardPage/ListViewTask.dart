@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:lottie/lottie.dart';
 import 'package:notification_permissions/notification_permissions.dart';
+import 'package:taskreminder/Components/NoTask.dart';
 import 'package:taskreminder/Components/TaskCard.dart';
 import 'package:taskreminder/Database/DBModel.dart';
 import 'package:taskreminder/Database/TaskModel.dart';
@@ -95,67 +96,18 @@ class _ListViewTaskState extends State<ListViewTask> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.blueAccent,
-        elevation: 0,
-      ),
-      body: FutureBuilder(
+    return FutureBuilder(
         future: db.getBpRecord(),
         initialData: const [],
         builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
           var data = snapshot.data;
           var dataLength = data!.length;
           return dataLength == 0
-              ? Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(12.0),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            width: 150,
-                            height: 150,
-                            child: Lottie.asset('assets/taskMan.json'),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          GestureDetector(
-                            onTap: () => {
-                              showModalBottomSheet(
-                                backgroundColor: Colors.transparent,
-                                isScrollControlled: true,
-                                context: context,
-                                builder: (context) => SingleChildScrollView(
-                                  child: Container(
-                                    padding: EdgeInsets.only(
-                                        bottom: MediaQuery.of(context)
-                                            .viewInsets
-                                            .bottom),
-                                    child: AddTask(),
-                                  ),
-                                ),
-                              )
-                            },
-                            child: const Text(
-                              "Click + to Add Task",
-                              style: TextStyle(
-                                  color: Colors.blueAccent,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'mplus'),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                )
+              ? const NoTask()
               : ListView.builder(
                   itemCount: dataLength,
                   itemBuilder: (context, i) {
+
                     return TaskCard(
                       id: data[i].id,
                       task: data[i].task,
@@ -169,8 +121,8 @@ class _ListViewTaskState extends State<ListViewTask> {
                   },
                 );
         },
-      ),
-    );
+      );
+
   }
 
   late String userData;

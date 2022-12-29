@@ -21,11 +21,6 @@ class _LandingPageState extends State<LandingPage> {
     const AboutPage(),
   ];
 
-  void reFresh() => {
-        print(
-            ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>."),
-      };
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

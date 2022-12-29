@@ -40,31 +40,35 @@ class _TaskCardState extends State<TaskCard> {
       isComplete: widget.isComplete,
     );
 
-    return Column(
-      children: [
-        Text(widget.subTask),
-        GestureDetector(
-          onTap: () => widget.deleteFunction(otherTaskCard),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              color: Colors.blue.shade900,
-            ),
-            child: Padding(
-              padding: EdgeInsets.only(left: 20, right: 20, bottom: 3, top: 3),
-              child: Text(
-                "Delete",
-                style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  fontFamily: 'bal',
-                  fontSize: 15,
-                  color: Colors.blue.shade100,
+    return Scaffold(
+
+      appBar: AppBar(),
+      body: Column(
+        children: [
+          Text(widget.subTask),
+          GestureDetector(
+            onTap: () => widget.deleteFunction(otherTaskCard),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: Colors.blue.shade900,
+              ),
+              child: Padding(
+                padding: EdgeInsets.only(left: 20, right: 20, bottom: 3, top: 3),
+                child: Text(
+                  "Delete",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'bal',
+                    fontSize: 15,
+                    color: Colors.blue.shade100,
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
