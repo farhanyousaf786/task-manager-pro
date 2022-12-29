@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:lottie/lottie.dart';
 import 'package:notification_permissions/notification_permissions.dart';
 import 'package:taskreminder/Components/NoTask.dart';
 import 'package:taskreminder/Components/TaskCard.dart';
@@ -8,6 +7,9 @@ import 'package:taskreminder/Database/DBModel.dart';
 import 'package:taskreminder/Database/TaskModel.dart';
 import 'package:taskreminder/Pages/AddTaskPage/AddTask.dart';
 import 'package:taskreminder/main.dart';
+
+typedef MyBuilder = void Function(
+    BuildContext context, void Function() methodA);
 
 class ListViewTask extends StatefulWidget {
   const ListViewTask({
@@ -94,20 +96,31 @@ class _ListViewTaskState extends State<ListViewTask> {
     });
   }
 
+  late void Function() myMethod;
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: db.getBpRecord(),
-        initialData: const [],
-        builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
-          var data = snapshot.data;
-          var dataLength = data!.length;
-          return dataLength == 0
-              ? const NoTask()
-              : ListView.builder(
+      future: db.getBpRecord(),
+      initialData: const [],
+      builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
+        var data = snapshot.data;
+        var dataLength = data!.length;
+        return dataLength == 0
+            ? const NoTask()
+            : Scaffold(
+                appBar: AppBar(
+                  leading: IconButton(
+                    icon: Icon(Icons.help),
+                    onPressed: () {
+                      // how can I call methodA from here?
+                      myMethod.call();
+                    },
+                  ),
+                ),
+                body: ListView.builder(
                   itemCount: dataLength,
                   itemBuilder: (context, i) {
-
                     return TaskCard(
                       id: data[i].id,
                       task: data[i].task,
@@ -116,13 +129,17 @@ class _ListViewTaskState extends State<ListViewTask> {
                       date: data[i].date,
                       time: data[i].time,
                       isComplete: data[i].isComplete,
+                      allTasks: data,
                       deleteFunction: deleteItem,
+                      builder: (BuildContext context, void Function() methodA) {
+                        myMethod = methodA;
+                      },
                     );
                   },
-                );
-        },
-      );
-
+                ),
+              );
+      },
+    );
   }
 
   late String userData;
