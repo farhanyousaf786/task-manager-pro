@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:notification_permissions/notification_permissions.dart';
+import 'package:taskreminder/Components/TaskCard.dart';
+import 'package:taskreminder/Database/DBModel.dart';
 import 'package:taskreminder/main.dart';
 
 class ListViewTask extends StatefulWidget {
@@ -17,6 +19,7 @@ class _ListViewTaskState extends State<ListViewTask> {
   var permUnknown = "unknown";
   var permProvisional = "provisional";
   var currentPerm = "";
+  var db = DatabaseConnect();
 
   @override
   void initState() {
@@ -62,6 +65,7 @@ class _ListViewTaskState extends State<ListViewTask> {
       });
     }
   }
+
   /// Checks the notification permission status
   Future<String> getCheckNotificationPermStatus() {
     return NotificationPermissions.getNotificationPermissionStatus()
@@ -84,12 +88,45 @@ class _ListViewTaskState extends State<ListViewTask> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0.0,
-
-      ),
-      body: Center(child: Text("List")),
-    );
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          backgroundColor: Colors.blueAccent,
+          actions: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Icon(Icons.question_mark_sharp),
+            )
+          ],
+          elevation: 0,
+          centerTitle: true,
+          title: const Text(
+            "TRACKER",
+            style: TextStyle(
+                fontSize: 22, fontWeight: FontWeight.bold, fontFamily: 'saira'),
+          ),
+        ),
+        body: FutureBuilder(
+          future: db.getBpRecord(),
+          initialData: const [],
+          builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
+            var data = snapshot.data;
+            var dataLength = data!.length;
+            return dataLength == 0
+                ? Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(12.0),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            Text("No data"),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+                : Text(data.toString());
+          },
+        ));
   }
 
   late String userData;

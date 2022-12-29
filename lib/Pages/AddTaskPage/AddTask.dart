@@ -4,6 +4,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:popover/popover.dart';
 import 'package:taskreminder/Components/SubTaskElement.dart';
+import 'package:taskreminder/Database/DBModel.dart';
+import 'package:taskreminder/Database/TaskModel.dart';
 import 'package:taskreminder/main.dart';
 
 class AddTask extends StatefulWidget {
@@ -72,7 +74,22 @@ class _AddTaskState extends State<AddTask> {
     print(">>> Date: ${reminderDate.toString()}");
     print(">>> Time: ${reminderTime.toString()}");
 
-    Navigator.pop(context);
+    var taskInfo = TaskModel(
+        task: taskController.text,
+        subTask: subTask,
+        category: categoryName,
+        time: reminderTime.toString(),
+        date: reminderDate.toString());
+        addItem(taskInfo);
+        Navigator.pop(context);
+  }
+
+  // create a database object so we can access database functions
+  var db = DatabaseConnect();
+
+  // function to add BP
+  void addItem(TaskModel taskInfo) async {
+    await db.insertBpRecord(taskInfo);
   }
 
   setNotification() async {
@@ -87,7 +104,7 @@ class _AddTaskState extends State<AddTask> {
       // 'Do the task',
       priority: Priority.max,
       importance: Importance.max,
-      largeIcon: DrawableResourceAndroidBitmap("@mipmap/ic_launcher"),
+      largeIcon: const DrawableResourceAndroidBitmap("@mipmap/ic_launcher"),
       styleInformation: MediaStyleInformation(
         htmlFormatContent: true,
         htmlFormatTitle: true,
@@ -101,25 +118,26 @@ class _AddTaskState extends State<AddTask> {
     );
 
     await flutterLocalNotificationsPlugin.schedule(
-        0,
-        'Task Reminder',
+        DateTime.now().microsecond,
+        'Get It Done',
         'Time For: ${taskController.text}',
         scheduledNotificationDateTime!,
         platformChannelSpecifics);
 
-    TimeOfDay _selectedTime;
-    String rTime;
-
-    if (reminderTime != null) {
-      setState(() {
-        _selectedTime =
-            reminderTime!.replacing(hour: reminderTime!.hourOfPeriod);
-
-        rTime = _selectedTime.hour.toString() +
-            ":" +
-            _selectedTime.minute.toString();
-      });
-    }
+    //
+    // TimeOfDay _selectedTime;
+    // String rTime;
+    //
+    // if (reminderTime != null) {
+    //   setState(() {
+    //     _selectedTime =
+    //         reminderTime!.replacing(hour: reminderTime!.hourOfPeriod);
+    //
+    //     rTime = _selectedTime.hour.toString() +
+    //         ":" +
+    //         _selectedTime.minute.toString();
+    //   });
+    // }
 
     // await Provider.of<TaskData>(
     //   context,
@@ -210,7 +228,7 @@ class _AddTaskState extends State<AddTask> {
                             child: Text(
                               "Reminder: ",
                               style: TextStyle(
-                                  color: Colors.blue,
+                                  color: Colors.blueAccent,
                                   fontSize: 17,
                                   fontWeight: FontWeight.bold,
                                   fontFamily: 'mplus'),
@@ -307,7 +325,7 @@ class _AddTaskState extends State<AddTask> {
                                 fontWeight: FontWeight.w600,
                                 fontSize: 10,
                                 color: categoryName == 'No Category'
-                                    ? Colors.blue
+                                    ? Colors.blueAccent
                                     : Colors.green,
                               ),
                             ),
@@ -336,12 +354,12 @@ class _AddTaskState extends State<AddTask> {
                                       fontFamily: 'mplus',
                                       fontWeight: FontWeight.w600,
                                       fontSize: 10,
-                                      color: Colors.blue),
+                                      color: Colors.blueAccent),
                                 ),
                                 Icon(
                                   Icons.subdirectory_arrow_right,
                                   size: 15,
-                                  color: Colors.blue,
+                                  color: Colors.blueAccent,
                                 )
                               ],
                             ),
@@ -390,7 +408,7 @@ class _AddTaskState extends State<AddTask> {
                           },
                           child: Icon(
                             Icons.done_outline_rounded,
-                            color: Colors.blue,
+                            color: Colors.blueAccent,
                             size: 28,
                           ),
                         ),
