@@ -56,11 +56,21 @@ class _AddTaskState extends State<AddTask> {
     if (reminderTime != null && reminderDate != null) {
       setNotification();
     }
+
+    Fluttertoast.showToast(
+        msg: "Task Added to Reminder List",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.TOP,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0);
+
     print(">>> Sub Task: $subTask");
-    print("Task Controller: ${taskController.text}");
-    print("Category: ${categoryName}");
-    print("Date: ${reminderDate.toString()}");
-    print("Time: ${reminderTime.toString()}");
+    print(">>> Task Controller: ${taskController.text}");
+    print(">>> Category: ${categoryName}");
+    print(">>> Date: ${reminderDate.toString()}");
+    print(">>> Time: ${reminderTime.toString()}");
 
     Navigator.pop(context);
   }
@@ -129,15 +139,6 @@ class _AddTaskState extends State<AddTask> {
     //     reminderId: reminderDate != null ? id : null,
     //   ),
     // );
-
-    Fluttertoast.showToast(
-        msg: "Task Added to Reminder List",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.TOP,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0);
   }
 
   @override
@@ -310,13 +311,9 @@ class _AddTaskState extends State<AddTask> {
                                     : Colors.green,
                               ),
                             ),
-                            padding: EdgeInsets.all(5),
+                            padding: EdgeInsets.all(7),
                             decoration: BoxDecoration(
-                              border: Border.all(
-                                color: categoryName == 'No Category'
-                                    ? Colors.blue
-                                    : Colors.green,
-                              ),
+                              color: Colors.blue.shade50,
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
@@ -327,18 +324,26 @@ class _AddTaskState extends State<AddTask> {
                         child: Padding(
                           padding: const EdgeInsets.only(left: 10),
                           child: Container(
-                            padding: EdgeInsets.all(5),
+                            padding: EdgeInsets.all(7),
                             decoration: BoxDecoration(
-                              border: Border.all(color: Colors.blue),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Text(
-                              "Add Sub Task",
-                              style: TextStyle(
-                                  fontFamily: 'mplus',
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 10,
-                                  color: Colors.blue),
+                                borderRadius: BorderRadius.circular(12),
+                                color: Colors.blue.shade50),
+                            child: Row(
+                              children: const [
+                                Text(
+                                  "Sub Task",
+                                  style: TextStyle(
+                                      fontFamily: 'mplus',
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 10,
+                                      color: Colors.blue),
+                                ),
+                                Icon(
+                                  Icons.subdirectory_arrow_right,
+                                  size: 15,
+                                  color: Colors.blue,
+                                )
+                              ],
                             ),
                           ),
                         ),
@@ -348,10 +353,10 @@ class _AddTaskState extends State<AddTask> {
                         child: Padding(
                           padding: const EdgeInsets.only(left: 10),
                           child: Container(
-                            padding: EdgeInsets.all(5),
+                            padding: EdgeInsets.all(7),
                             decoration: BoxDecoration(
-                              border: Border.all(color: Colors.green),
                               borderRadius: BorderRadius.circular(12),
+                              color: Colors.green.shade50,
                             ),
                             child: Row(
                               children: [
@@ -384,9 +389,9 @@ class _AddTaskState extends State<AddTask> {
                             _onDone(),
                           },
                           child: Icon(
-                            Icons.send_outlined,
+                            Icons.done_outline_rounded,
                             color: Colors.blue,
-                            size: 35,
+                            size: 28,
                           ),
                         ),
                       ],

@@ -62,7 +62,6 @@ class _ListViewTaskState extends State<ListViewTask> {
       });
     }
   }
-
   /// Checks the notification permission status
   Future<String> getCheckNotificationPermStatus() {
     return NotificationPermissions.getNotificationPermissionStatus()
@@ -86,7 +85,8 @@ class _ListViewTaskState extends State<ListViewTask> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Notification Permissions'),
+        elevation: 0.0,
+
       ),
       body: Center(child: Text("List")),
     );
