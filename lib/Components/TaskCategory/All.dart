@@ -31,6 +31,38 @@ class AllTask extends StatefulWidget {
 
 class _AllTaskState extends State<AllTask> {
   @override
+  void initState() {
+    slipSubTask();
+    getTodayAndFutureTask();
+    super.initState();
+  }
+
+  List<String> subList = [];
+
+  slipSubTask() {
+    //this will split every subTask from _F_ Flaf
+
+    if (widget.subTask == "N/A") {
+    } else {
+      final tagName = widget.subTask;
+      final split = tagName.split('_F_');
+      final Map<int, String> values = {
+        for (int i = 0; i < split.length; i++) i: split[i]
+      };
+      for (int i = 1; i <= values.length - 1; i++) {
+        print(values[i]);
+        subList.add(values[i]!);
+      }
+    }
+  }
+
+  getTodayAndFutureTask(){
+
+
+    print("date: ${widget.date}");
+
+  }
+  @override
   Widget build(BuildContext context) {
     var otherTaskCard = TaskModel(
       id: widget.id,
@@ -44,8 +76,13 @@ class _AllTaskState extends State<AllTask> {
 
     return Column(
       children: [
-        Text("Today"),
-        Text(widget.subTask),
+        const Text("Today"),
+        Column(
+          children: [
+            Text("Task: ${widget.task}"),
+            for (var i in subList) Text(i.toString()),
+          ],
+        ),
         GestureDetector(
           onTap: () => widget.deleteFunction(otherTaskCard),
           child: Container(
