@@ -81,6 +81,7 @@ class _AddTaskState extends State<AddTask> {
         isComplete: isComplete.toString());
 
     addItem(taskInfo);
+    print("date = >>>==  ${reminderDate.runtimeType}");
     Navigator.pushAndRemoveUntil<dynamic>(
       context,
       MaterialPageRoute<dynamic>(

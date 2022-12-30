@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:taskreminder/Components/TaskCategory/All.dart';
+import 'package:taskreminder/Components/TaskCategory/All/All.dart';
 import 'package:taskreminder/Components/TaskCategory/Work.dart';
 import 'package:taskreminder/Database/Constants.dart';
 import 'package:taskreminder/Database/TaskModel.dart';
