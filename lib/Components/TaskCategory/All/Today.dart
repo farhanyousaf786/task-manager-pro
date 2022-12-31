@@ -157,7 +157,15 @@ class _TodayTasksState extends State<TodayTasks> {
       itemCount: subList.length,
       itemBuilder: (context, i) {
         // without reminder = 2 or with reminder = 0, will add to all list or Today list
-        return Text(subList[i]);
+        return Padding(
+          padding: const EdgeInsets.only(left: 31, top: 1, bottom: 1),
+          child: Text("${i+1})  ${subList[i]}",
+          style: TextStyle(
+            fontWeight: FontWeight.w500,
+            color: Colors.grey.shade600,
+            fontSize: 15
+          ),),
+        );
       },
     );
 
