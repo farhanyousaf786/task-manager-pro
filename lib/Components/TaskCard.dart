@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:taskreminder/Components/TaskCategory/All/All.dart';
-import 'package:taskreminder/Components/TaskCategory/Work.dart';
 import 'package:taskreminder/Database/Constants.dart';
-import 'package:taskreminder/Database/TaskModel.dart';
 import 'package:taskreminder/Pages/DashboardPage/ListViewTask.dart';
 
 class TaskCard extends StatefulWidget {
-
   final List allTasks;
   final Function deleteFunction;
   final Function completeTask;
   final MyBuilder builder;
+
   const TaskCard({
     Key? key,
     required this.deleteFunction,
@@ -24,27 +22,19 @@ class TaskCard extends StatefulWidget {
 }
 
 class _TaskCardState extends State<TaskCard> {
-  String currentPage = "all";
-
-  void currentTask() {
-    setState(() {
-      currentPage = Constants.currentPage;
-    });
+  @override
+  void initState() {
+    print(widget.allTasks.toString());
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    widget.builder.call(context, currentTask);
-
-    return currentPage == 'all'
-        ? AllTask(
-            allTasks: widget.allTasks,
-            deleteFunction: widget.deleteFunction,
-            completeTask: widget.completeTask,
-          )
-        : WorkTask(
-
-            allTasks: widget.allTasks,
-            deleteFunction: widget.deleteFunction);
+    return AllTask(
+      allTasks: widget.allTasks,
+      deleteFunction: widget.deleteFunction,
+      completeTask: widget.completeTask,
+      builder: widget.builder,
+    );
   }
 }

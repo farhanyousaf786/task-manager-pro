@@ -2,18 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:taskreminder/Components/TaskCategory/All/TaskWidget.dart';
+import 'package:taskreminder/Pages/DashboardPage/ListViewTask.dart';
 
 class AllTask extends StatefulWidget {
   final List allTasks;
   final Function deleteFunction;
   final Function completeTask;
+  final MyBuilder builder;
 
   const AllTask(
       {Key? key,
-
       required this.allTasks,
       required this.deleteFunction,
-      required this.completeTask})
+      required this.completeTask,
+      required this.builder})
       : super(key: key);
 
   @override
@@ -109,8 +111,6 @@ class _AllTaskState extends State<AllTask> {
                       }
 
                       // without reminder = 2 or with reminder = 0, will add to all list or Today list
-                      print(
-                          "check for today : ${checkTaskDay} && task = ${widget.allTasks[i].isComplete}");
                       return checkTaskDay == 0 &&
                                   widget.allTasks[i].isComplete == 'no' ||
                               checkTaskDay == 4 &&
@@ -125,6 +125,7 @@ class _AllTaskState extends State<AllTask> {
                               isComplete: widget.allTasks[i].isComplete,
                               deleteFunction: widget.deleteFunction,
                               completeTask: widget.completeTask,
+                              builder: widget.builder,
                             )
                           : const SizedBox(
                               height: 0,
@@ -201,6 +202,7 @@ class _AllTaskState extends State<AllTask> {
                               isComplete: widget.allTasks[i].isComplete,
                               deleteFunction: widget.deleteFunction,
                               completeTask: widget.completeTask,
+                              builder: widget.builder,
                             )
                           : const SizedBox(
                               height: 0,
@@ -280,6 +282,7 @@ class _AllTaskState extends State<AllTask> {
                               isComplete: widget.allTasks[i].isComplete,
                               deleteFunction: widget.deleteFunction,
                               completeTask: widget.completeTask,
+                              builder: widget.builder,
                             );
                     },
                   ),
@@ -351,6 +354,7 @@ class _AllTaskState extends State<AllTask> {
                               isComplete: widget.allTasks[i].isComplete,
                               deleteFunction: widget.deleteFunction,
                               completeTask: widget.completeTask,
+                              builder: widget.builder,
                             )
                           : SizedBox(
                               height: 0,

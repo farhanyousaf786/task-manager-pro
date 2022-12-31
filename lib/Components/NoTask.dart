@@ -1,20 +1,17 @@
-
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:taskreminder/Pages/AddTaskPage/AddTask.dart';
 
 class NoTask extends StatelessWidget {
-  const NoTask({Key? key}) : super(key: key);
+  final AppBar appBar;
+
+  const NoTask({Key? key, required this.appBar}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0.0,
-
-      ),
+      appBar: appBar,
       body: Center(
         child: Padding(
           padding: EdgeInsets.all(12.0),
@@ -38,9 +35,7 @@ class NoTask extends StatelessWidget {
                       builder: (context) => SingleChildScrollView(
                         child: Container(
                           padding: EdgeInsets.only(
-                              bottom: MediaQuery.of(context)
-                                  .viewInsets
-                                  .bottom),
+                              bottom: MediaQuery.of(context).viewInsets.bottom),
                           child: AddTask(),
                         ),
                       ),

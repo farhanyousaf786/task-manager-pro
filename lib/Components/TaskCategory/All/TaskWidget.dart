@@ -3,7 +3,9 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_swipe_action_cell/core/cell.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+import 'package:taskreminder/Database/Constants.dart';
 import 'package:taskreminder/Database/TaskModel.dart';
+import 'package:taskreminder/Pages/DashboardPage/ListViewTask.dart';
 
 class TaskWidget extends StatefulWidget {
   final int id;
@@ -13,6 +15,7 @@ class TaskWidget extends StatefulWidget {
   final String time;
   final String date;
   final String isComplete;
+  final MyBuilder builder;
   final Function deleteFunction;
   final Function completeTask;
 
@@ -27,6 +30,7 @@ class TaskWidget extends StatefulWidget {
     required this.isComplete,
     required this.deleteFunction,
     required this.completeTask,
+    required this.builder,
   }) : super(key: key);
 
   @override
@@ -39,7 +43,6 @@ class _TaskWidgetState extends State<TaskWidget> {
   late DateTime reminderDate;
   String currentPage = "all";
 
-
   @override
   void initState() {
     initializeDateFormatting('pt_BR', null);
@@ -49,7 +52,14 @@ class _TaskWidgetState extends State<TaskWidget> {
       getDate();
     }
     slipSubTask();
+
     super.initState();
+  }
+
+  void currentTask() {
+    setState(() {
+      currentPage = Constants.currentPage;
+    });
   }
 
   removeNotificationFromSchedual(int id) async {
@@ -100,6 +110,7 @@ class _TaskWidgetState extends State<TaskWidget> {
 
   @override
   Widget build(BuildContext context) {
+    widget.builder.call(context, currentTask);
     var otherTaskCard = TaskModel(
       id: widget.id,
       task: widget.subTask,
@@ -110,54 +121,113 @@ class _TaskWidgetState extends State<TaskWidget> {
       isComplete: widget.isComplete,
     );
 
-    return  SwipeActionCell(
-      backgroundColor: Colors.white,
-      key: ObjectKey(widget.id),
+    return widget.category == Constants.currentPage
+        ? SwipeActionCell(
+            backgroundColor: Colors.white,
+            key: ObjectKey(widget.id),
 
-      /// this key is necessary
-      trailingActions: <SwipeAction>[
-        SwipeAction(
-            backgroundRadius: 10,
-            title: "Delete",
-            style: TextStyle(
-                fontSize: 12, color: Colors.white, fontFamily: 'mplu'),
-            onTap: (CompletionHandler handler) async {
-              widget.deleteFunction(otherTaskCard);
-              removeNotificationFromSchedual(widget.id);
-            },
-            color: Colors.red),
-        SwipeAction(
-            title: "Edit",
-            style: const TextStyle(
-                fontSize: 12, color: Colors.white, fontFamily: 'mplu'),
-            onTap: (CompletionHandler handler) async {},
-            color: Colors.blueAccent),
-      ],
+            /// this key is necessary
+            trailingActions: <SwipeAction>[
+              SwipeAction(
+                  backgroundRadius: 10,
+                  title: "Delete",
+                  style: TextStyle(
+                      fontSize: 12, color: Colors.white, fontFamily: 'mplu'),
+                  onTap: (CompletionHandler handler) async {
+                    widget.deleteFunction(otherTaskCard);
+                    removeNotificationFromSchedual(widget.id);
+                  },
+                  color: Colors.red),
+              SwipeAction(
+                  title: "Edit",
+                  style: const TextStyle(
+                      fontSize: 12, color: Colors.white, fontFamily: 'mplu'),
+                  onTap: (CompletionHandler handler) async {},
+                  color: Colors.blueAccent),
+            ],
 
-      child: GestureDetector(
-        onTap: () {
-          showDetails(otherTaskCard);
-        },
-        child: Padding(
-          padding: const EdgeInsets.only(top: 5, bottom: 5, right: 8, left: 8),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              color: Colors.grey.withOpacity(0.1),
+            child: GestureDetector(
+              onTap: () {
+                showDetails(otherTaskCard);
+              },
+              child: Padding(
+                padding:
+                    const EdgeInsets.only(top: 5, bottom: 5, right: 8, left: 8),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: Colors.grey.withOpacity(0.1),
+                  ),
+                  padding: const EdgeInsets.all(8.0),
+                  width: MediaQuery.of(context).size.width,
+                  child: Column(
+                    children: [
+                      task(),
+                      subTask(),
+                      reminder('false'),
+                    ],
+                  ),
+                ),
+              ),
             ),
-            padding: const EdgeInsets.all(8.0),
-            width: MediaQuery.of(context).size.width,
-            child: Column(
-              children: [
-                task(),
-                subTask(),
-                reminder('false'),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
+          )
+        : Constants.currentPage == "all"
+            ? SwipeActionCell(
+                backgroundColor: Colors.white,
+                key: ObjectKey(widget.id),
+
+                /// this key is necessary
+                trailingActions: <SwipeAction>[
+                  SwipeAction(
+                      backgroundRadius: 10,
+                      title: "Delete",
+                      style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.white,
+                          fontFamily: 'mplu'),
+                      onTap: (CompletionHandler handler) async {
+                        widget.deleteFunction(otherTaskCard);
+                        removeNotificationFromSchedual(widget.id);
+                      },
+                      color: Colors.red),
+                  SwipeAction(
+                      title: "Edit",
+                      style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.white,
+                          fontFamily: 'mplu'),
+                      onTap: (CompletionHandler handler) async {},
+                      color: Colors.blueAccent),
+                ],
+
+                child: GestureDetector(
+                  onTap: () {
+                    showDetails(otherTaskCard);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        top: 5, bottom: 5, right: 8, left: 8),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: Colors.grey.withOpacity(0.1),
+                      ),
+                      padding: const EdgeInsets.all(8.0),
+                      width: MediaQuery.of(context).size.width,
+                      child: Column(
+                        children: [
+                          task(),
+                          subTask(),
+                          reminder('false'),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            : SizedBox(
+                height: 0,
+              );
   }
 
   Widget task() {

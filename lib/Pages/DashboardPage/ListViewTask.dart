@@ -307,6 +307,7 @@ class _ListViewTaskState extends State<ListViewTask> {
   late AddTask feedPage;
   late Widget currentPage;
   late void Function() currentTask;
+  late int dataLength;
 
   @override
   void initState() {
@@ -377,12 +378,10 @@ class _ListViewTaskState extends State<ListViewTask> {
     setState(() {});
   }
 
-
   void updateTask(int id, String completeTask) async {
     await db.updateBpRecord(id, completeTask);
     setState(() {});
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -391,24 +390,16 @@ class _ListViewTaskState extends State<ListViewTask> {
       initialData: const [],
       builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
         var data = snapshot.data;
-        var dataLength = data!.length;
+        dataLength = data!.length;
+
         return dataLength == 0
-            ? const NoTask()
+            ? NoTask(
+                appBar: appBar(),
+              )
             : Scaffold(
                 backgroundColor: Colors.white,
-                appBar: AppBar(
-                  backgroundColor: Colors.white,
-                  elevation: 0.0,
-                  bottom: PreferredSize(
-                    preferredSize:
-                        Size(MediaQuery.of(context).size.width * 2, 0),
-                    child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: categoryList()),
-                  ),
-                ),
+                appBar: appBar(),
                 body: TaskCard(
-
                   allTasks: data,
                   deleteFunction: deleteItem,
                   completeTask: updateTask,
@@ -416,28 +407,6 @@ class _ListViewTaskState extends State<ListViewTask> {
                     currentTask = ct;
                   },
                 ),
-
-                // ListView.builder(
-                //   itemCount: dataLength,
-                //   itemBuilder: (context, i) {
-                //     print(data.toString());
-                //
-                //     return TaskCard(
-                //       id: data[i].id,
-                //       task: data[i].task,
-                //       subTask: data[i].subTask,
-                //       category: data[i].category,
-                //       date: data[i].date,
-                //       time: data[i].time,
-                //       isComplete: data[i].isComplete,
-                //       allTasks: data,
-                //       deleteFunction: deleteItem,
-                //       builder: (BuildContext context, void Function() ct) {
-                //         currentTask = ct;
-                //       },
-                //     );
-                //   },
-                // ),
               );
       },
     );
@@ -453,8 +422,8 @@ class _ListViewTaskState extends State<ListViewTask> {
         return AlertDialog(
             title: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
+            const Padding(
+              padding: EdgeInsets.all(8.0),
               child: Text(
                 "Please Eanble Notification For Reminder",
                 textAlign: TextAlign.center,
@@ -490,73 +459,305 @@ class _ListViewTaskState extends State<ListViewTask> {
     );
   }
 
+  appBar() {
+    return AppBar(
+      backgroundColor: Colors.white,
+      elevation: 0.0,
+      bottom: PreferredSize(
+        preferredSize: Size(MediaQuery.of(context).size.width * 2, 0),
+        child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal, child: categoryList()),
+      ),
+    );
+  }
+
   Widget categoryList() {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        GestureDetector(
-          onTap: () {
-            setState(() {
-              Constants.currentPage = 'all';
-            });
-            currentTask.call();
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(6),
-            child: Container(
-              padding:
-                  const EdgeInsets.only(left: 10, right: 10, top: 4, bottom: 4),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: Constants.currentPage == "all"
-                    ? Colors.blueAccent.shade200.withOpacity(0.85)
-                    : Colors.blueAccent.withOpacity(0.2),
-              ),
-              child: Text(
-                "All",
-                style: TextStyle(
-                    fontFamily: 'mplus',
-                    color: Constants.currentPage == "all"
-                        ? Colors.white
-                        : Colors.blueAccent.shade200.withOpacity(0.85),
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12),
-              ),
-            ),
-          ),
-        ),
-        GestureDetector(
-          onTap: () {
-            setState(() {
-              Constants.currentPage = 'work';
-            });
-            currentTask.call();
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(6),
-            child: Container(
-              padding:
-                  const EdgeInsets.only(left: 10, right: 10, top: 4, bottom: 4),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: Constants.currentPage == "work"
-                    ? Colors.blueAccent.shade200.withOpacity(0.85)
-                    : Colors.blueAccent.withOpacity(0.2),
-              ),
-              child: Text(
-                "Work",
-                style: TextStyle(
-                    fontFamily: 'mplus',
-                    color: Constants.currentPage == "work"
-                        ? Colors.white
-                        : Colors.blueAccent.shade200.withOpacity(0.85),
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                Constants.currentPage = 'all';
+              });
+              dataLength == 0 ? null : currentTask.call();
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(6),
+              child: Container(
+                padding: const EdgeInsets.only(
+                    left: 10, right: 10, top: 4, bottom: 4),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Constants.currentPage == "all"
+                      ? Colors.blueAccent.shade200.withOpacity(0.85)
+                      : Colors.blueAccent.withOpacity(0.2),
+                ),
+                child: Text(
+                  "All",
+                  style: TextStyle(
+                      fontFamily: 'mplus',
+                      color: Constants.currentPage == "all"
+                          ? Colors.white
+                          : Colors.blueAccent.shade200.withOpacity(0.85),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12),
+                ),
               ),
             ),
           ),
-        ),
-      ],
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                Constants.currentPage = 'Work';
+              });
+              dataLength == 0 ? null : currentTask.call();
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(6),
+              child: Container(
+                padding: const EdgeInsets.only(
+                    left: 10, right: 10, top: 4, bottom: 4),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Constants.currentPage == "Work"
+                      ? Colors.blueAccent.shade200.withOpacity(0.85)
+                      : Colors.blueAccent.withOpacity(0.2),
+                ),
+                child: Text(
+                  "Work",
+                  style: TextStyle(
+                      fontFamily: 'mplus',
+                      color: Constants.currentPage == "Work"
+                          ? Colors.white
+                          : Colors.blueAccent.shade200.withOpacity(0.85),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12),
+                ),
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                Constants.currentPage = 'Personal';
+              });
+              dataLength == 0 ? null : currentTask.call();
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(6),
+              child: Container(
+                padding: const EdgeInsets.only(
+                    left: 10, right: 10, top: 4, bottom: 4),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Constants.currentPage == "Personal"
+                      ? Colors.blueAccent.shade200.withOpacity(0.85)
+                      : Colors.blueAccent.withOpacity(0.2),
+                ),
+                child: Text(
+                  "Personal",
+                  style: TextStyle(
+                      fontFamily: 'mplus',
+                      color: Constants.currentPage == "Personal"
+                          ? Colors.white
+                          : Colors.blueAccent.shade200.withOpacity(0.85),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12),
+                ),
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                Constants.currentPage = 'Watchlist';
+              });
+              dataLength == 0 ? null : currentTask.call();
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(6),
+              child: Container(
+                padding: const EdgeInsets.only(
+                    left: 10, right: 10, top: 4, bottom: 4),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Constants.currentPage == "Watchlist"
+                      ? Colors.blueAccent.shade200.withOpacity(0.85)
+                      : Colors.blueAccent.withOpacity(0.2),
+                ),
+                child: Text(
+                  "Watchlist",
+                  style: TextStyle(
+                      fontFamily: 'mplus',
+                      color: Constants.currentPage == "Watchlist"
+                          ? Colors.white
+                          : Colors.blueAccent.shade200.withOpacity(0.85),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12),
+                ),
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                Constants.currentPage = 'Birthday';
+              });
+              dataLength == 0 ? null : currentTask.call();
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(6),
+              child: Container(
+                padding: const EdgeInsets.only(
+                    left: 10, right: 10, top: 4, bottom: 4),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Constants.currentPage == "Birthday"
+                      ? Colors.blueAccent.shade200.withOpacity(0.85)
+                      : Colors.blueAccent.withOpacity(0.2),
+                ),
+                child: Text(
+                  "Birthday",
+                  style: TextStyle(
+                      fontFamily: 'mplus',
+                      color: Constants.currentPage == "Birthday"
+                          ? Colors.white
+                          : Colors.blueAccent.shade200.withOpacity(0.85),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12),
+                ),
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                Constants.currentPage = 'Urgent';
+              });
+              dataLength == 0 ? null : currentTask.call();
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(6),
+              child: Container(
+                padding: const EdgeInsets.only(
+                    left: 10, right: 10, top: 4, bottom: 4),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Constants.currentPage == "Urgent"
+                      ? Colors.blueAccent.shade200.withOpacity(0.85)
+                      : Colors.blueAccent.withOpacity(0.2),
+                ),
+                child: Text(
+                  "Urgent",
+                  style: TextStyle(
+                      fontFamily: 'mplus',
+                      color: Constants.currentPage == "Urgent"
+                          ? Colors.white
+                          : Colors.blueAccent.shade200.withOpacity(0.85),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12),
+                ),
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                Constants.currentPage = 'Important';
+              });
+              dataLength == 0 ? null : currentTask.call();
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(6),
+              child: Container(
+                padding: const EdgeInsets.only(
+                    left: 10, right: 10, top: 4, bottom: 4),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Constants.currentPage == "Important"
+                      ? Colors.blueAccent.shade200.withOpacity(0.85)
+                      : Colors.blueAccent.withOpacity(0.2),
+                ),
+                child: Text(
+                  "Important",
+                  style: TextStyle(
+                      fontFamily: 'mplus',
+                      color: Constants.currentPage == "Important"
+                          ? Colors.white
+                          : Colors.blueAccent.shade200.withOpacity(0.85),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12),
+                ),
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                Constants.currentPage = 'Home';
+              });
+              dataLength == 0 ? null : currentTask.call();
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(6),
+              child: Container(
+                padding: const EdgeInsets.only(
+                    left: 10, right: 10, top: 4, bottom: 4),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Constants.currentPage == "Home"
+                      ? Colors.blueAccent.shade200.withOpacity(0.85)
+                      : Colors.blueAccent.withOpacity(0.2),
+                ),
+                child: Text(
+                  "Home",
+                  style: TextStyle(
+                      fontFamily: 'mplus',
+                      color: Constants.currentPage == "Home"
+                          ? Colors.white
+                          : Colors.blueAccent.shade200.withOpacity(0.85),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12),
+                ),
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                Constants.currentPage = 'Others';
+              });
+              dataLength == 0 ? null : currentTask.call();
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(6),
+              child: Container(
+                padding: const EdgeInsets.only(
+                    left: 10, right: 10, top: 4, bottom: 4),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Constants.currentPage == "Others"
+                      ? Colors.blueAccent.shade200.withOpacity(0.85)
+                      : Colors.blueAccent.withOpacity(0.2),
+                ),
+                child: Text(
+                  "Others",
+                  style: TextStyle(
+                      fontFamily: 'mplus',
+                      color: Constants.currentPage == "Others"
+                          ? Colors.white
+                          : Colors.blueAccent.shade200.withOpacity(0.85),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
