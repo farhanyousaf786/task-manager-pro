@@ -49,6 +49,7 @@ dependencies:
   permission_handler: ^10.2.0
   notification_permissions: ^0.6.1
   lottie: ^1.1.0
+  flutter_swipe_action_cell: ^3.0.7
 
 
 

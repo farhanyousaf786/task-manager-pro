@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_swipe_action_cell/core/cell.dart';
 import 'package:taskreminder/Database/TaskModel.dart';
 
 class TodayTasks extends StatefulWidget {
@@ -28,7 +29,6 @@ class TodayTasks extends StatefulWidget {
 }
 
 class _TodayTasksState extends State<TodayTasks> {
-
   @override
   Widget build(BuildContext context) {
     var otherTaskCard = TaskModel(
@@ -41,21 +41,57 @@ class _TodayTasksState extends State<TodayTasks> {
       isComplete: widget.isComplete,
     );
 
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(widget.task),
-        ),
+    return SwipeActionCell(
+      backgroundColor: Colors.white,
 
-        GestureDetector(
+      key: ObjectKey(widget.id),
 
-            onTap: ()=>{
-              widget.deleteFunction(otherTaskCard)
-
+      /// this key is necessary
+      trailingActions: <SwipeAction>[
+        SwipeAction(
+            backgroundRadius: 10,
+            title: "Delete",
+            style: TextStyle(
+                fontSize: 12, color: Colors.white, fontFamily: 'mplu'),
+            onTap: (CompletionHandler handler) async {
+              widget.deleteFunction(otherTaskCard);
             },
-            child: Text("delete"))
+            color: Colors.red),
+        SwipeAction(
+            title: "Edit",
+            style: const TextStyle(
+                fontSize: 12, color: Colors.white, fontFamily: 'mplu'),
+            onTap: (CompletionHandler handler) async {},
+            color: Colors.blueAccent),
       ],
+
+      child: Padding(
+        padding: const EdgeInsets.only(top: 5, bottom: 5, right: 8, left: 8),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: Colors.blueAccent.withOpacity(0.1),
+          ),
+          padding: const EdgeInsets.all(8.0),
+          width: MediaQuery.of(context).size.width,
+          child: Row(
+            children: [
+              Icon(
+                Icons.check_circle_outline,
+                color: Colors.grey.shade500,
+              ),
+              Text(
+                "  ${widget.task.length > 18 ? "${widget.task.substring(0, 17)}...." : widget.task}",
+                style: const TextStyle(
+                    fontFamily: 'mplus',
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black87),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
