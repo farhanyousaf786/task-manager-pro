@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:taskreminder/Components/TaskCategory/All/CompleteTask.dart';
-import 'package:taskreminder/Components/TaskCategory/All/Future.dart';
-import 'package:taskreminder/Components/TaskCategory/All/Today.dart';
-import 'package:taskreminder/Components/TaskCategory/All/Tomorrow.dart';
+import 'package:taskreminder/Components/TaskCategory/All/TaskWidget.dart';
 
 class AllTask extends StatefulWidget {
   final int id;
@@ -125,11 +123,13 @@ class _AllTaskState extends State<AllTask> {
                       }
 
                       // without reminder = 2 or with reminder = 0, will add to all list or Today list
-                      print("checkTaskDay : ${checkTaskDay} && task = ${widget.allTasks[i].task}");
-                      return checkTaskDay == 0 ||
+                      print(
+                          "check for today : ${checkTaskDay} && task = ${widget.allTasks[i].isComplete}");
+                      return checkTaskDay == 0 &&
+                                  widget.allTasks[i].isComplete == 'no' ||
                               checkTaskDay == 4 &&
                                   widget.allTasks[i].isComplete == 'no'
-                          ? TodayTasks(
+                          ? TaskWidget(
                               task: widget.allTasks[i].task,
                               id: widget.allTasks[i].id,
                               subTask: widget.allTasks[i].subTask,
@@ -194,6 +194,7 @@ class _AllTaskState extends State<AllTask> {
                     itemCount: widget.allTasks.length,
                     itemBuilder: (context, i) {
                       if (widget.allTasks[i].date.toString() == "null") {
+                        checkTaskDay = 4;
                       } else if (widget.allTasks[i].date.toString() != "null") {
                         var trimmedDate =
                             widget.allTasks[i].date.substring(0, 10);
@@ -201,8 +202,10 @@ class _AllTaskState extends State<AllTask> {
                             () => DateFormat("yyyy-MM-dd").parse(trimmedDate));
                         checkTaskDay = calculateDifference(myDate);
                       }
-                      return checkTaskDay == 1
-                          ? TomorrowTask(
+                      return checkTaskDay == 1 &&
+                              checkTaskDay != 4 &&
+                              widget.allTasks[i].isComplete == 'no'
+                          ? TaskWidget(
                               task: widget.allTasks[i].task,
                               id: widget.allTasks[i].id,
                               subTask: widget.allTasks[i].subTask,
@@ -211,6 +214,7 @@ class _AllTaskState extends State<AllTask> {
                               time: widget.allTasks[i].time,
                               isComplete: widget.allTasks[i].isComplete,
                               deleteFunction: widget.deleteFunction,
+                              completeTask: widget.completeTask,
                             )
                           : const SizedBox(
                               height: 0,
@@ -266,6 +270,7 @@ class _AllTaskState extends State<AllTask> {
                     itemCount: widget.allTasks.length,
                     itemBuilder: (context, i) {
                       if (widget.allTasks[i].date.toString() == "null") {
+                        checkTaskDay = 4;
                       } else if (widget.allTasks[i].date.toString() != "null") {
                         var trimmedDate =
                             widget.allTasks[i].date.substring(0, 10);
@@ -273,11 +278,13 @@ class _AllTaskState extends State<AllTask> {
                             () => DateFormat("yyyy-MM-dd").parse(trimmedDate));
                         checkTaskDay = calculateDifference(myDate);
                       }
-                      return checkTaskDay! < 2 || widget.allTasks[i].date.toString() == "null"
+                      return checkTaskDay! < 2 ||
+                              widget.allTasks[i].date.toString() == "null" ||
+                              widget.allTasks[i].isComplete != 'no'
                           ? const SizedBox(
                               height: 0,
                             )
-                          : FutureTask(
+                          : TaskWidget(
                               task: widget.allTasks[i].task,
                               id: widget.allTasks[i].id,
                               subTask: widget.allTasks[i].subTask,
@@ -286,6 +293,7 @@ class _AllTaskState extends State<AllTask> {
                               time: widget.allTasks[i].time,
                               isComplete: widget.allTasks[i].isComplete,
                               deleteFunction: widget.deleteFunction,
+                              completeTask: widget.completeTask,
                             );
                     },
                   ),

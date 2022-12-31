@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_swipe_action_cell/core/cell.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
-import 'package:taskreminder/Database/DBModel.dart';
 import 'package:taskreminder/Database/TaskModel.dart';
 
-class TodayTasks extends StatefulWidget {
+class TaskWidget extends StatefulWidget {
   final int id;
   final String task;
   final String subTask;
@@ -16,7 +15,7 @@ class TodayTasks extends StatefulWidget {
   final Function deleteFunction;
   final Function completeTask;
 
-  const TodayTasks({
+  const TaskWidget({
     Key? key,
     required this.task,
     required this.id,
@@ -30,10 +29,12 @@ class TodayTasks extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<TodayTasks> createState() => _TodayTasksState();
+  State<TaskWidget> createState() => _TaskWidgetState();
 }
 
-class _TodayTasksState extends State<TodayTasks> {
+class _TaskWidgetState extends State<TaskWidget> {
+
+
   List<String> subList = [];
   late TimeOfDay reminderTime;
   late DateTime reminderDate;
@@ -183,14 +184,14 @@ class _TodayTasksState extends State<TodayTasks> {
           children: [
             widget.date == "null"
                 ? SizedBox(
-                    width: 0,
-                    height: 0,
-                  )
+              width: 0,
+              height: 0,
+            )
                 : Icon(
-                    Icons.add_alert_rounded,
-                    size: 16,
-                    color: Colors.black.withOpacity(0.6),
-                  )
+              Icons.add_alert_rounded,
+              size: 16,
+              color: Colors.black.withOpacity(0.6),
+            )
           ],
         ),
       ],
@@ -241,13 +242,13 @@ class _TodayTasksState extends State<TodayTasks> {
         children: [
           hide == "true"
               ? const SizedBox(
-                  height: 0,
-                  width: 0,
-                )
+            height: 0,
+            width: 0,
+          )
               : const Icon(
-                  Icons.check_circle_outline,
-                  color: Colors.transparent,
-                ),
+            Icons.check_circle_outline,
+            color: Colors.transparent,
+          ),
           Text(
             "  ${DateFormat.yMMMd().format(reminderDate!)} at ${formatTimeOfDay(reminderTime)}",
             style: TextStyle(
@@ -376,37 +377,37 @@ class _TodayTasksState extends State<TodayTasks> {
                   ),
                   widget.time == "null"
                       ? Padding(
-                          padding:
-                              const EdgeInsets.only(left: 8, top: 1, bottom: 4),
-                          child: Row(
-                            children: [
-                              Text(
-                                "No Reminder Set",
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    fontFamily: "mplus",
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black.withOpacity(0.6)),
-                              ),
-                            ],
-                          ),
-                        )
-                      : Padding(
-                          padding: EdgeInsets.only(left: 8, top: 1, bottom: 4),
-                          child: Row(
-                            children: [
-                              const Text(
-                                "Reminder @ ",
-                                style: TextStyle(
-                                    fontSize: 15,
-                                    fontFamily: "mplus",
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.blueAccent),
-                              ),
-                              reminder('true'),
-                            ],
-                          ),
+                    padding:
+                    const EdgeInsets.only(left: 8, top: 1, bottom: 4),
+                    child: Row(
+                      children: [
+                        Text(
+                          "No Reminder Set",
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontFamily: "mplus",
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black.withOpacity(0.6)),
                         ),
+                      ],
+                    ),
+                  )
+                      : Padding(
+                    padding: EdgeInsets.only(left: 8, top: 1, bottom: 4),
+                    child: Row(
+                      children: [
+                        const Text(
+                          "Reminder @ ",
+                          style: TextStyle(
+                              fontSize: 15,
+                              fontFamily: "mplus",
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blueAccent),
+                        ),
+                        reminder('true'),
+                      ],
+                    ),
+                  ),
                   const Divider(),
 
                   ElevatedButton(
