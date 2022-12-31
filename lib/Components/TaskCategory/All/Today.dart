@@ -105,7 +105,6 @@ class _TodayTasksState extends State<TodayTasks> {
 
     return SwipeActionCell(
       backgroundColor: Colors.white,
-
       key: ObjectKey(widget.id),
 
       /// this key is necessary
@@ -127,28 +126,33 @@ class _TodayTasksState extends State<TodayTasks> {
             color: Colors.blueAccent),
       ],
 
-      child: Padding(
-        padding: const EdgeInsets.only(top: 5, bottom: 5, right: 8, left: 8),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            color: Colors.blueAccent.withOpacity(0.1),
-          ),
-          padding: const EdgeInsets.all(8.0),
-          width: MediaQuery.of(context).size.width,
-          child: Column(
-            children: [
-              task(),
-              subTask(),
-              reminder(),
-            ],
+      child: GestureDetector(
+        onTap: () {
+          showDetails();
+        },
+        child: Padding(
+          padding: const EdgeInsets.only(top: 5, bottom: 5, right: 8, left: 8),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: Colors.blueAccent.withOpacity(0.1),
+            ),
+            padding: const EdgeInsets.all(8.0),
+            width: MediaQuery.of(context).size.width,
+            child: Column(
+              children: [
+                task(),
+                subTask(),
+                reminder('false'),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  task() {
+  Widget task() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -166,7 +170,7 @@ class _TodayTasksState extends State<TodayTasks> {
               ),
             ),
             Text(
-              "  ${widget.task.length > 18 ? "${widget.task.substring(0, 17)}...." : widget.task}",
+              "  ${widget.task.length > 20 ? "${widget.task.substring(0, 19)}...." : widget.task}",
               style: const TextStyle(
                   fontFamily: 'mplus',
                   fontSize: 15,
@@ -193,7 +197,7 @@ class _TodayTasksState extends State<TodayTasks> {
     );
   }
 
-  subTask() {
+  Widget subTask() {
     if (widget.subTask == "N/A") {
       return const SizedBox(
         height: 0,
@@ -213,7 +217,7 @@ class _TodayTasksState extends State<TodayTasks> {
                 color: Colors.transparent,
               ),
               Text(
-                " ${i + 1})  ${subList[i].length > 10 ? "${subList[i].substring(0, 9)}..." : subList[i]}",
+                " ${i + 1})  ${subList[i].length > 20 ? "${subList[i].substring(0, 19)}..." : subList[i]}",
                 style: TextStyle(
                     fontWeight: FontWeight.w500,
                     color: Colors.grey.shade600,
@@ -226,7 +230,7 @@ class _TodayTasksState extends State<TodayTasks> {
     }
   }
 
-  reminder() {
+  Widget reminder(String hide) {
     if (widget.time == "null") {
       return SizedBox(
         height: 0,
@@ -235,20 +239,164 @@ class _TodayTasksState extends State<TodayTasks> {
     } else {
       return Row(
         children: [
-          Icon(
-            Icons.check_circle_outline,
-            color: Colors.transparent,
-          ),
-
+          hide == "true"
+              ? SizedBox(
+                  height: 0,
+                  width: 0,
+                )
+              : Icon(
+                  Icons.check_circle_outline,
+                  color: Colors.transparent,
+                ),
           Text(
             "  ${DateFormat.yMMMd().format(reminderDate!)} at ${formatTimeOfDay(reminderTime)}",
             style: TextStyle(
-                fontSize: 10,
-                fontFamily: 'mplus',
-                fontWeight: FontWeight.w600,
-                color: Colors.green.shade700,),
+              fontSize: 10,
+              fontFamily: 'mplus',
+              fontWeight: FontWeight.w600,
+              color: Colors.green.shade700,
+            ),
           )
         ],
+      );
+    }
+  }
+
+  showDetails() {
+    showModalBottomSheet(
+        useRootNavigator: true,
+        isScrollControlled: true,
+        barrierColor: Colors.red.withOpacity(0.2),
+        elevation: 0,
+        context: context,
+        builder: (context) {
+          return SizedBox(
+            height: MediaQuery.of(context).size.height / 1.5,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    color: Colors.blue,
+                    child: Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Icon(
+                            Icons.linear_scale_sharp,
+                            color: Colors.white,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            widget.task,
+                            textAlign: TextAlign.start,
+                            style: const TextStyle(
+                                fontSize: 16,
+                                fontFamily: "mplus",
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blueAccent),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8, top: 0),
+                    child: Row(
+                      children: const [
+                        Text(
+                          "Sub Tasks: ",
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontFamily: "mplus",
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
+                        ),
+                      ],
+                    ),
+                  ),
+                  subTaskForBottomSheet(),
+                  widget.time == "null"
+                      ? const Text(
+                          "No Reminder",
+                          style: TextStyle(
+                              fontSize: 17,
+                              fontFamily: "mplus",
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blueAccent),
+                        )
+                      : Padding(
+                          padding: EdgeInsets.only(left: 8, top: 6),
+                          child: Row(
+                            children: [
+                              const Text(
+                                "Reminder @ ",
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    fontFamily: "mplus",
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.blueAccent),
+                              ),
+                              reminder('true'),
+                            ],
+                          ),
+                        ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  subTaskForBottomSheet() {
+    if (widget.subTask == "N/A") {
+      return const Text(
+        "No Sub Task Available",
+        textAlign: TextAlign.start,
+        style: const TextStyle(
+            fontSize: 15,
+            fontFamily: "mplus",
+            fontWeight: FontWeight.bold,
+            color: Colors.blueAccent),
+      );
+    } else {
+      return ListView.builder(
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        primary: false,
+        itemCount: subList.length,
+        itemBuilder: (context, i) {
+          // without reminder = 2 or with reminder = 0, will add to all list or Today list
+          return Row(
+            children: [
+              Flexible(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8, right: 8, top: 5),
+                  child: Text(
+                    "${i + 1})  ${subList[i]}",
+                    softWrap: true,
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: Colors.grey.shade600,
+                        fontSize: 12),
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
       );
     }
   }
