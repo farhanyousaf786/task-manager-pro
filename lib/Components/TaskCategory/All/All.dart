@@ -91,8 +91,8 @@ class _AllTaskState extends State<AllTask> {
                           fontSize: 16),
                     ),
                     Icon(isExpandToday == true
-                        ? Icons.arrow_downward
-                        : Icons.double_arrow_outlined)
+                        ? Icons.arrow_drop_down
+                        : Icons.arrow_drop_up)
                   ],
                 ),
               ),
@@ -138,13 +138,7 @@ class _AllTaskState extends State<AllTask> {
                       },
                     ),
                   )
-                : Text(
-                    "Click to expand Today task",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'mplus',
-                        fontSize: 16),
-                  ),
+                : SizedBox(height:0.0),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: GestureDetector(
@@ -172,45 +166,51 @@ class _AllTaskState extends State<AllTask> {
                           fontSize: 16),
                     ),
                     Icon(isExpandTomorrow == true
-                        ? Icons.arrow_downward
-                        : Icons.double_arrow_outlined)
+                        ? Icons.arrow_drop_down
+                        : Icons.arrow_drop_up)
                   ],
                 ),
               ),
             ),
-            Container(
-              color: Colors.green,
-              height: MediaQuery.of(context).size.height / 3,
-              width: MediaQuery.of(context).size.width,
-              child: ListView.builder(
-                itemCount: widget.allTasks.length,
-                itemBuilder: (context, i) {
-                  if (widget.allTasks[i].date.toString() == "null") {
-                  } else if (widget.allTasks[i].date.toString() != "null") {
-                    var trimmedDate = widget.allTasks[i].date.substring(0, 10);
-                    myDate = Intl.withLocale('en',
-                        () => DateFormat("yyyy-MM-dd").parse(trimmedDate));
-                    checkTaskDay = calculateDifference(myDate);
-                  }
-                  return checkTaskDay == 1
-                      ? TomorrowTask(
-                          task: widget.allTasks[i].task,
-                          id: widget.allTasks[i].id,
-                          subTask: widget.allTasks[i].subTask,
-                          category: widget.allTasks[i].category,
-                          date: widget.allTasks[i].date,
-                          time: widget.allTasks[i].time,
-                          isComplete: widget.allTasks[i].isComplete,
-                          deleteFunction: widget.deleteFunction,
-                        )
-                      : const SizedBox(
-                          height: 0,
-                        );
-                },
-              ),
-            ),
+            isExpandTomorrow == true
+                ? Container(
+                    color: Colors.green,
+                    height: MediaQuery.of(context).size.height / 3,
+                    width: MediaQuery.of(context).size.width,
+                    child: ListView.builder(
+                      itemCount: widget.allTasks.length,
+                      itemBuilder: (context, i) {
+                        if (widget.allTasks[i].date.toString() == "null") {
+                        } else if (widget.allTasks[i].date.toString() !=
+                            "null") {
+                          var trimmedDate =
+                              widget.allTasks[i].date.substring(0, 10);
+                          myDate = Intl.withLocale(
+                              'en',
+                              () =>
+                                  DateFormat("yyyy-MM-dd").parse(trimmedDate));
+                          checkTaskDay = calculateDifference(myDate);
+                        }
+                        return checkTaskDay == 1
+                            ? TomorrowTask(
+                                task: widget.allTasks[i].task,
+                                id: widget.allTasks[i].id,
+                                subTask: widget.allTasks[i].subTask,
+                                category: widget.allTasks[i].category,
+                                date: widget.allTasks[i].date,
+                                time: widget.allTasks[i].time,
+                                isComplete: widget.allTasks[i].isComplete,
+                                deleteFunction: widget.deleteFunction,
+                              )
+                            : const SizedBox(
+                                height: 0,
+                              );
+                      },
+                    ),
+                  )
+                 : SizedBox(height:0.0),
 
-            Padding(
+    Padding(
               padding: const EdgeInsets.all(8.0),
               child: GestureDetector(
                 onTap: () => {
@@ -237,13 +237,13 @@ class _AllTaskState extends State<AllTask> {
                           fontSize: 16),
                     ),
                     Icon(isExpandFuture == true
-                        ? Icons.arrow_downward
-                        : Icons.double_arrow_outlined)
+                        ? Icons.arrow_drop_down
+                        : Icons.arrow_drop_up)
                   ],
                 ),
               ),
             ),
-            Container(
+            isExpandFuture == true ?  Container(
               color: Colors.red,
               height: MediaQuery.of(context).size.height / 3,
               width: MediaQuery.of(context).size.width,
@@ -273,7 +273,7 @@ class _AllTaskState extends State<AllTask> {
                         );
                 },
               ),
-            ),
+            ) : SizedBox(height:0.0)
           ],
         ),
       ),
