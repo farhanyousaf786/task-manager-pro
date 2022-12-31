@@ -35,7 +35,10 @@ class _AddTaskState extends State<AddTask> {
       lastDate: DateTime(DateTime.now().year + 2),
     ))!;
     reminderTime =
-        (await showTimePicker(context: context, initialTime: TimeOfDay.now()))!;
+
+        (await showTimePicker(context: context, initialTime: TimeOfDay.now(),
+        cancelText: ""))!;
+
   }
 
   String formatTimeOfDay(TimeOfDay tod) {

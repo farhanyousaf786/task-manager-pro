@@ -14,18 +14,18 @@ class TodayTasks extends StatefulWidget {
   final Function deleteFunction;
   final Function completeTask;
 
-  const TodayTasks(
-      {Key? key,
-      required this.task,
-      required this.id,
-      required this.subTask,
-      required this.category,
-      required this.time,
-      required this.date,
-      required this.isComplete,
-      required this.deleteFunction,
-      required this.completeTask})
-      : super(key: key);
+  const TodayTasks({
+    Key? key,
+    required this.task,
+    required this.id,
+    required this.subTask,
+    required this.category,
+    required this.time,
+    required this.date,
+    required this.isComplete,
+    required this.deleteFunction,
+    required this.completeTask,
+  }) : super(key: key);
 
   @override
   State<TodayTasks> createState() => _TodayTasksState();
@@ -42,7 +42,28 @@ class _TodayTasksState extends State<TodayTasks> {
 
   @override
   void initState() {
+    slipSubTask();
+
     super.initState();
+  }
+
+  List<String> subList = [];
+
+  slipSubTask() {
+    //this will split every subTask from _F_ Flaf
+
+    if (widget.subTask == "N/A") {
+    } else {
+      final tagName = widget.subTask;
+      final split = tagName.split('_F_');
+      final Map<int, String> values = {
+        for (int i = 0; i < split.length; i++) i: split[i]
+      };
+      for (int i = 1; i <= values.length - 1; i++) {
+        subList.add(values[i]!);
+      }
+      print("Sub list >> $subList");
+    }
   }
 
   @override
@@ -90,31 +111,55 @@ class _TodayTasksState extends State<TodayTasks> {
           ),
           padding: const EdgeInsets.all(8.0),
           width: MediaQuery.of(context).size.width,
-          child: Row(
+          child: Column(
             children: [
-              GestureDetector(
-                onTap: () {
-                  widget.completeTask(widget.id, "yes");
-                },
-                child: Icon(
-                  widget.isComplete == "yes"
-                      ? Icons.check_circle
-                      : Icons.check_circle_outline,
-                  color: Colors.grey.shade500,
-                ),
+              Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      widget.completeTask(widget.id, "yes");
+                    },
+                    child: Icon(
+                      widget.isComplete == "yes"
+                          ? Icons.check_circle
+                          : Icons.check_circle_outline,
+                      color: Colors.grey.shade500,
+                    ),
+                  ),
+                  Text(
+                    "  ${widget.task.length > 18 ? "${widget.task.substring(0, 17)}...." : widget.task}",
+                    style: const TextStyle(
+                        fontFamily: 'mplus',
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black87),
+                  ),
+                ],
               ),
-              Text(
-                "  ${widget.task.length > 18 ? "${widget.task.substring(0, 17)}...." : widget.task}",
-                style: const TextStyle(
-                    fontFamily: 'mplus',
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.black87),
-              ),
+              widget.subTask == "N/A"
+                  ? SizedBox(
+                      height: 00,
+                    )
+                  : subTask()
             ],
           ),
         ),
       ),
     );
+  }
+
+  subTask() {
+
+   return ListView.builder(
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
+      primary: false,
+      itemCount: subList.length,
+      itemBuilder: (context, i) {
+        // without reminder = 2 or with reminder = 0, will add to all list or Today list
+        return Text(subList[i]);
+      },
+    );
+
   }
 }

@@ -29,6 +29,6 @@ class CompleteTasks extends StatefulWidget {
 class _CompleteTasksState extends State<CompleteTasks> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Text(widget.task);
   }
 }

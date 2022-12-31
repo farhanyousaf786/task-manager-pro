@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+import 'package:taskreminder/Components/TaskCategory/All/CompleteTask.dart';
 import 'package:taskreminder/Components/TaskCategory/All/Future.dart';
 import 'package:taskreminder/Components/TaskCategory/All/Today.dart';
 import 'package:taskreminder/Components/TaskCategory/All/Tomorrow.dart';
@@ -41,6 +42,7 @@ class _AllTaskState extends State<AllTask> {
   late bool isExpandToday = true;
   late bool isExpandTomorrow = true;
   late bool isExpandFuture = true;
+  late bool isExpandComplete = true;
 
   @override
   void initState() {
@@ -102,7 +104,7 @@ class _AllTaskState extends State<AllTask> {
             ),
           ),
           isExpandToday == true
-              ? Container(
+              ? SizedBox(
                   width: MediaQuery.of(context).size.width,
                   child: ListView.builder(
                     scrollDirection: Axis.vertical,
@@ -121,9 +123,11 @@ class _AllTaskState extends State<AllTask> {
                         checkTaskDay = calculateDifference(myDate);
                       }
 
-                      // without reminder = 2 or with reminder = 0, will add to all list or Today list
 
-                      return checkTaskDay == 0 || checkTaskDay == 2
+                      // without reminder = 2 or with reminder = 0, will add to all list or Today list
+                      return checkTaskDay == 0 ||
+                              checkTaskDay == 2 &&
+                                  widget.allTasks[i].isComplete == 'no'
                           ? TodayTasks(
                               task: widget.allTasks[i].task,
                               id: widget.allTasks[i].id,
@@ -279,6 +283,77 @@ class _AllTaskState extends State<AllTask> {
                               time: widget.allTasks[i].time,
                               isComplete: widget.allTasks[i].isComplete,
                               deleteFunction: widget.deleteFunction,
+                            );
+                    },
+                  ),
+                )
+              : SizedBox(height: 0.0),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: GestureDetector(
+              onTap: () => {
+                if (isExpandComplete == false)
+                  {
+                    setState(() {
+                      isExpandComplete = true;
+                    })
+                  }
+                else
+                  {
+                    setState(() {
+                      isExpandComplete = false;
+                    })
+                  }
+              },
+              child: Row(
+                children: [
+                  Text(
+                    "Completed",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'mplus',
+                        fontSize: 16),
+                  ),
+                  Icon(
+                    isExpandComplete == true
+                        ? Icons.arrow_drop_down
+                        : Icons.arrow_drop_up,
+                    color: Colors.black54,
+                  )
+                ],
+              ),
+            ),
+          ),
+          isExpandComplete == true
+              ? Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    primary: false,
+                    itemCount: widget.allTasks.length,
+                    itemBuilder: (context, i) {
+                      if (widget.allTasks[i].date.toString() == "null") {
+                      } else if (widget.allTasks[i].date.toString() != "null") {
+                        var trimmedDate =
+                            widget.allTasks[i].date.substring(0, 10);
+                        myDate = Intl.withLocale('en',
+                            () => DateFormat("yyyy-MM-dd").parse(trimmedDate));
+                        checkTaskDay = calculateDifference(myDate);
+                      }
+                      return widget.allTasks[i].isComplete == 'yes'
+                          ? CompleteTasks(
+                              task: widget.allTasks[i].task,
+                              id: widget.allTasks[i].id,
+                              subTask: widget.allTasks[i].subTask,
+                              category: widget.allTasks[i].category,
+                              date: widget.allTasks[i].date,
+                              time: widget.allTasks[i].time,
+                              isComplete: widget.allTasks[i].isComplete,
+                              deleteFunction: widget.deleteFunction,
+                            )
+                          : SizedBox(
+                              height: 0,
                             );
                     },
                   ),
