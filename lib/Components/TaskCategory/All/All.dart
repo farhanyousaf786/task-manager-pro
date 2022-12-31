@@ -114,8 +114,8 @@ class _AllTaskState extends State<AllTask> {
                     itemCount: widget.allTasks.length,
                     itemBuilder: (context, i) {
                       if (widget.allTasks[i].date.toString() == "null") {
-                        // without reminder = 2, will add to all list or Today list
-                        checkTaskDay = 2;
+                        // without reminder = 4, will add to all list or Today list
+                        checkTaskDay = 4;
                       } else if (widget.allTasks[i].date.toString() != "null") {
                         var trimmedDate =
                             widget.allTasks[i].date.substring(0, 10);
@@ -125,8 +125,9 @@ class _AllTaskState extends State<AllTask> {
                       }
 
                       // without reminder = 2 or with reminder = 0, will add to all list or Today list
+                      print("checkTaskDay : ${checkTaskDay} && task = ${widget.allTasks[i].task}");
                       return checkTaskDay == 0 ||
-                              checkTaskDay == 2 &&
+                              checkTaskDay == 4 &&
                                   widget.allTasks[i].isComplete == 'no'
                           ? TodayTasks(
                               task: widget.allTasks[i].task,
@@ -272,7 +273,7 @@ class _AllTaskState extends State<AllTask> {
                             () => DateFormat("yyyy-MM-dd").parse(trimmedDate));
                         checkTaskDay = calculateDifference(myDate);
                       }
-                      return checkTaskDay! < 3
+                      return checkTaskDay! < 2 || widget.allTasks[i].date.toString() == "null"
                           ? const SizedBox(
                               height: 0,
                             )

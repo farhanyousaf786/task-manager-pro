@@ -128,7 +128,7 @@ class _TodayTasksState extends State<TodayTasks> {
 
       child: GestureDetector(
         onTap: () {
-          showDetails();
+          showDetails(otherTaskCard);
         },
         child: Padding(
           padding: const EdgeInsets.only(top: 5, bottom: 5, right: 8, left: 8),
@@ -240,11 +240,11 @@ class _TodayTasksState extends State<TodayTasks> {
       return Row(
         children: [
           hide == "true"
-              ? SizedBox(
+              ? const SizedBox(
                   height: 0,
                   width: 0,
                 )
-              : Icon(
+              : const Icon(
                   Icons.check_circle_outline,
                   color: Colors.transparent,
                 ),
@@ -262,7 +262,7 @@ class _TodayTasksState extends State<TodayTasks> {
     }
   }
 
-  showDetails() {
+  showDetails(var otherTaskCard) {
     showModalBottomSheet(
         useRootNavigator: true,
         isScrollControlled: true,
@@ -277,7 +277,7 @@ class _TodayTasksState extends State<TodayTasks> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    color: Colors.blue,
+                    color: Colors.blueAccent.withOpacity(0.8),
                     child: Padding(
                       padding: const EdgeInsets.all(5.0),
                       child: Row(
@@ -292,8 +292,26 @@ class _TodayTasksState extends State<TodayTasks> {
                       ),
                     ),
                   ),
+
+                  /// These are Task Widgets
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.only(left: 8, top: 10),
+                    child: Row(
+                      children: const [
+                        Text(
+                          "Tasks:",
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontFamily: "mplus",
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8, top: 0, bottom: 4),
                     child: Row(
                       children: [
                         Flexible(
@@ -310,12 +328,19 @@ class _TodayTasksState extends State<TodayTasks> {
                       ],
                     ),
                   ),
+
+                  const Divider(),
+
+                  /// These are subTask Widgets
                   Padding(
-                    padding: const EdgeInsets.only(left: 8, top: 0),
+                    padding: const EdgeInsets.only(
+                      left: 8,
+                      top: 0,
+                    ),
                     child: Row(
                       children: const [
                         Text(
-                          "Sub Tasks: ",
+                          "Sub Tasks:",
                           textAlign: TextAlign.start,
                           style: TextStyle(
                               fontSize: 16,
@@ -327,17 +352,47 @@ class _TodayTasksState extends State<TodayTasks> {
                     ),
                   ),
                   subTaskForBottomSheet(),
-                  widget.time == "null"
-                      ? const Text(
-                          "No Reminder",
+                  const Divider(),
+
+                  /// These are Reminder Widgets
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      left: 8,
+                      top: 0,
+                    ),
+                    child: Row(
+                      children: const [
+                        Text(
+                          "Reminder:",
+                          textAlign: TextAlign.start,
                           style: TextStyle(
-                              fontSize: 17,
+                              fontSize: 16,
                               fontFamily: "mplus",
                               fontWeight: FontWeight.bold,
-                              color: Colors.blueAccent),
+                              color: Colors.black),
+                        ),
+                      ],
+                    ),
+                  ),
+                  widget.time == "null"
+                      ? Padding(
+                          padding:
+                              const EdgeInsets.only(left: 8, top: 1, bottom: 4),
+                          child: Row(
+                            children: [
+                              Text(
+                                "No Reminder Set",
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    fontFamily: "mplus",
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black.withOpacity(0.6)),
+                              ),
+                            ],
+                          ),
                         )
                       : Padding(
-                          padding: EdgeInsets.only(left: 8, top: 6),
+                          padding: EdgeInsets.only(left: 8, top: 1, bottom: 4),
                           child: Row(
                             children: [
                               const Text(
@@ -352,6 +407,23 @@ class _TodayTasksState extends State<TodayTasks> {
                             ],
                           ),
                         ),
+                  const Divider(),
+
+                  ElevatedButton(
+                    onPressed: () => {
+                      widget.deleteFunction(otherTaskCard),
+                      Navigator.pop(context),
+                    },
+                    child: const Text(
+                      "Delete Task",
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontFamily: "mplus",
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),
@@ -361,42 +433,54 @@ class _TodayTasksState extends State<TodayTasks> {
 
   subTaskForBottomSheet() {
     if (widget.subTask == "N/A") {
-      return const Text(
-        "No Sub Task Available",
-        textAlign: TextAlign.start,
-        style: const TextStyle(
-            fontSize: 15,
-            fontFamily: "mplus",
-            fontWeight: FontWeight.bold,
-            color: Colors.blueAccent),
+      return Row(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 8, top: 1, bottom: 4),
+            child: Text(
+              "There is No Sub Task Available",
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                  fontSize: 12,
+                  fontFamily: "mplus",
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black.withOpacity(0.6)),
+            ),
+          ),
+        ],
       );
     } else {
-      return ListView.builder(
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        primary: false,
-        itemCount: subList.length,
-        itemBuilder: (context, i) {
-          // without reminder = 2 or with reminder = 0, will add to all list or Today list
-          return Row(
-            children: [
-              Flexible(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 8, right: 8, top: 5),
-                  child: Text(
-                    "${i + 1})  ${subList[i]}",
-                    softWrap: true,
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        color: Colors.grey.shade600,
-                        fontSize: 12),
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 9),
+        child: ListView.builder(
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          primary: false,
+          itemCount: subList.length,
+          itemBuilder: (context, i) {
+            // without reminder = 2 or with reminder = 0, will add to all list or Today list
+
+            return Row(
+              children: [
+                Flexible(
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 8, right: 8, top: 5, bottom: 1),
+                    child: Text(
+                      "${i + 1})  ${subList[i]}",
+                      softWrap: true,
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          color: Colors.blueAccent,
+                          fontSize: 12),
+                    ),
                   ),
                 ),
-              ),
-            ],
-          );
-        },
+              ],
+            );
+          },
+        ),
       );
     }
   }
