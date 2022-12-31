@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swipe_action_cell/core/cell.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:taskreminder/Database/DBModel.dart';
 import 'package:taskreminder/Database/TaskModel.dart';
@@ -34,13 +35,20 @@ class TodayTasks extends StatefulWidget {
 
 class _TodayTasksState extends State<TodayTasks> {
   List<String> subList = [];
-  late TimeOfDay time;
+  late TimeOfDay reminderTime;
+  late DateTime reminderDate;
 
   @override
   void initState() {
-    getTime();
-    slipSubTask();
+    initializeDateFormatting('pt_BR', null);
 
+    if (widget.time == "null") {
+    } else {
+      getTime();
+      getDate();
+    }
+
+    slipSubTask();
     super.initState();
   }
 
@@ -68,14 +76,19 @@ class _TodayTasksState extends State<TodayTasks> {
     return format.format(dt);
   }
 
-
   // get time in string and convert into TimeOfDat and then get PM AM
   // by using formatTimeOfDay function
   getTime() {
-    var time0 = widget.time.substring(10, 15);
-    time = TimeOfDay(
-        hour: int.parse(time0.split(":")[0]),
-        minute: int.parse(time0.split(":")[1]));
+    var time = widget.time.substring(10, 15);
+    reminderTime = TimeOfDay(
+        hour: int.parse(time.split(":")[0]),
+        minute: int.parse(time.split(":")[1]));
+  }
+
+  getDate() {
+    var trimmedDate = widget.date.substring(0, 10);
+    reminderDate = Intl.withLocale(
+        'en', () => DateFormat("yyyy-MM-dd").parse(trimmedDate));
   }
 
   @override
@@ -193,15 +206,20 @@ class _TodayTasksState extends State<TodayTasks> {
         itemCount: subList.length,
         itemBuilder: (context, i) {
           // without reminder = 2 or with reminder = 0, will add to all list or Today list
-          return Padding(
-            padding: const EdgeInsets.only(left: 32, top: 1, bottom: 1),
-            child: Text(
-              "${i + 1})  ${subList[i].length > 10 ? "${subList[i].substring(0, 9)}..." : subList[i]}",
-              style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey.shade600,
-                  fontSize: 12),
-            ),
+          return Row(
+            children: [
+              Icon(
+                Icons.check_circle_outline,
+                color: Colors.transparent,
+              ),
+              Text(
+                " ${i + 1})  ${subList[i].length > 10 ? "${subList[i].substring(0, 9)}..." : subList[i]}",
+                style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey.shade600,
+                    fontSize: 12),
+              ),
+            ],
           );
         },
       );
@@ -209,16 +227,29 @@ class _TodayTasksState extends State<TodayTasks> {
   }
 
   reminder() {
-    return Row(
-      children: [
-        Icon(
-          Icons.check_circle_outline,
-          color: Colors.transparent,
-        ),
-        Text(
-          widget.time + widget.date.toString(),
-        )
-      ],
-    );
+    if (widget.time == "null") {
+      return SizedBox(
+        height: 0,
+        width: 0,
+      );
+    } else {
+      return Row(
+        children: [
+          Icon(
+            Icons.check_circle_outline,
+            color: Colors.transparent,
+          ),
+
+          Text(
+            "  ${DateFormat.yMMMd().format(reminderDate!)} at ${formatTimeOfDay(reminderTime)}",
+            style: TextStyle(
+                fontSize: 10,
+                fontFamily: 'mplus',
+                fontWeight: FontWeight.w600,
+                color: Colors.green.shade700,),
+          )
+        ],
+      );
+    }
   }
 }
