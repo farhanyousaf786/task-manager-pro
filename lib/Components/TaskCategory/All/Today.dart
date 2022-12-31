@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swipe_action_cell/core/cell.dart';
+import 'package:taskreminder/Database/DBModel.dart';
 import 'package:taskreminder/Database/TaskModel.dart';
 
 class TodayTasks extends StatefulWidget {
@@ -11,6 +12,7 @@ class TodayTasks extends StatefulWidget {
   final String date;
   final String isComplete;
   final Function deleteFunction;
+  final Function completeTask;
 
   const TodayTasks(
       {Key? key,
@@ -21,7 +23,8 @@ class TodayTasks extends StatefulWidget {
       required this.time,
       required this.date,
       required this.isComplete,
-      required this.deleteFunction})
+      required this.deleteFunction,
+      required this.completeTask})
       : super(key: key);
 
   @override
@@ -29,6 +32,19 @@ class TodayTasks extends StatefulWidget {
 }
 
 class _TodayTasksState extends State<TodayTasks> {
+  // // create a database object so we can access database functions
+  // var db = DatabaseConnect();
+  //
+  // completeTask(String isComplete) {
+  //   db.updateBpRecord(widget.id, isComplete);
+  //   setState(() {});
+  // }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var otherTaskCard = TaskModel(
@@ -76,9 +92,16 @@ class _TodayTasksState extends State<TodayTasks> {
           width: MediaQuery.of(context).size.width,
           child: Row(
             children: [
-              Icon(
-                Icons.check_circle_outline,
-                color: Colors.grey.shade500,
+              GestureDetector(
+                onTap: () {
+                  widget.completeTask(widget.id, "yes");
+                },
+                child: Icon(
+                  widget.isComplete == "yes"
+                      ? Icons.check_circle
+                      : Icons.check_circle_outline,
+                  color: Colors.grey.shade500,
+                ),
               ),
               Text(
                 "  ${widget.task.length > 18 ? "${widget.task.substring(0, 17)}...." : widget.task}",

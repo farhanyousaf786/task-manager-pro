@@ -377,6 +377,13 @@ class _ListViewTaskState extends State<ListViewTask> {
     setState(() {});
   }
 
+
+  void updateTask(int id, String completeTask) async {
+    await db.updateBpRecord(id, completeTask);
+    setState(() {});
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -410,6 +417,7 @@ class _ListViewTaskState extends State<ListViewTask> {
                   isComplete: "data[i].isComplete",
                   allTasks: data,
                   deleteFunction: deleteItem,
+                  completeTask: updateTask,
                   builder: (BuildContext context, void Function() ct) {
                     currentTask = ct;
                   },

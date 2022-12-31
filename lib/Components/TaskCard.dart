@@ -15,6 +15,8 @@ class TaskCard extends StatefulWidget {
   final String isComplete;
   final List allTasks;
   final Function deleteFunction;
+  final Function completeTask;
+
   final MyBuilder builder;
 
   const TaskCard({
@@ -29,6 +31,7 @@ class TaskCard extends StatefulWidget {
     required this.deleteFunction,
     required this.allTasks,
     required this.builder,
+    required this.completeTask,
   }) : super(key: key);
 
   @override
@@ -58,7 +61,9 @@ class _TaskCardState extends State<TaskCard> {
             date: widget.date,
             isComplete: widget.isComplete,
             allTasks: widget.allTasks,
-            deleteFunction: widget.deleteFunction)
+            deleteFunction: widget.deleteFunction,
+            completeTask: widget.completeTask,
+          )
         : WorkTask(
             id: widget.id,
             task: widget.task,

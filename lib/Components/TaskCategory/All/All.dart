@@ -15,6 +15,7 @@ class AllTask extends StatefulWidget {
   final String isComplete;
   final List allTasks;
   final Function deleteFunction;
+  final Function completeTask;
 
   const AllTask(
       {Key? key,
@@ -26,7 +27,8 @@ class AllTask extends StatefulWidget {
       required this.date,
       required this.isComplete,
       required this.allTasks,
-      required this.deleteFunction})
+      required this.deleteFunction,
+      required this.completeTask})
       : super(key: key);
 
   @override
@@ -89,12 +91,12 @@ class _AllTaskState extends State<AllTask> {
                         fontFamily: 'mplus',
                         fontSize: 16),
                   ),
-                  Icon(isExpandToday == true
-                      ? Icons.arrow_drop_down
-                      : Icons.arrow_drop_up,
-
-                    color: Colors.black54,)
-
+                  Icon(
+                    isExpandToday == true
+                        ? Icons.arrow_drop_down
+                        : Icons.arrow_drop_up,
+                    color: Colors.black54,
+                  )
                 ],
               ),
             ),
@@ -111,14 +113,11 @@ class _AllTaskState extends State<AllTask> {
                       if (widget.allTasks[i].date.toString() == "null") {
                         // without reminder = 2, will add to all list or Today list
                         checkTaskDay = 2;
-                      } else if (widget.allTasks[i].date.toString() !=
-                          "null") {
+                      } else if (widget.allTasks[i].date.toString() != "null") {
                         var trimmedDate =
                             widget.allTasks[i].date.substring(0, 10);
-                        myDate = Intl.withLocale(
-                            'en',
-                            () =>
-                                DateFormat("yyyy-MM-dd").parse(trimmedDate));
+                        myDate = Intl.withLocale('en',
+                            () => DateFormat("yyyy-MM-dd").parse(trimmedDate));
                         checkTaskDay = calculateDifference(myDate);
                       }
 
@@ -134,6 +133,7 @@ class _AllTaskState extends State<AllTask> {
                               time: widget.allTasks[i].time,
                               isComplete: widget.allTasks[i].isComplete,
                               deleteFunction: widget.deleteFunction,
+                              completeTask: widget.completeTask,
                             )
                           : const SizedBox(
                               height: 0,
@@ -141,7 +141,7 @@ class _AllTaskState extends State<AllTask> {
                     },
                   ),
                 )
-              : SizedBox(height:0.0),
+              : SizedBox(height: 0.0),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
@@ -168,11 +168,12 @@ class _AllTaskState extends State<AllTask> {
                         fontFamily: 'mplus',
                         fontSize: 16),
                   ),
-                  Icon(isExpandTomorrow == true
-                      ? Icons.arrow_drop_down
-                      : Icons.arrow_drop_up,
-                    color: Colors.black54,)
-
+                  Icon(
+                    isExpandTomorrow == true
+                        ? Icons.arrow_drop_down
+                        : Icons.arrow_drop_up,
+                    color: Colors.black54,
+                  )
                 ],
               ),
             ),
@@ -184,18 +185,14 @@ class _AllTaskState extends State<AllTask> {
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     primary: false,
-
                     itemCount: widget.allTasks.length,
                     itemBuilder: (context, i) {
                       if (widget.allTasks[i].date.toString() == "null") {
-                      } else if (widget.allTasks[i].date.toString() !=
-                          "null") {
+                      } else if (widget.allTasks[i].date.toString() != "null") {
                         var trimmedDate =
                             widget.allTasks[i].date.substring(0, 10);
-                        myDate = Intl.withLocale(
-                            'en',
-                            () =>
-                                DateFormat("yyyy-MM-dd").parse(trimmedDate));
+                        myDate = Intl.withLocale('en',
+                            () => DateFormat("yyyy-MM-dd").parse(trimmedDate));
                         checkTaskDay = calculateDifference(myDate);
                       }
                       return checkTaskDay == 1
@@ -215,9 +212,8 @@ class _AllTaskState extends State<AllTask> {
                     },
                   ),
                 )
-               : SizedBox(height:0.0),
-
-    Padding(
+              : SizedBox(height: 0.0),
+          Padding(
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
               onTap: () => {
@@ -243,47 +239,51 @@ class _AllTaskState extends State<AllTask> {
                         fontFamily: 'mplus',
                         fontSize: 16),
                   ),
-                  Icon(isExpandFuture == true
-                      ? Icons.arrow_drop_down
-                      : Icons.arrow_drop_up,
-                  color: Colors.black54,)
+                  Icon(
+                    isExpandFuture == true
+                        ? Icons.arrow_drop_down
+                        : Icons.arrow_drop_up,
+                    color: Colors.black54,
+                  )
                 ],
               ),
             ),
           ),
-          isExpandFuture == true ?  Container(
-            width: MediaQuery.of(context).size.width,
-            child: ListView.builder(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              primary: false,
-
-              itemCount: widget.allTasks.length,
-              itemBuilder: (context, i) {
-                if (widget.allTasks[i].date.toString() == "null") {
-                } else if (widget.allTasks[i].date.toString() != "null") {
-                  var trimmedDate = widget.allTasks[i].date.substring(0, 10);
-                  myDate = Intl.withLocale('en',
-                      () => DateFormat("yyyy-MM-dd").parse(trimmedDate));
-                  checkTaskDay = calculateDifference(myDate);
-                }
-                return checkTaskDay! < 3
-                    ? const SizedBox(
-                        height: 0,
-                      )
-                    : FutureTask(
-                        task: widget.allTasks[i].task,
-                        id: widget.allTasks[i].id,
-                        subTask: widget.allTasks[i].subTask,
-                        category: widget.allTasks[i].category,
-                        date: widget.allTasks[i].date,
-                        time: widget.allTasks[i].time,
-                        isComplete: widget.allTasks[i].isComplete,
-                        deleteFunction: widget.deleteFunction,
-                      );
-              },
-            ),
-          ) : SizedBox(height:0.0)
+          isExpandFuture == true
+              ? Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    primary: false,
+                    itemCount: widget.allTasks.length,
+                    itemBuilder: (context, i) {
+                      if (widget.allTasks[i].date.toString() == "null") {
+                      } else if (widget.allTasks[i].date.toString() != "null") {
+                        var trimmedDate =
+                            widget.allTasks[i].date.substring(0, 10);
+                        myDate = Intl.withLocale('en',
+                            () => DateFormat("yyyy-MM-dd").parse(trimmedDate));
+                        checkTaskDay = calculateDifference(myDate);
+                      }
+                      return checkTaskDay! < 3
+                          ? const SizedBox(
+                              height: 0,
+                            )
+                          : FutureTask(
+                              task: widget.allTasks[i].task,
+                              id: widget.allTasks[i].id,
+                              subTask: widget.allTasks[i].subTask,
+                              category: widget.allTasks[i].category,
+                              date: widget.allTasks[i].date,
+                              time: widget.allTasks[i].time,
+                              isComplete: widget.allTasks[i].isComplete,
+                              deleteFunction: widget.deleteFunction,
+                            );
+                    },
+                  ),
+                )
+              : SizedBox(height: 0.0)
         ],
       ),
     );
