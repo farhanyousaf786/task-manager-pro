@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swipe_action_cell/core/cell.dart';
+import 'package:intl/intl.dart';
 import 'package:taskreminder/Database/DBModel.dart';
 import 'package:taskreminder/Database/TaskModel.dart';
 
@@ -32,22 +33,16 @@ class TodayTasks extends StatefulWidget {
 }
 
 class _TodayTasksState extends State<TodayTasks> {
-  // // create a database object so we can access database functions
-  // var db = DatabaseConnect();
-  //
-  // completeTask(String isComplete) {
-  //   db.updateBpRecord(widget.id, isComplete);
-  //   setState(() {});
-  // }
+  List<String> subList = [];
+  late TimeOfDay time;
 
   @override
   void initState() {
+    getTime();
     slipSubTask();
 
     super.initState();
   }
-
-  List<String> subList = [];
 
   slipSubTask() {
     //this will split every subTask from _F_ Flaf
@@ -64,6 +59,23 @@ class _TodayTasksState extends State<TodayTasks> {
       }
       print("Sub list >> $subList");
     }
+  }
+
+  String formatTimeOfDay(TimeOfDay tod) {
+    final now = new DateTime.now();
+    final dt = DateTime(now.year, now.month, now.day, tod.hour, tod.minute);
+    final format = DateFormat.jm(); //"6:00 AM"
+    return format.format(dt);
+  }
+
+
+  // get time in string and convert into TimeOfDat and then get PM AM
+  // by using formatTimeOfDay function
+  getTime() {
+    var time0 = widget.time.substring(10, 15);
+    time = TimeOfDay(
+        hour: int.parse(time0.split(":")[0]),
+        minute: int.parse(time0.split(":")[1]));
   }
 
   @override
@@ -113,34 +125,9 @@ class _TodayTasksState extends State<TodayTasks> {
           width: MediaQuery.of(context).size.width,
           child: Column(
             children: [
-              Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      widget.completeTask(widget.id, "yes");
-                    },
-                    child: Icon(
-                      widget.isComplete == "yes"
-                          ? Icons.check_circle
-                          : Icons.check_circle_outline,
-                      color: Colors.grey.shade500,
-                    ),
-                  ),
-                  Text(
-                    "  ${widget.task.length > 18 ? "${widget.task.substring(0, 17)}...." : widget.task}",
-                    style: const TextStyle(
-                        fontFamily: 'mplus',
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black87),
-                  ),
-                ],
-              ),
-              widget.subTask == "N/A"
-                  ? SizedBox(
-                      height: 00,
-                    )
-                  : subTask()
+              task(),
+              subTask(),
+              reminder(),
             ],
           ),
         ),
@@ -148,26 +135,90 @@ class _TodayTasksState extends State<TodayTasks> {
     );
   }
 
-  subTask() {
-
-   return ListView.builder(
-      scrollDirection: Axis.vertical,
-      shrinkWrap: true,
-      primary: false,
-      itemCount: subList.length,
-      itemBuilder: (context, i) {
-        // without reminder = 2 or with reminder = 0, will add to all list or Today list
-        return Padding(
-          padding: const EdgeInsets.only(left: 31, top: 1, bottom: 1),
-          child: Text("${i+1})  ${subList[i]}",
-          style: TextStyle(
-            fontWeight: FontWeight.w500,
-            color: Colors.grey.shade600,
-            fontSize: 15
-          ),),
-        );
-      },
+  task() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: [
+            GestureDetector(
+              onTap: () {
+                widget.completeTask(widget.id, "yes");
+              },
+              child: Icon(
+                widget.isComplete == "yes"
+                    ? Icons.check_circle
+                    : Icons.check_circle_outline,
+                color: Colors.grey.shade500,
+              ),
+            ),
+            Text(
+              "  ${widget.task.length > 18 ? "${widget.task.substring(0, 17)}...." : widget.task}",
+              style: const TextStyle(
+                  fontFamily: 'mplus',
+                  fontSize: 15,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.black87),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            widget.date == "null"
+                ? SizedBox(
+                    width: 0,
+                    height: 0,
+                  )
+                : Icon(
+                    Icons.add_alert_rounded,
+                    size: 16,
+                    color: Colors.black.withOpacity(0.6),
+                  )
+          ],
+        ),
+      ],
     );
+  }
 
+  subTask() {
+    if (widget.subTask == "N/A") {
+      return const SizedBox(
+        height: 0,
+      );
+    } else {
+      return ListView.builder(
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        primary: false,
+        itemCount: subList.length,
+        itemBuilder: (context, i) {
+          // without reminder = 2 or with reminder = 0, will add to all list or Today list
+          return Padding(
+            padding: const EdgeInsets.only(left: 32, top: 1, bottom: 1),
+            child: Text(
+              "${i + 1})  ${subList[i].length > 10 ? "${subList[i].substring(0, 9)}..." : subList[i]}",
+              style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey.shade600,
+                  fontSize: 12),
+            ),
+          );
+        },
+      );
+    }
+  }
+
+  reminder() {
+    return Row(
+      children: [
+        Icon(
+          Icons.check_circle_outline,
+          color: Colors.transparent,
+        ),
+        Text(
+          widget.time + widget.date.toString(),
+        )
+      ],
+    );
   }
 }

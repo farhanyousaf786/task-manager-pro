@@ -91,7 +91,8 @@ class _AllTaskState extends State<AllTask> {
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontFamily: 'mplus',
-                        fontSize: 16),
+                        fontSize: 16,
+                        color: Colors.black.withOpacity(0.6)),
                   ),
                   Icon(
                     isExpandToday == true
@@ -122,7 +123,6 @@ class _AllTaskState extends State<AllTask> {
                             () => DateFormat("yyyy-MM-dd").parse(trimmedDate));
                         checkTaskDay = calculateDifference(myDate);
                       }
-
 
                       // without reminder = 2 or with reminder = 0, will add to all list or Today list
                       return checkTaskDay == 0 ||
@@ -170,7 +170,8 @@ class _AllTaskState extends State<AllTask> {
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontFamily: 'mplus',
-                        fontSize: 16),
+                        fontSize: 16,
+                        color: Colors.black.withOpacity(0.6)),
                   ),
                   Icon(
                     isExpandTomorrow == true
@@ -241,7 +242,8 @@ class _AllTaskState extends State<AllTask> {
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontFamily: 'mplus',
-                        fontSize: 16),
+                        fontSize: 16,
+                        color: Colors.black.withOpacity(0.6)),
                   ),
                   Icon(
                     isExpandFuture == true
@@ -287,7 +289,7 @@ class _AllTaskState extends State<AllTask> {
                     },
                   ),
                 )
-              : SizedBox(height: 0.0),
+              : const SizedBox(height: 0.0),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
@@ -310,9 +312,11 @@ class _AllTaskState extends State<AllTask> {
                   Text(
                     "Completed",
                     style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'mplus',
-                        fontSize: 16),
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'mplus',
+                      fontSize: 16,
+                      color: Colors.black.withOpacity(0.6),
+                    ),
                   ),
                   Icon(
                     isExpandComplete == true
