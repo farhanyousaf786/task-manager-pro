@@ -92,7 +92,10 @@ class _AllTaskState extends State<AllTask> {
                     ),
                     Icon(isExpandToday == true
                         ? Icons.arrow_drop_down
-                        : Icons.arrow_drop_up)
+                        : Icons.arrow_drop_up,
+
+                      color: Colors.black54,)
+
                   ],
                 ),
               ),
@@ -100,9 +103,11 @@ class _AllTaskState extends State<AllTask> {
             isExpandToday == true
                 ? Container(
                     color: Colors.blueAccent,
-                    height: MediaQuery.of(context).size.height / 3,
                     width: MediaQuery.of(context).size.width,
                     child: ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+
                       itemCount: widget.allTasks.length,
                       itemBuilder: (context, i) {
                         if (widget.allTasks[i].date.toString() == "null") {
@@ -167,7 +172,9 @@ class _AllTaskState extends State<AllTask> {
                     ),
                     Icon(isExpandTomorrow == true
                         ? Icons.arrow_drop_down
-                        : Icons.arrow_drop_up)
+                        : Icons.arrow_drop_up,
+                      color: Colors.black54,)
+
                   ],
                 ),
               ),
@@ -175,9 +182,10 @@ class _AllTaskState extends State<AllTask> {
             isExpandTomorrow == true
                 ? Container(
                     color: Colors.green,
-                    height: MediaQuery.of(context).size.height / 3,
                     width: MediaQuery.of(context).size.width,
                     child: ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
                       itemCount: widget.allTasks.length,
                       itemBuilder: (context, i) {
                         if (widget.allTasks[i].date.toString() == "null") {
@@ -238,16 +246,18 @@ class _AllTaskState extends State<AllTask> {
                     ),
                     Icon(isExpandFuture == true
                         ? Icons.arrow_drop_down
-                        : Icons.arrow_drop_up)
+                        : Icons.arrow_drop_up,
+                    color: Colors.black54,)
                   ],
                 ),
               ),
             ),
             isExpandFuture == true ?  Container(
               color: Colors.red,
-              height: MediaQuery.of(context).size.height / 3,
               width: MediaQuery.of(context).size.width,
               child: ListView.builder(
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
                 itemCount: widget.allTasks.length,
                 itemBuilder: (context, i) {
                   if (widget.allTasks[i].date.toString() == "null") {
