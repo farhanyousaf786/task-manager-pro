@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_swipe_action_cell/core/cell.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
@@ -33,24 +34,29 @@ class TaskWidget extends StatefulWidget {
 }
 
 class _TaskWidgetState extends State<TaskWidget> {
-
-
   List<String> subList = [];
   late TimeOfDay reminderTime;
   late DateTime reminderDate;
+  String currentPage = "all";
+
 
   @override
   void initState() {
     initializeDateFormatting('pt_BR', null);
-
     if (widget.time == "null") {
     } else {
       getTime();
       getDate();
     }
-
     slipSubTask();
     super.initState();
+  }
+
+  removeNotificationFromSchedual(int id) async {
+    final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
+        FlutterLocalNotificationsPlugin();
+
+    await _flutterLocalNotificationsPlugin.cancel(id);
   }
 
   slipSubTask() {
@@ -104,7 +110,7 @@ class _TaskWidgetState extends State<TaskWidget> {
       isComplete: widget.isComplete,
     );
 
-    return SwipeActionCell(
+    return  SwipeActionCell(
       backgroundColor: Colors.white,
       key: ObjectKey(widget.id),
 
@@ -117,6 +123,7 @@ class _TaskWidgetState extends State<TaskWidget> {
                 fontSize: 12, color: Colors.white, fontFamily: 'mplu'),
             onTap: (CompletionHandler handler) async {
               widget.deleteFunction(otherTaskCard);
+              removeNotificationFromSchedual(widget.id);
             },
             color: Colors.red),
         SwipeAction(
@@ -136,7 +143,7 @@ class _TaskWidgetState extends State<TaskWidget> {
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
-              color: Colors.blueAccent.withOpacity(0.1),
+              color: Colors.grey.withOpacity(0.1),
             ),
             padding: const EdgeInsets.all(8.0),
             width: MediaQuery.of(context).size.width,
@@ -161,7 +168,9 @@ class _TaskWidgetState extends State<TaskWidget> {
           children: [
             GestureDetector(
               onTap: () {
-                widget.completeTask(widget.id, "yes");
+                widget.completeTask(
+                    widget.id, widget.isComplete == "yes" ? "no" : "yes");
+                removeNotificationFromSchedual(widget.id);
               },
               child: Icon(
                 widget.isComplete == "yes"
@@ -172,26 +181,42 @@ class _TaskWidgetState extends State<TaskWidget> {
             ),
             Text(
               "  ${widget.task.length > 20 ? "${widget.task.substring(0, 19)}...." : widget.task}",
-              style: const TextStyle(
+              style: TextStyle(
                   fontFamily: 'mplus',
                   fontSize: 15,
                   fontWeight: FontWeight.w700,
-                  color: Colors.black87),
+                  color: Colors.black87,
+                  decoration: widget.isComplete == "yes"
+                      ? TextDecoration.lineThrough
+                      : TextDecoration.none),
             ),
+            widget.time == "null"
+                ? Text(
+                    widget.category == "No Category"
+                        ? ""
+                        : " (${widget.category})",
+                    style: TextStyle(
+                      fontSize: 8,
+                      fontFamily: 'mplus',
+                      fontWeight: FontWeight.w600,
+                      color: Colors.deepOrange,
+                    ),
+                  )
+                : Text(""),
           ],
         ),
         Row(
           children: [
             widget.date == "null"
                 ? SizedBox(
-              width: 0,
-              height: 0,
-            )
+                    width: 0,
+                    height: 0,
+                  )
                 : Icon(
-              Icons.add_alert_rounded,
-              size: 16,
-              color: Colors.black.withOpacity(0.6),
-            )
+                    Icons.add_alert_rounded,
+                    size: 16,
+                    color: Colors.black.withOpacity(0.6),
+                  )
           ],
         ),
       ],
@@ -213,7 +238,7 @@ class _TaskWidgetState extends State<TaskWidget> {
           // without reminder = 2 or with reminder = 0, will add to all list or Today list
           return Row(
             children: [
-              Icon(
+              const Icon(
                 Icons.check_circle_outline,
                 color: Colors.transparent,
               ),
@@ -222,7 +247,8 @@ class _TaskWidgetState extends State<TaskWidget> {
                 style: TextStyle(
                     fontWeight: FontWeight.w500,
                     color: Colors.grey.shade600,
-                    fontSize: 12),
+                    fontSize: 12,
+                    fontFamily: 'mplus'),
               ),
             ],
           );
@@ -242,13 +268,13 @@ class _TaskWidgetState extends State<TaskWidget> {
         children: [
           hide == "true"
               ? const SizedBox(
-            height: 0,
-            width: 0,
-          )
+                  height: 0,
+                  width: 0,
+                )
               : const Icon(
-            Icons.check_circle_outline,
-            color: Colors.transparent,
-          ),
+                  Icons.check_circle_outline,
+                  color: Colors.transparent,
+                ),
           Text(
             "  ${DateFormat.yMMMd().format(reminderDate!)} at ${formatTimeOfDay(reminderTime)}",
             style: TextStyle(
@@ -257,7 +283,16 @@ class _TaskWidgetState extends State<TaskWidget> {
               fontWeight: FontWeight.w600,
               color: Colors.green.shade700,
             ),
-          )
+          ),
+          Text(
+            widget.category == "No Category" ? "" : " (${widget.category})",
+            style: TextStyle(
+              fontSize: 8,
+              fontFamily: 'mplus',
+              fontWeight: FontWeight.w600,
+              color: Colors.deepOrange,
+            ),
+          ),
         ],
       );
     }
@@ -377,53 +412,82 @@ class _TaskWidgetState extends State<TaskWidget> {
                   ),
                   widget.time == "null"
                       ? Padding(
-                    padding:
-                    const EdgeInsets.only(left: 8, top: 1, bottom: 4),
-                    child: Row(
-                      children: [
-                        Text(
-                          "No Reminder Set",
-                          style: TextStyle(
-                              fontSize: 12,
-                              fontFamily: "mplus",
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black.withOpacity(0.6)),
-                        ),
-                      ],
-                    ),
-                  )
+                          padding:
+                              const EdgeInsets.only(left: 8, top: 1, bottom: 4),
+                          child: Row(
+                            children: [
+                              Text(
+                                "No Reminder Set",
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    fontFamily: "mplus",
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black.withOpacity(0.6)),
+                              ),
+                            ],
+                          ),
+                        )
                       : Padding(
-                    padding: EdgeInsets.only(left: 8, top: 1, bottom: 4),
-                    child: Row(
-                      children: [
-                        const Text(
-                          "Reminder @ ",
-                          style: TextStyle(
-                              fontSize: 15,
-                              fontFamily: "mplus",
-                              fontWeight: FontWeight.bold,
-                              color: Colors.blueAccent),
+                          padding: EdgeInsets.only(left: 8, top: 1, bottom: 4),
+                          child: Row(
+                            children: [
+                              const Text(
+                                "Reminder @ ",
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    fontFamily: "mplus",
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.blueAccent),
+                              ),
+                              reminder('true'),
+                            ],
+                          ),
                         ),
-                        reminder('true'),
-                      ],
-                    ),
-                  ),
                   const Divider(),
 
-                  ElevatedButton(
-                    onPressed: () => {
-                      widget.deleteFunction(otherTaskCard),
-                      Navigator.pop(context),
-                    },
-                    child: const Text(
-                      "Delete Task",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontFamily: "mplus",
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () => {
+                          widget.completeTask(widget.id,
+                              widget.isComplete == "yes" ? "no" : "yes"),
+                          removeNotificationFromSchedual(widget.id),
+                          Navigator.pop(context),
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.green, // background
+                          onPrimary: Colors.blue, // foreground
+                        ),
+                        child: Text(
+                          widget.isComplete == "yes"
+                              ? "Mark As Incomplete"
+                              : "Mark As Complete",
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontFamily: "mplus",
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
-                    ),
+                      ElevatedButton(
+                        onPressed: () => {
+                          widget.deleteFunction(otherTaskCard),
+                          removeNotificationFromSchedual(widget.id),
+                          Navigator.pop(context),
+                        },
+                        child: const Text(
+                          "Delete Task",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: "mplus",
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
                   )
                 ],
               ),

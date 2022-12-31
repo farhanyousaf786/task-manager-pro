@@ -1,30 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
-import 'package:taskreminder/Components/TaskCategory/All/CompleteTask.dart';
 import 'package:taskreminder/Components/TaskCategory/All/TaskWidget.dart';
 
 class AllTask extends StatefulWidget {
-  final int id;
-  final String task;
-  final String subTask;
-  final String category;
-  final String time;
-  final String date;
-  final String isComplete;
   final List allTasks;
   final Function deleteFunction;
   final Function completeTask;
 
   const AllTask(
       {Key? key,
-      required this.id,
-      required this.task,
-      required this.subTask,
-      required this.category,
-      required this.time,
-      required this.date,
-      required this.isComplete,
+
       required this.allTasks,
       required this.deleteFunction,
       required this.completeTask})
@@ -324,7 +310,7 @@ class _AllTaskState extends State<AllTask> {
                       fontWeight: FontWeight.bold,
                       fontFamily: 'mplus',
                       fontSize: 16,
-                      color: Colors.black.withOpacity(0.6),
+                      color: Colors.green.withOpacity(0.9),
                     ),
                   ),
                   Icon(
@@ -355,7 +341,7 @@ class _AllTaskState extends State<AllTask> {
                         checkTaskDay = calculateDifference(myDate);
                       }
                       return widget.allTasks[i].isComplete == 'yes'
-                          ? CompleteTasks(
+                          ? TaskWidget(
                               task: widget.allTasks[i].task,
                               id: widget.allTasks[i].id,
                               subTask: widget.allTasks[i].subTask,
@@ -364,6 +350,7 @@ class _AllTaskState extends State<AllTask> {
                               time: widget.allTasks[i].time,
                               isComplete: widget.allTasks[i].isComplete,
                               deleteFunction: widget.deleteFunction,
+                              completeTask: widget.completeTask,
                             )
                           : SizedBox(
                               height: 0,

@@ -408,13 +408,7 @@ class _ListViewTaskState extends State<ListViewTask> {
                   ),
                 ),
                 body: TaskCard(
-                  id: 0,
-                  task: "data[i].task",
-                  subTask: "data[i].subTask",
-                  category: "data[i].category",
-                  date: "data[i].date",
-                  time: "data[i].time",
-                  isComplete: "data[i].isComplete",
+
                   allTasks: data,
                   deleteFunction: deleteItem,
                   completeTask: updateTask,
