@@ -6,8 +6,9 @@ import 'package:taskreminder/Pages/DashboardPage/ListViewTask.dart';
 import 'package:taskreminder/Pages/AddTaskPage/AddTask.dart';
 
 class LandingPage extends StatefulWidget {
-
-  const LandingPage({Key? key, }) : super(key: key);
+  const LandingPage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<LandingPage> createState() => _LandingPageState();
@@ -15,12 +16,14 @@ class LandingPage extends StatefulWidget {
 
 class _LandingPageState extends State<LandingPage> {
   int pageIndex = Constants.index;
+
   // all pages to add on bottom bar
   final pages = [
     const ListViewTask(),
     const CalendarViewTask(),
     const AboutPage(),
   ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,103 +64,102 @@ class _LandingPageState extends State<LandingPage> {
 
   Container buildMyNavBar(BuildContext context) {
     return Container(
-      height: 80,
+      height: 60,
       color: Colors.blueAccent.shade200.withOpacity(0.85),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Column(
-            children: [
-              IconButton(
-                enableFeedback: false,
-                onPressed: () {
-                  setState(() {
-                    pageIndex = 0;
-                  });
-                },
-                icon: pageIndex == 0
-                    ? const Icon(
-                        Icons.view_list_sharp,
-                        color: Colors.white,
-                        size: 25,
-                      )
-                    : const Icon(
-                        Icons.view_list_outlined,
-                        color: Colors.white,
-                        size: 25,
-                      ),
-              ),
-              const Text(
-                "Tasks",
-                style: TextStyle(
-                    fontFamily: 'mplus',
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12),
-              )
-            ],
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                IconButton(
+                  enableFeedback: false,
+                  onPressed: () {
+                    setState(() {
+                      pageIndex = 0;
+                    });
+                  },
+                  icon: pageIndex == 0
+                      ? const Icon(
+                          Icons.view_list_sharp,
+                          color: Colors.white,
+                          size: 22,
+                        )
+                      : const Icon(
+                          Icons.view_list_outlined,
+                          color: Colors.white,
+                          size: 22,
+                        ),
+                ),
+                // const Text(
+                //   "Tasks",
+                //   style: TextStyle(
+                //       fontFamily: 'mplus',
+                //       color: Colors.white,
+                //       fontWeight: FontWeight.bold,
+                //       fontSize: 10),
+                // )
+              ],
+            ),
           ),
-          Column(
-            children: [
-              IconButton(
-                enableFeedback: false,
-                onPressed: () {
-                  setState(() {
-                    pageIndex = 1;
-                  });
-                },
-                icon: pageIndex == 1
-                    ? const Icon(
-                        Icons.calendar_month,
-                        color: Colors.white,
-                        size: 25,
-                      )
-                    : const Icon(
-                        Icons.calendar_month_outlined,
-                        color: Colors.white,
-                        size: 25,
-                      ),
-              ),
-              const Text(
-                "Calender",
-                style: TextStyle(
-                    fontFamily: 'mplus',
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12),
-              )
-            ],
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                IconButton(
+                  enableFeedback: false,
+                  onPressed: () {
+                    setState(() {
+                      pageIndex = 1;
+                    });
+                  },
+                  icon: pageIndex == 1
+                      ? const Icon(
+                          Icons.calendar_month,
+                          color: Colors.white,
+                          size: 22,
+                        )
+                      : const Icon(
+                          Icons.calendar_month_outlined,
+                          color: Colors.white,
+                          size: 22,
+                        ),
+                ),
+                // const Text(
+                //   "Calender",
+                //   style: TextStyle(
+                //       fontFamily: 'mplus',
+                //       color: Colors.white,
+                //       fontWeight: FontWeight.bold,
+                //       fontSize: 10),
+                // )
+              ],
+            ),
           ),
-          Column(
-            children: [
-              IconButton(
-                enableFeedback: false,
-                onPressed: () {
-                  setState(() {
-                    pageIndex = 2;
-                  });
-                },
-                icon: pageIndex == 2
-                    ? const Icon(
-                        Icons.info,
-                        color: Colors.white,
-                        size: 25,
-                      )
-                    : const Icon(
-                        Icons.info_outline,
-                        color: Colors.white,
-                        size: 25,
-                      ),
-              ),
-              const Text(
-                "INFO",
-                style: TextStyle(
-                    fontFamily: 'mplus',
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12),
-              )
-            ],
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                IconButton(
+                  enableFeedback: false,
+                  onPressed: () {
+                    setState(() {
+                      pageIndex = 2;
+                    });
+                  },
+                  icon: pageIndex == 2
+                      ? const Icon(
+                          Icons.settings_applications_sharp,
+                          color: Colors.white,
+                          size: 22,
+                        )
+                      : const Icon(
+                          Icons.settings,
+                          color: Colors.white,
+                          size: 22,
+                        ),
+                ),
+
+              ],
+            ),
           ),
         ],
       ),

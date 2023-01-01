@@ -104,7 +104,15 @@ class _CalendarViewTaskState extends State<CalendarViewTask> {
           ),
         ),
         body: isLoading == true
-            ? Text("Loading")
+            ? const Center(
+                child: Text(
+                "Loading...",
+                style: TextStyle(
+                    color: Colors.blueAccent,
+                    fontSize: 20,
+                    fontFamily: 'mplus',
+                    fontWeight: FontWeight.bold),
+              ))
             : SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
