@@ -22,11 +22,7 @@ class TaskCard extends StatefulWidget {
 }
 
 class _TaskCardState extends State<TaskCard> {
-  @override
-  void initState() {
-    print(widget.allTasks.toString());
-    super.initState();
-  }
+
 
   @override
   Widget build(BuildContext context) {

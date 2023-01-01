@@ -138,12 +138,12 @@ class _TaskWidgetState extends State<TaskWidget> {
                     removeNotificationFromSchedual(widget.id);
                   },
                   color: Colors.red),
-              SwipeAction(
-                  title: "Edit",
-                  style: const TextStyle(
-                      fontSize: 12, color: Colors.white, fontFamily: 'mplu'),
-                  onTap: (CompletionHandler handler) async {},
-                  color: Colors.blueAccent),
+              // SwipeAction(
+              //     title: "Edit",
+              //     style: const TextStyle(
+              //         fontSize: 12, color: Colors.white, fontFamily: 'mplu'),
+              //     onTap: (CompletionHandler handler) async {},
+              //     color: Colors.blueAccent),
             ],
 
             child: GestureDetector(
@@ -190,14 +190,14 @@ class _TaskWidgetState extends State<TaskWidget> {
                         removeNotificationFromSchedual(widget.id);
                       },
                       color: Colors.red),
-                  SwipeAction(
-                      title: "Edit",
-                      style: const TextStyle(
-                          fontSize: 12,
-                          color: Colors.white,
-                          fontFamily: 'mplu'),
-                      onTap: (CompletionHandler handler) async {},
-                      color: Colors.blueAccent),
+                  // SwipeAction(
+                  //     title: "Edit",
+                  //     style: const TextStyle(
+                  //         fontSize: 12,
+                  //         color: Colors.white,
+                  //         fontFamily: 'mplu'),
+                  //     onTap: (CompletionHandler handler) async {},
+                  //     color: Colors.blueAccent),
                 ],
 
                 child: GestureDetector(
@@ -541,7 +541,10 @@ class _TaskWidgetState extends State<TaskWidget> {
                           ),
                         ),
                       ),
-                      ElevatedButton(
+                      ElevatedButton(  style: ElevatedButton.styleFrom(
+                        primary: Colors.red, // background
+                        onPrimary: Colors.blue, // foreground
+                      ),
                         onPressed: () => {
                           widget.deleteFunction(otherTaskCard),
                           removeNotificationFromSchedual(widget.id),

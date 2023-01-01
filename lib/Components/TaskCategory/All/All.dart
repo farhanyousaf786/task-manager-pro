@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 import 'package:taskreminder/Components/TaskCategory/All/TaskWidget.dart';
+import 'package:taskreminder/Database/Constants.dart';
 import 'package:taskreminder/Pages/DashboardPage/ListViewTask.dart';
 
 class AllTask extends StatefulWidget {
@@ -29,6 +31,7 @@ class _AllTaskState extends State<AllTask> {
   late bool isExpandTomorrow = true;
   late bool isExpandFuture = true;
   late bool isExpandComplete = true;
+  late int taskRemaining = 0;
 
   @override
   void initState() {
@@ -45,6 +48,22 @@ class _AllTaskState extends State<AllTask> {
     return DateTime(date.year, date.month, date.day)
         .difference(DateTime(now.year, now.month, now.day))
         .inDays;
+  }
+
+  taskRemainingCounter() {
+    for (int i = 0; i < widget.allTasks.length; i++) {
+      if (widget.allTasks[i].isComplete == "no") {
+        taskRemaining = taskRemaining + 1;
+      }
+    }
+    if (taskRemaining == 0) {
+      Future.delayed(Duration.zero, () async {
+        Constants.helperBottomSheet == 1 ? showTaskComplete() : null;
+        setState(() {
+          Constants.helperBottomSheet = 0;
+        });
+      });
+    }
   }
 
   @override
@@ -109,6 +128,11 @@ class _AllTaskState extends State<AllTask> {
                             () => DateFormat("yyyy-MM-dd").parse(trimmedDate));
                         checkTaskDay = calculateDifference(myDate);
                       }
+
+                      taskRemaining = 0;
+                      Constants.helperBottomSheet == 1
+                          ? taskRemainingCounter()
+                          : null;
 
                       // without reminder = 2 or with reminder = 0, will add to all list or Today list
                       return checkTaskDay == 0 &&
@@ -366,5 +390,66 @@ class _AllTaskState extends State<AllTask> {
         ],
       ),
     );
+  }
+
+  showTaskComplete() {
+    return showModalBottomSheet(
+        useRootNavigator: true,
+        isScrollControlled: true,
+        barrierColor: Colors.red.withOpacity(0.2),
+        elevation: 0,
+        context: context,
+        builder: (context) {
+          return Container(
+            color: Colors.white,
+            height: MediaQuery.of(context).size.height / 2.3,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Icon(
+                            Icons.linear_scale_sharp,
+                            color: Colors.blueAccent,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Column(
+                    children: [
+                      SizedBox(
+                        height: 20,
+                      ),
+                      SizedBox(
+                        width: 150,
+                        height: 150,
+                        child: Lottie.asset('assets/taskMan.json'),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          "Hurry! Today's List is Clear",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'mplus',
+                              fontSize: 12,
+                              color: Colors.blueAccent),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          );
+        });
   }
 }
