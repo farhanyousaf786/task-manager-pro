@@ -1,3 +1,4 @@
+import 'package:facebook_audience_network/facebook_audience_network.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
@@ -36,7 +37,25 @@ class _AllTaskState extends State<AllTask> {
   @override
   void initState() {
     initializeDateFormatting('pt_BR', null);
+    _showBannerAd();
     super.initState();
+  }
+
+  Widget _currentAd = SizedBox(
+    width: 0.0,
+    height: 0.0,
+  );
+
+  _showBannerAd() {
+    _currentAd = FacebookBannerAd(
+      placementId: "549950063684272_549952740350671",
+      // placementId:
+      //     "IMG_16_9_APP_INSTALL#2312433698835503_2964944860251047", //testid
+      bannerSize: BannerSize.STANDARD,
+      listener: (result, value) {
+        print("Banner Ad: $result -->  $value");
+      },
+    );
   }
 
   /// Returns the difference (in full days) between the provided date and today.
@@ -72,6 +91,13 @@ class _AllTaskState extends State<AllTask> {
       physics: AlwaysScrollableScrollPhysics(),
       child: Column(
         children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Align(
+              alignment: Alignment(0, 1.0),
+              child: _currentAd,
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(

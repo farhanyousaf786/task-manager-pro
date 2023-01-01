@@ -147,17 +147,24 @@ class _LandingPageState extends State<LandingPage> {
                   },
                   icon: pageIndex == 2
                       ? const Icon(
-                          Icons.settings_applications_sharp,
+                          Icons.info,
                           color: Colors.white,
                           size: 22,
                         )
                       : const Icon(
-                          Icons.settings,
+                          Icons.info_outline,
                           color: Colors.white,
                           size: 22,
                         ),
                 ),
-
+                // const Text(
+                //   "INFO",
+                //   style: TextStyle(
+                //       fontFamily: 'mplus',
+                //       color: Colors.white,
+                //       fontWeight: FontWeight.bold,
+                //       fontSize: 10),
+                // )
               ],
             ),
           ),

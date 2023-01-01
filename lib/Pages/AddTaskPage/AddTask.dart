@@ -1,3 +1,4 @@
+import 'package:facebook_audience_network/facebook_audience_network.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -33,11 +34,8 @@ class _AddTaskState extends State<AddTask> {
       firstDate: DateTime.now(),
       lastDate: DateTime(DateTime.now().year + 2),
     ))!;
-    reminderTime =
-
-        (await showTimePicker(context: context, initialTime: TimeOfDay.now(),
-        cancelText: ""))!;
-
+    reminderTime = (await showTimePicker(
+        context: context, initialTime: TimeOfDay.now(), cancelText: ""))!;
   }
 
   String formatTimeOfDay(TimeOfDay tod) {
@@ -48,7 +46,6 @@ class _AddTaskState extends State<AddTask> {
   }
 
   _onDone() {
-
     if (cards.isNotEmpty) {
       for (int i = 0; i < cards.length; i++) {
         // give Flag _F_ into string so when we retrieve it
@@ -85,6 +82,7 @@ class _AddTaskState extends State<AddTask> {
     addItem(taskInfo);
     print("date = >>>==  ${reminderDate.runtimeType}");
 
+    _showInterstitialAd();
     Navigator.pushAndRemoveUntil<dynamic>(
       context,
       MaterialPageRoute<dynamic>(
@@ -96,13 +94,16 @@ class _AddTaskState extends State<AddTask> {
 
   // create a database object so we can access database functions
   var db = DatabaseConnect();
+
   // function to add BP
   void addItem(TaskModel taskInfo) async {
     await db.insertBpRecord(taskInfo);
   }
+
   setNotification() async {
     var scheduledNotificationDateTime = reminderDate
-        ?.add(Duration(hours: reminderTime!.hour, minutes: reminderTime!.minute))
+        ?.add(
+            Duration(hours: reminderTime!.hour, minutes: reminderTime!.minute))
         .subtract(const Duration(seconds: 5));
 
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
@@ -164,6 +165,44 @@ class _AddTaskState extends State<AddTask> {
     //     reminderId: reminderDate != null ? id : null,
     //   ),
     // );
+  }
+
+  @override
+  void initState() {
+    FacebookAudienceNetwork.init();
+    _loadInterstitialAd();
+    super.initState();
+  }
+
+  bool _isInterstitialAdLoaded = false;
+
+  void _loadInterstitialAd() {
+    FacebookInterstitialAd.loadInterstitialAd(
+      placementId: "549950063684272_549950853684193",
+      // placementId: "IMG_16_9_APP_INSTALL#2312433698835503_2650502525028617",
+
+      listener: (result, value) {
+        print(">> FAN > Interstitial Ad: $result --> $value");
+        if (result == InterstitialAdResult.LOADED)
+          _isInterstitialAdLoaded = true;
+
+        /// Once an Interstitial Ad has been dismissed and becomes invalidated,
+        /// load a fresh Ad by calling this function.
+        if (result == InterstitialAdResult.DISMISSED &&
+            value["invalidated"] == true) {
+          _isInterstitialAdLoaded = false;
+          _loadInterstitialAd();
+        }
+      },
+    );
+  }
+
+  _showInterstitialAd() {
+    if (_isInterstitialAdLoaded == true) {
+      FacebookInterstitialAd.showInterstitialAd();
+    } else {
+      print("Interstial Ad not yet loaded!");
+    }
   }
 
   @override
@@ -244,9 +283,9 @@ class _AddTaskState extends State<AddTask> {
                           Text(
                             "${DateFormat.yMMMd().format(reminderDate!)}  ",
                             style: const TextStyle(
-                            color: Colors.grey,
-                            fontSize: 12,
-                            fontFamily: 'mplus'),
+                                color: Colors.grey,
+                                fontSize: 12,
+                                fontFamily: 'mplus'),
                           ),
                           Text(
                             "${formatTimeOfDay(reminderTime!)}    ",

@@ -1,3 +1,4 @@
+import 'package:facebook_audience_network/facebook_audience_network.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:flutter_calendar_carousel/classes/event_list.dart';
@@ -35,12 +36,47 @@ class _CalendarViewTaskState extends State<CalendarViewTask> {
   @override
   void initState() {
     addTaskToCalender();
+    _showNativeAd();
+
     Future.delayed(const Duration(milliseconds: 100), () {
       setState(() {
         isLoading = false;
       });
     });
+
     super.initState();
+  }
+
+
+  Widget _currentAd = SizedBox(
+    width: 0.0,
+    height: 0.0,
+  );
+
+  _showNativeAd() {
+    setState(() {
+      _currentAd = _nativeAd();
+    });
+  }
+
+  Widget _nativeAd() {
+    return FacebookNativeAd(
+      placementId: "549950063684272_549950677017544",
+      adType: NativeAdType.NATIVE_AD_VERTICAL,
+      width: double.infinity,
+      height: 300,
+      backgroundColor: Colors.blue,
+      titleColor: Colors.white,
+      descriptionColor: Colors.white,
+      buttonColor: Colors.deepPurple,
+      buttonTitleColor: Colors.white,
+      buttonBorderColor: Colors.white,
+      listener: (result, value) {
+        print("Native Ad: $result --> $value");
+      },
+      keepExpandedWhileLoading: true,
+      expandAnimationDuraion: 1000,
+    );
   }
 
   String formatTimeOfDay(TimeOfDay tod) {
@@ -123,8 +159,8 @@ class _CalendarViewTaskState extends State<CalendarViewTask> {
                     //custom icon without header
                     Container(
                       margin: const EdgeInsets.only(
-                        top: 30.0,
-                        bottom: 16.0,
+                        top: 10.0,
+                        bottom: 10.0,
                         left: 16.0,
                         right: 16.0,
                       ),
@@ -205,7 +241,7 @@ class _CalendarViewTaskState extends State<CalendarViewTask> {
                         weekFormat: false,
 //      firstDayOfWeek: 4,
                         markedDatesMap: _markedDateMap,
-                        height: 420.0,
+                        height: 300.0,
                         selectedDateTime: _currentDate2,
                         targetDateTime: _targetDateTime,
                         customGridViewPhysics: NeverScrollableScrollPhysics(),
@@ -252,6 +288,13 @@ class _CalendarViewTaskState extends State<CalendarViewTask> {
                         onDayLongPressed: (DateTime date) {
                           print('long pressed date $date');
                         },
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Align(
+                        alignment: Alignment(0, 1.0),
+                        child: _currentAd,
                       ),
                     ),
                     //
