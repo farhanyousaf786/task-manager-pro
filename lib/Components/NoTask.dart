@@ -42,10 +42,10 @@ class NoTask extends StatelessWidget {
                     )
                   },
                   child: const Text(
-                    "Click + to Add Task",
+                    "No task, Click on Add Task",
                     style: TextStyle(
                         color: Colors.blueAccent,
-                        fontSize: 20,
+                        fontSize: 15,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'mplus'),
                   ),

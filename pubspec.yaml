@@ -50,6 +50,7 @@ dependencies:
   notification_permissions: ^0.6.1
   lottie: ^1.1.0
   flutter_swipe_action_cell: ^3.0.7
+  flutter_calendar_carousel: ^2.4.1
 
 
 

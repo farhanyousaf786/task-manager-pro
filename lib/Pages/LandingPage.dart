@@ -12,7 +12,7 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends State<LandingPage> {
-  int pageIndex = 0;
+  int pageIndex = 1;
 
   // all pages to add on bottom bar
   final pages = [
@@ -30,7 +30,10 @@ class _LandingPageState extends State<LandingPage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: FloatingActionButton(
+        child: FloatingActionButton.extended(
+
+          elevation: 0.0,
+
           onPressed: () {
             showModalBottomSheet(
               backgroundColor: Colors.transparent,
@@ -41,15 +44,19 @@ class _LandingPageState extends State<LandingPage> {
                   padding: EdgeInsets.only(
                       bottom: MediaQuery.of(context).viewInsets.bottom),
                   child: AddTask(),
+
                 ),
               ),
             );
           },
           backgroundColor: Colors.blueAccent.shade200.withOpacity(0.85),
-          child: const Icon(
-            Icons.add,
-            color: Colors.white,
-          ),
+
+          label: const Text('Add Task', style: TextStyle(
+            fontFamily: 'mplus',
+            fontWeight: FontWeight.bold,
+
+          ),),
+
         ),
       ),
     );

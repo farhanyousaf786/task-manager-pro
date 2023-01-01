@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:taskreminder/Components/TaskCategory/All/All.dart';
-import 'package:taskreminder/Database/Constants.dart';
+import 'package:taskreminder/Components/All.dart';
 import 'package:taskreminder/Pages/DashboardPage/ListViewTask.dart';
 
 class TaskCard extends StatefulWidget {
