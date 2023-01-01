@@ -22,7 +22,6 @@ void main() async {
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
-
   runApp(const MyApp());
 }
 
@@ -38,8 +37,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home:
-            const LandingPage() // this page wil contain all pages along with bottom bar
+        home: LandingPage() // this page wil contain all pages along with bottom bar
         );
   }
 }
@@ -48,7 +46,6 @@ class MyApp extends StatelessWidget {
 // //flutter build apk --target-platform=android-arm
 // //flutter build apk --target-platform=android-arm64
 // //flutter build appbundle --release
-
 
 // import 'dart:async';
 //

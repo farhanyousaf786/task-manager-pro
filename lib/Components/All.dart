@@ -97,7 +97,7 @@ class _AllTaskState extends State<AllTask> {
                         fontWeight: FontWeight.bold,
                         fontFamily: 'mplus',
                         fontSize: 16,
-                        color: Colors.black.withOpacity(0.6)),
+                        color: Colors.red.withOpacity(0.9)),
                   ),
                   Icon(
                     isExpandToday == true
@@ -183,7 +183,7 @@ class _AllTaskState extends State<AllTask> {
                         fontWeight: FontWeight.bold,
                         fontFamily: 'mplus',
                         fontSize: 16,
-                        color: Colors.black.withOpacity(0.6)),
+                        color: Colors.blue.withOpacity(0.9)),
                   ),
                   Icon(
                     isExpandTomorrow == true
@@ -260,7 +260,7 @@ class _AllTaskState extends State<AllTask> {
                         fontWeight: FontWeight.bold,
                         fontFamily: 'mplus',
                         fontSize: 16,
-                        color: Colors.black.withOpacity(0.6)),
+                        color: Colors.deepPurple.withOpacity(0.9)),
                   ),
                   Icon(
                     isExpandFuture == true

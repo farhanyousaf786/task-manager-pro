@@ -3,7 +3,10 @@ import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:flutter_calendar_carousel/classes/event_list.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
 import 'package:intl/intl.dart';
+import 'package:taskreminder/Database/Constants.dart';
 import 'package:taskreminder/Database/DBModel.dart';
+import 'package:taskreminder/Pages/CalendarPage/CalendarView.dart';
+import 'package:taskreminder/Pages/LandingPage.dart';
 
 class CalendarViewTask extends StatefulWidget {
   const CalendarViewTask({Key? key}) : super(key: key);
@@ -23,6 +26,10 @@ class _CalendarViewTaskState extends State<CalendarViewTask> {
   List? dateList = [];
   List? categoryList = [];
   List? allTask = [];
+  String? category = "";
+  List? timeList = [];
+  var time;
+  late TimeOfDay reminderTime;
 
   @override
   void initState() {
@@ -30,11 +37,18 @@ class _CalendarViewTaskState extends State<CalendarViewTask> {
     super.initState();
   }
 
+  String formatTimeOfDay(TimeOfDay tod) {
+    final now = new DateTime.now();
+    final dt = DateTime(now.year, now.month, now.day, tod.hour, tod.minute);
+    final format = DateFormat.jm(); //"6:00 AM"
+    return format.format(dt);
+  }
+
   addTaskToCalender() {
     db.getBpRecord().then((value) => {
           for (int i = 0; i < value.length; i++)
             {
-              if (value[i].date != "null")
+              if (value[i].date != "null" && value[i].isComplete == "no")
                 {
                   print(value[i].date),
                   print(value[i].date.substring(0, 4)),
@@ -58,7 +72,13 @@ class _CalendarViewTaskState extends State<CalendarViewTask> {
                         ),
                         title: value[i].task,
                         icon: _eventIcon,
-                        description: value[i].category),
+                        dot: Container(height: 4, width: 4,
+                        decoration: BoxDecoration(
+                            color: Colors.deepPurple.shade700,
+                          borderRadius: BorderRadius.circular(20)
+                        ),),
+                        description: "${value[i].time}_${value[i].category}"),
+
                   ),
                 }
             }
@@ -71,30 +91,25 @@ class _CalendarViewTaskState extends State<CalendarViewTask> {
     final _calendarCarouselNoHeader = CalendarCarousel<Event>(
       todayBorderColor: Colors.white,
       onDayPressed: (date, events) => {
-        this.setState(() => _currentDate2 = date),
-
-        allTask = events.toList(),
-
-        for (int i = 0; i < allTask!.length; i++)
-          {
-            print(allTask?[i].title),
-            print(allTask?[i].description),
-            print(allTask?[i].date),
-
-            titleList!.add(allTask?[i].title),
-            categoryList!.add(allTask?[i].description),
-            dateList!.add(allTask?[i].date),
+        setState(() => {_currentDate2 = date}),
+        Future.delayed(const Duration(microseconds: 100), () {
+          allTask = events.toList();
+          for (int i = 0; i < allTask!.length; i++) {
+            category = allTask?[i].description.toString().substring(15);
+            time = allTask?[i].description.toString().substring(10, 15);
+            reminderTime = TimeOfDay(
+              hour: int.parse(time.split(":")[0]),
+              minute: int.parse(time.split(":")[1]),
+            );
+            timeList!.add(formatTimeOfDay(reminderTime));
+            titleList!.add(allTask?[i].title);
+            categoryList!.add(allTask?[i].description.toString().substring(17));
+            dateList!.add(allTask?[i].date);
             // categoryList.add(list[i].category);
             // dateList.add(list[i].date);
-          },
-        showTasks(),
-
-        // Future.delayed(const Duration(seconds: 2), () {
-        //   print(
-        //     ">>>>>>" + categoryList.toString(),
-        //   );
-        //
-        // });
+          }
+          showTasks();
+        }),
       },
       daysHaveCircularBorder: true,
       showOnlyCurrentMonthDate: false,
@@ -110,15 +125,16 @@ class _CalendarViewTaskState extends State<CalendarViewTask> {
       targetDateTime: _targetDateTime,
       customGridViewPhysics: NeverScrollableScrollPhysics(),
       markedDateCustomShapeBorder:
-          CircleBorder(side: BorderSide(color: Colors.blueAccent.shade100)),
+          CircleBorder(side: BorderSide(color: Colors.blueAccent)),
       markedDateCustomTextStyle: TextStyle(
         fontSize: 18,
-        color: Colors.blueAccent.shade100,
+        color: Colors.blueAccent,
       ),
       showHeader: false,
       todayTextStyle: TextStyle(
         color: Colors.blueAccent.shade100,
       ),
+
       // markedDateShowIcon: true,
       // markedDateIconMaxShown: 2,
       // markedDateIconBuilder: (event) {
@@ -222,66 +238,119 @@ class _CalendarViewTaskState extends State<CalendarViewTask> {
   showTasks() {
     return showModalBottomSheet(
         useRootNavigator: true,
-        isScrollControlled: true,
+        isScrollControlled: false,
         barrierColor: Colors.red.withOpacity(0.2),
         elevation: 0,
         context: context,
+        isDismissible: false,
+        enableDrag: false,
         builder: (context) {
-          return Container(
-            color: Colors.white,
-            height: MediaQuery.of(context).size.height / 2.3,
-            child: ListView.builder(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              primary: false,
-              itemCount: allTask?.length,
-              itemBuilder: (context, i) {
-                return SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Row(
-                            children: [
-                              Text(
-                                " ${i + 1})  ${titleList?[i].length > 20 ? "${titleList?[i].substring(0, 19)}..." : titleList?[i]}",
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'mplus',
-                                    fontSize: 12,
-                                    color: Colors.blueAccent),
-                              ),
-                              Text(
-                                " (${categoryList?[i]})",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'mplus',
-                                    fontSize: 10,
-                                    color: Colors.red),
-                              ),
-                            ],
-                          ),
+          return Column(
+            children: [
+              Container(
+                color: Colors.blueAccent,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        "Tasks",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'mplus',
+                            fontSize: 17,
+                            color: Colors.white),
+                      ),
+                      GestureDetector(
+                        onTap: () => {
+                          setState(() {
+                            Constants.index = 1;
+                          }),
+                          Navigator.pushAndRemoveUntil<dynamic>(
+                            context,
+                            MaterialPageRoute<dynamic>(
+                              builder: (BuildContext context) =>
+                                  const LandingPage(),
+                            ),
+                            (route) =>
+                                false, //if you want to disable back feature set to false
+                          )
+                        },
+                        child: Text(
+                          "Next>>",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'mplus',
+                              fontSize: 17,
+                              color: Colors.white),
                         ),
-                        Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(
-                            "${DateFormat.yMMMd().format(dateList![i])}",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'mplus',
-                                fontSize: 12,
-                                color: Colors.blueAccent),
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                );
-              },
-            ),
+                ),
+              ),
+              Container(
+                color: Colors.white,
+                height: MediaQuery.of(context).size.height / 2.3,
+                child: ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  primary: false,
+                  itemCount: allTask?.length,
+                  itemBuilder: (context, i) {
+                    return SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        " ${i + 1})  ${titleList?[i].length > 20 ? "${titleList?[i].substring(0, 19)}..." : titleList?[i]}",
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: 'mplus',
+                                            fontSize: 12,
+                                            color: Colors.blueAccent),
+                                      ),
+                                      Text(
+                                        " (${categoryList?[i]})",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: 'mplus',
+                                            fontSize: 10,
+                                            color: Colors.red),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text(
+                                    "${timeList![i]}",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'mplus',
+                                        fontSize: 12,
+                                        color: Colors.blueAccent),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
           );
         });
   }

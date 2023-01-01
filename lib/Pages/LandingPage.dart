@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:taskreminder/Database/Constants.dart';
 import 'package:taskreminder/Pages/AboutPage/AboutPage.dart';
 import 'package:taskreminder/Pages/CalendarPage/CalendarView.dart';
 import 'package:taskreminder/Pages/DashboardPage/ListViewTask.dart';
 import 'package:taskreminder/Pages/AddTaskPage/AddTask.dart';
 
 class LandingPage extends StatefulWidget {
-  const LandingPage({Key? key}) : super(key: key);
+
+  const LandingPage({Key? key, }) : super(key: key);
 
   @override
   State<LandingPage> createState() => _LandingPageState();
 }
 
 class _LandingPageState extends State<LandingPage> {
-  int pageIndex = 1;
-
+  int pageIndex = Constants.index;
   // all pages to add on bottom bar
   final pages = [
     const ListViewTask(),
     const CalendarViewTask(),
     const AboutPage(),
   ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,9 +31,7 @@ class _LandingPageState extends State<LandingPage> {
       floatingActionButton: Padding(
         padding: const EdgeInsets.all(8.0),
         child: FloatingActionButton.extended(
-
           elevation: 0.0,
-
           onPressed: () {
             showModalBottomSheet(
               backgroundColor: Colors.transparent,
@@ -44,19 +42,18 @@ class _LandingPageState extends State<LandingPage> {
                   padding: EdgeInsets.only(
                       bottom: MediaQuery.of(context).viewInsets.bottom),
                   child: AddTask(),
-
                 ),
               ),
             );
           },
           backgroundColor: Colors.blueAccent.shade200.withOpacity(0.85),
-
-          label: const Text('Add Task', style: TextStyle(
-            fontFamily: 'mplus',
-            fontWeight: FontWeight.bold,
-
-          ),),
-
+          label: const Text(
+            'Add Task',
+            style: TextStyle(
+              fontFamily: 'mplus',
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
       ),
     );
