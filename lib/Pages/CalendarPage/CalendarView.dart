@@ -30,10 +30,16 @@ class _CalendarViewTaskState extends State<CalendarViewTask> {
   List? timeList = [];
   var time;
   late TimeOfDay reminderTime;
+  late bool isLoading = true;
 
   @override
   void initState() {
     addTaskToCalender();
+    Future.delayed(const Duration(milliseconds: 100), () {
+      setState(() {
+        isLoading = false;
+      });
+    });
     super.initState();
   }
 
@@ -72,13 +78,14 @@ class _CalendarViewTaskState extends State<CalendarViewTask> {
                         ),
                         title: value[i].task,
                         icon: _eventIcon,
-                        dot: Container(height: 4, width: 4,
-                        decoration: BoxDecoration(
-                            color: Colors.deepPurple.shade700,
-                          borderRadius: BorderRadius.circular(20)
-                        ),),
+                        dot: Container(
+                          height: 4,
+                          width: 4,
+                          decoration: BoxDecoration(
+                              color: Colors.deepPurple.shade700,
+                              borderRadius: BorderRadius.circular(20)),
+                        ),
                         description: "${value[i].time}_${value[i].category}"),
-
                   ),
                 }
             }
@@ -88,85 +95,6 @@ class _CalendarViewTaskState extends State<CalendarViewTask> {
   @override
   Widget build(BuildContext context) {
     /// Example Calendar Carousel without header and custom prev & next button
-    final _calendarCarouselNoHeader = CalendarCarousel<Event>(
-      todayBorderColor: Colors.white,
-      onDayPressed: (date, events) => {
-        setState(() => {_currentDate2 = date}),
-        Future.delayed(const Duration(microseconds: 100), () {
-          allTask = events.toList();
-          for (int i = 0; i < allTask!.length; i++) {
-            category = allTask?[i].description.toString().substring(15);
-            time = allTask?[i].description.toString().substring(10, 15);
-            reminderTime = TimeOfDay(
-              hour: int.parse(time.split(":")[0]),
-              minute: int.parse(time.split(":")[1]),
-            );
-            timeList!.add(formatTimeOfDay(reminderTime));
-            titleList!.add(allTask?[i].title);
-            categoryList!.add(allTask?[i].description.toString().substring(17));
-            dateList!.add(allTask?[i].date);
-            // categoryList.add(list[i].category);
-            // dateList.add(list[i].date);
-          }
-          showTasks();
-        }),
-      },
-      daysHaveCircularBorder: true,
-      showOnlyCurrentMonthDate: false,
-      weekendTextStyle: TextStyle(
-        color: Colors.red,
-      ),
-      thisMonthDayBorderColor: Colors.grey,
-      weekFormat: false,
-//      firstDayOfWeek: 4,
-      markedDatesMap: _markedDateMap,
-      height: 420.0,
-      selectedDateTime: _currentDate2,
-      targetDateTime: _targetDateTime,
-      customGridViewPhysics: NeverScrollableScrollPhysics(),
-      markedDateCustomShapeBorder:
-          CircleBorder(side: BorderSide(color: Colors.blueAccent)),
-      markedDateCustomTextStyle: TextStyle(
-        fontSize: 18,
-        color: Colors.blueAccent,
-      ),
-      showHeader: false,
-      todayTextStyle: TextStyle(
-        color: Colors.blueAccent.shade100,
-      ),
-
-      // markedDateShowIcon: true,
-      // markedDateIconMaxShown: 2,
-      // markedDateIconBuilder: (event) {
-      //   return event.icon;
-      // },
-      // markedDateMoreShowTotal:
-      //     true,
-      todayButtonColor: Colors.blueAccent,
-      selectedDayTextStyle: const TextStyle(
-        color: Colors.yellow,
-      ),
-      minSelectedDate: _currentDate.subtract(Duration(days: 360)),
-      maxSelectedDate: _currentDate.add(Duration(days: 360)),
-      prevDaysTextStyle: TextStyle(
-        fontSize: 16,
-        color: Colors.pinkAccent,
-      ),
-      inactiveDaysTextStyle: TextStyle(
-        color: Colors.tealAccent,
-        fontSize: 16,
-      ),
-      onCalendarChanged: (DateTime date) {
-        this.setState(() {
-          _targetDateTime = date;
-          _currentMonth = DateFormat.yMMM().format(_targetDateTime);
-        });
-      },
-      onDayLongPressed: (DateTime date) {
-        print('long pressed date $date');
-      },
-    );
-
     return Scaffold(
         appBar: AppBar(
           elevation: 0,
@@ -175,64 +103,153 @@ class _CalendarViewTaskState extends State<CalendarViewTask> {
             style: TextStyle(fontFamily: 'mplus', fontWeight: FontWeight.bold),
           ),
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              //custom icon
-              // This trailing comma makes auto-formatting nicer for build methods.
-              //custom icon without header
-              Container(
-                margin: const EdgeInsets.only(
-                  top: 30.0,
-                  bottom: 16.0,
-                  left: 16.0,
-                  right: 16.0,
-                ),
-                child: Row(
+        body: isLoading == true
+            ? Text("Loading")
+            : SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    Expanded(
-                        child: Text(
-                      _currentMonth,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24.0,
+                    //custom icon
+                    // This trailing comma makes auto-formatting nicer for build methods.
+                    //custom icon without header
+                    Container(
+                      margin: const EdgeInsets.only(
+                        top: 30.0,
+                        bottom: 16.0,
+                        left: 16.0,
+                        right: 16.0,
                       ),
-                    )),
-                    TextButton(
-                      child: Text('PREV'),
-                      onPressed: () {
-                        setState(() {
-                          _targetDateTime = DateTime(
-                              _targetDateTime.year, _targetDateTime.month - 1);
-                          _currentMonth =
-                              DateFormat.yMMM().format(_targetDateTime);
-                        });
-                      },
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                              child: Text(
+                            _currentMonth,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 24.0,
+                            ),
+                          )),
+                          TextButton(
+                            child: Text('PREV'),
+                            onPressed: () {
+                              setState(() {
+                                _targetDateTime = DateTime(_targetDateTime.year,
+                                    _targetDateTime.month - 1);
+                                _currentMonth =
+                                    DateFormat.yMMM().format(_targetDateTime);
+                              });
+                            },
+                          ),
+                          TextButton(
+                            child: Text('NEXT'),
+                            onPressed: () {
+                              setState(() {
+                                _targetDateTime = DateTime(_targetDateTime.year,
+                                    _targetDateTime.month + 1);
+                                _currentMonth =
+                                    DateFormat.yMMM().format(_targetDateTime);
+                              });
+                            },
+                          )
+                        ],
+                      ),
                     ),
-                    TextButton(
-                      child: Text('NEXT'),
-                      onPressed: () {
-                        setState(() {
-                          _targetDateTime = DateTime(
-                              _targetDateTime.year, _targetDateTime.month + 1);
-                          _currentMonth =
-                              DateFormat.yMMM().format(_targetDateTime);
-                        });
-                      },
-                    )
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 16.0),
+                      child: CalendarCarousel<Event>(
+                        todayBorderColor: Colors.white,
+                        onDayPressed: (date, events) => {
+                          setState(() => {_currentDate2 = date}),
+                          allTask = events.toList(),
+                          for (int i = 0; i < allTask!.length; i++)
+                            {
+                              category = allTask?[i]
+                                  .description
+                                  .toString()
+                                  .substring(15),
+                              time = allTask?[i]
+                                  .description
+                                  .toString()
+                                  .substring(10, 15),
+                              reminderTime = TimeOfDay(
+                                hour: int.parse(time.split(":")[0]),
+                                minute: int.parse(time.split(":")[1]),
+                              ),
+                              timeList!.add(formatTimeOfDay(reminderTime)),
+                              titleList!.add(allTask?[i].title),
+                              categoryList!.add(allTask?[i]
+                                  .description
+                                  .toString()
+                                  .substring(17)),
+                              dateList!.add(allTask?[i].date),
+                              // categoryList.add(list[i].category);
+                              // dateList.add(list[i].date);
+                            },
+                          showTasks(),
+                        },
+                        daysHaveCircularBorder: true,
+                        showOnlyCurrentMonthDate: false,
+                        weekendTextStyle: TextStyle(
+                          color: Colors.red,
+                        ),
+                        thisMonthDayBorderColor: Colors.grey,
+                        weekFormat: false,
+//      firstDayOfWeek: 4,
+                        markedDatesMap: _markedDateMap,
+                        height: 420.0,
+                        selectedDateTime: _currentDate2,
+                        targetDateTime: _targetDateTime,
+                        customGridViewPhysics: NeverScrollableScrollPhysics(),
+                        markedDateCustomShapeBorder: CircleBorder(
+                            side: BorderSide(color: Colors.blueAccent)),
+                        markedDateCustomTextStyle: TextStyle(
+                          fontSize: 18,
+                          color: Colors.blueAccent,
+                        ),
+                        showHeader: false,
+                        todayTextStyle: TextStyle(
+                          color: Colors.blueAccent.shade100,
+                        ),
+
+                        // markedDateShowIcon: true,
+                        // markedDateIconMaxShown: 2,
+                        // markedDateIconBuilder: (event) {
+                        //   return event.icon;
+                        // },
+                        // markedDateMoreShowTotal:
+                        //     true,
+                        todayButtonColor: Colors.blueAccent,
+                        selectedDayTextStyle: const TextStyle(
+                          color: Colors.yellow,
+                        ),
+                        minSelectedDate:
+                            _currentDate.subtract(Duration(days: 360)),
+                        maxSelectedDate: _currentDate.add(Duration(days: 360)),
+                        prevDaysTextStyle: TextStyle(
+                          fontSize: 16,
+                          color: Colors.pinkAccent,
+                        ),
+                        inactiveDaysTextStyle: TextStyle(
+                          color: Colors.tealAccent,
+                          fontSize: 16,
+                        ),
+                        onCalendarChanged: (DateTime date) {
+                          this.setState(() {
+                            _targetDateTime = date;
+                            _currentMonth =
+                                DateFormat.yMMM().format(_targetDateTime);
+                          });
+                        },
+                        onDayLongPressed: (DateTime date) {
+                          print('long pressed date $date');
+                        },
+                      ),
+                    ),
+                    //
                   ],
                 ),
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 16.0),
-                child: _calendarCarouselNoHeader,
-              ),
-              //
-            ],
-          ),
-        ));
+              ));
   }
 
   showTasks() {

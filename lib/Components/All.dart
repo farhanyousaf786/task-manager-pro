@@ -96,7 +96,7 @@ class _AllTaskState extends State<AllTask> {
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontFamily: 'mplus',
-                        fontSize: 16,
+                        fontSize: 17,
                         color: Colors.red.withOpacity(0.9)),
                   ),
                   Icon(
@@ -182,7 +182,7 @@ class _AllTaskState extends State<AllTask> {
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontFamily: 'mplus',
-                        fontSize: 16,
+                        fontSize: 17,
                         color: Colors.blue.withOpacity(0.9)),
                   ),
                   Icon(
@@ -259,7 +259,7 @@ class _AllTaskState extends State<AllTask> {
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontFamily: 'mplus',
-                        fontSize: 16,
+                        fontSize: 17,
                         color: Colors.deepPurple.withOpacity(0.9)),
                   ),
                   Icon(
@@ -336,7 +336,7 @@ class _AllTaskState extends State<AllTask> {
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontFamily: 'mplus',
-                      fontSize: 16,
+                      fontSize: 17,
                       color: Colors.green.withOpacity(0.9),
                     ),
                   ),

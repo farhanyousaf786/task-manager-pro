@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'To-Do Task Reminder',
+        title: 'To-Do Task Manager',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),

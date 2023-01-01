@@ -131,19 +131,13 @@ class _TaskWidgetState extends State<TaskWidget> {
               SwipeAction(
                   backgroundRadius: 10,
                   title: "Delete",
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontSize: 12, color: Colors.white, fontFamily: 'mplu'),
                   onTap: (CompletionHandler handler) async {
                     widget.deleteFunction(otherTaskCard);
                     removeNotificationFromSchedual(widget.id);
                   },
                   color: Colors.red),
-              // SwipeAction(
-              //     title: "Edit",
-              //     style: const TextStyle(
-              //         fontSize: 12, color: Colors.white, fontFamily: 'mplu'),
-              //     onTap: (CompletionHandler handler) async {},
-              //     color: Colors.blueAccent),
             ],
 
             child: GestureDetector(
@@ -541,10 +535,11 @@ class _TaskWidgetState extends State<TaskWidget> {
                           ),
                         ),
                       ),
-                      ElevatedButton(  style: ElevatedButton.styleFrom(
-                        primary: Colors.red, // background
-                        onPrimary: Colors.blue, // foreground
-                      ),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.red, // background
+                          onPrimary: Colors.blue, // foreground
+                        ),
                         onPressed: () => {
                           widget.deleteFunction(otherTaskCard),
                           removeNotificationFromSchedual(widget.id),
