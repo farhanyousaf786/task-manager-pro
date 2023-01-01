@@ -171,6 +171,7 @@ class _AddTaskState extends State<AddTask> {
   void initState() {
     FacebookAudienceNetwork.init();
     _loadInterstitialAd();
+    _showNativeBannerAd();
     super.initState();
   }
 
@@ -205,6 +206,30 @@ class _AddTaskState extends State<AddTask> {
     }
   }
 
+  Widget _currentAd = SizedBox(
+    width: 0.0,
+    height: 0.0,
+  );
+
+  _showNativeBannerAd() {
+    setState(() {
+      _currentAd = _nativeBannerAd();
+    });
+  }
+
+  Widget _nativeBannerAd() {
+    return FacebookNativeAd(
+      placementId: "549950063684272_549961877016424",
+      // placementId: "IMG_16_9_APP_INSTALL#2312433698835503_2964953543583512",
+      adType: NativeAdType.NATIVE_BANNER_AD,
+      bannerAdSize: NativeBannerAdSize.HEIGHT_100,
+      height: 110,
+      listener: (result, value) {
+        print("Native Banner Ad: $result --> $value");
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -221,6 +246,13 @@ class _AddTaskState extends State<AddTask> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Align(
+                alignment: Alignment(0, 1.0),
+                child: _currentAd,
+              ),
+            ),
             const SizedBox(
               height: 15,
             ),

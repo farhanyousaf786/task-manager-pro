@@ -9,12 +9,12 @@ class AboutPage extends StatefulWidget {
 }
 
 class _AboutPageState extends State<AboutPage> {
-
   @override
   void initState() {
     _showNativeBannerAd();
     super.initState();
   }
+
   Widget _currentAd = SizedBox(
     width: 0.0,
     height: 0.0,
@@ -115,6 +115,7 @@ class _AboutPageState extends State<AboutPage> {
                 ),
               ),
             ),
+            howToDelete(),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Align(
@@ -125,6 +126,35 @@ class _AboutPageState extends State<AboutPage> {
           ],
         ),
       ),
+    );
+  }
+
+  howToDelete() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15),
+              color: Colors.blueAccent),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "Quik Delete",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'mplus',
+                      fontSize: 19,
+                      color: Colors.white),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Image.network('https://imgur.com/4ZNMTPm.gif'),
+              ),
+            ],
+          )),
     );
   }
 }
