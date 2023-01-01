@@ -312,7 +312,6 @@ class _ListViewTaskState extends State<ListViewTask> {
   @override
   void initState() {
     super.initState();
-
     Future.delayed(const Duration(seconds: 1), () {
       // set up the notification permissions class
       // set up the future to fetch the notification data
