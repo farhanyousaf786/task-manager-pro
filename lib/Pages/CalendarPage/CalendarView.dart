@@ -18,33 +18,14 @@ class _CalendarViewTaskState extends State<CalendarViewTask> {
   String _currentMonth = DateFormat.yMMM().format(DateTime.now());
   DateTime _targetDateTime = DateTime.now();
   var db = DatabaseConnect();
-
-//  List<DateTime> _markedDate = [DateTime(2018, 9, 20), DateTime(2018, 10, 11)];
-  static final Widget _eventIcon = Container(
-    decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.all(Radius.circular(1000)),
-        border: Border.all(color: Colors.blueAccent, width: 2.0)),
-    child: const Icon(
-      Icons.add_alert_rounded,
-      color: Colors.amber,
-    ),
-  );
-
   final EventList<Event> _markedDateMap = EventList<Event>(events: {});
+  List? titleList = [];
+  List? dateList = [];
+  List? categoryList = [];
+  List? allTask = [];
 
   @override
   void initState() {
-
-    /// Add more events to _markedDateMap EventList
-    // _markedDateMap.add(
-    //     DateTime(2023, 1, 1),
-    //     Event(
-    //       date: DateTime(2023, 1, 1),
-    //       title: 'Event 5',
-    //       icon: _eventIcon,
-    //     ));
-
     addTaskToCalender();
     super.initState();
   }
@@ -60,19 +41,25 @@ class _CalendarViewTaskState extends State<CalendarViewTask> {
                   print(value[i].date.substring(5, 7)),
                   print(value[i].date.substring(8, 10)),
                   _markedDateMap.add(
-                      DateTime(
+                    DateTime(
+                      int.parse(value[i].date.substring(0, 4)),
+                      int.parse(value[i].date.substring(5, 7)),
+                      int.parse(
+                        value[i].date.substring(8, 10),
+                      ),
+                    ),
+                    Event(
+                        date: DateTime(
                           int.parse(value[i].date.substring(0, 4)),
                           int.parse(value[i].date.substring(5, 7)),
-                          int.parse(value[i].date.substring(8, 10),),),
-                      Event(
-                        date:  DateTime(
-                          int.parse(value[i].date.substring(0, 4)),
-                          int.parse(value[i].date.substring(5, 7)),
-                          int.parse(value[i].date.substring(8, 10),),),
+                          int.parse(
+                            value[i].date.substring(8, 10),
+                          ),
+                        ),
                         title: value[i].task,
                         icon: _eventIcon,
-
-                      )),
+                        description: value[i].category),
+                  ),
                 }
             }
         });
@@ -83,9 +70,33 @@ class _CalendarViewTaskState extends State<CalendarViewTask> {
     /// Example Calendar Carousel without header and custom prev & next button
     final _calendarCarouselNoHeader = CalendarCarousel<Event>(
       todayBorderColor: Colors.white,
-      onDayPressed: (date, events) {
-        this.setState(() => _currentDate2 = date);
-        events.forEach((event) => print(event.title));
+      onDayPressed: (date, events) => {
+        this.setState(() => _currentDate2 = date),
+
+        allTask = events.toList(),
+
+        for (int i = 0; i < allTask!.length; i++)
+          {
+            print(allTask?[i].title),
+            print(allTask?[i].description),
+            print(allTask?[i].date),
+
+            titleList!.add(allTask?[i].title),
+            categoryList!.add(allTask?[i].description),
+            dateList!.add(allTask?[i].date),
+
+            showTasks(),
+
+            // categoryList.add(list[i].category);
+            // dateList.add(list[i].date);
+          }
+
+        // Future.delayed(const Duration(seconds: 2), () {
+        //   print(
+        //     ">>>>>>" + categoryList.toString(),
+        //   );
+        //
+        // });
       },
       daysHaveCircularBorder: true,
       showOnlyCurrentMonthDate: false,
@@ -101,14 +112,14 @@ class _CalendarViewTaskState extends State<CalendarViewTask> {
       targetDateTime: _targetDateTime,
       customGridViewPhysics: NeverScrollableScrollPhysics(),
       markedDateCustomShapeBorder:
-          CircleBorder(side: BorderSide(color: Colors.yellow)),
+          CircleBorder(side: BorderSide(color: Colors.blueAccent.shade100)),
       markedDateCustomTextStyle: TextStyle(
         fontSize: 18,
-        color: Colors.blue,
+        color: Colors.blueAccent.shade100,
       ),
       showHeader: false,
       todayTextStyle: TextStyle(
-        color: Colors.blue,
+        color: Colors.blueAccent.shade100,
       ),
       // markedDateShowIcon: true,
       // markedDateIconMaxShown: 2,
@@ -117,7 +128,7 @@ class _CalendarViewTaskState extends State<CalendarViewTask> {
       // },
       // markedDateMoreShowTotal:
       //     true,
-      todayButtonColor: Colors.yellow,
+      todayButtonColor: Colors.blueAccent,
       selectedDayTextStyle: const TextStyle(
         color: Colors.yellow,
       ),
@@ -145,7 +156,10 @@ class _CalendarViewTaskState extends State<CalendarViewTask> {
     return Scaffold(
         appBar: AppBar(
           elevation: 0,
-          title: Text("Task"),
+          title: Text(
+            "All Tasks",
+            style: TextStyle(fontFamily: 'mplus', fontWeight: FontWeight.bold),
+          ),
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -206,4 +220,72 @@ class _CalendarViewTaskState extends State<CalendarViewTask> {
           ),
         ));
   }
+
+  showTasks() {
+    return showModalBottomSheet(
+        useRootNavigator: true,
+        isScrollControlled: true,
+        barrierColor: Colors.red.withOpacity(0.2),
+        elevation: 0,
+        context: context,
+        builder: (context) {
+          return Container(
+            color: Colors.white,
+            height: MediaQuery.of(context).size.height / 2.3,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Icon(
+                            Icons.linear_scale_sharp,
+                            color: Colors.blueAccent,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Column(
+                    children: [
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          titleList.toString(),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'mplus',
+                              fontSize: 12,
+                              color: Colors.blueAccent),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  //  List<DateTime> _markedDate = [DateTime(2018, 9, 20), DateTime(2018, 10, 11)];
+  static final Widget _eventIcon = Container(
+    decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(Radius.circular(1000)),
+        border: Border.all(color: Colors.blueAccent, width: 2.0)),
+    child: const Icon(
+      Icons.add_alert_rounded,
+      color: Colors.amber,
+    ),
+  );
 }
