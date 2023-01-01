@@ -84,12 +84,10 @@ class _CalendarViewTaskState extends State<CalendarViewTask> {
             titleList!.add(allTask?[i].title),
             categoryList!.add(allTask?[i].description),
             dateList!.add(allTask?[i].date),
-
-            showTasks(),
-
             // categoryList.add(list[i].category);
             // dateList.add(list[i].date);
-          }
+          },
+        showTasks(),
 
         // Future.delayed(const Duration(seconds: 2), () {
         //   print(
@@ -232,46 +230,57 @@ class _CalendarViewTaskState extends State<CalendarViewTask> {
           return Container(
             color: Colors.white,
             height: MediaQuery.of(context).size.height / 2.3,
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    color: Colors.white,
-                    child: Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Icon(
-                            Icons.linear_scale_sharp,
-                            color: Colors.blueAccent,
+            child: ListView.builder(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              primary: false,
+              itemCount: allTask?.length,
+              itemBuilder: (context, i) {
+                return SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              Text(
+                                " ${i + 1})  ${titleList?[i].length > 20 ? "${titleList?[i].substring(0, 19)}..." : titleList?[i]}",
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'mplus',
+                                    fontSize: 12,
+                                    color: Colors.blueAccent),
+                              ),
+                              Text(
+                                " (${categoryList?[i]})",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'mplus',
+                                    fontSize: 10,
+                                    color: Colors.red),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            "${DateFormat.yMMMd().format(dateList![i])}",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'mplus',
+                                fontSize: 12,
+                                color: Colors.blueAccent),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  Column(
-                    children: [
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          titleList.toString(),
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'mplus',
-                              fontSize: 12,
-                              color: Colors.blueAccent),
-                        ),
-                      ),
-                    ],
-                  )
-                ],
-              ),
+                );
+              },
             ),
           );
         });
