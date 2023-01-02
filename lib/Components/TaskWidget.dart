@@ -39,8 +39,8 @@ class TaskWidget extends StatefulWidget {
 
 class _TaskWidgetState extends State<TaskWidget> {
   List<String> subList = [];
-  late TimeOfDay reminderTime;
-  late DateTime reminderDate;
+  late TimeOfDay? reminderTime = const TimeOfDay(hour: 15, minute: 0);
+  late DateTime? reminderDate = DateTime.now();
   String currentPage = "all";
 
   @override
@@ -50,6 +50,7 @@ class _TaskWidgetState extends State<TaskWidget> {
     } else {
       getTime();
       getDate();
+      Future.delayed(const Duration(milliseconds: 100), () {});
     }
     slipSubTask();
 
@@ -204,7 +205,7 @@ class _TaskWidgetState extends State<TaskWidget> {
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
-                        color: Colors.grey.withOpacity(0.1),
+                        color: Colors.grey.withOpacity(0.08),
                       ),
                       padding: const EdgeInsets.all(8.0),
                       width: MediaQuery.of(context).size.width,
@@ -340,7 +341,7 @@ class _TaskWidgetState extends State<TaskWidget> {
                   color: Colors.transparent,
                 ),
           Text(
-            "  ${DateFormat.yMMMd().format(reminderDate!)} at ${formatTimeOfDay(reminderTime)}",
+            "  ${DateFormat.yMMMd().format(reminderDate!)} at ${formatTimeOfDay(reminderTime!)}",
             style: TextStyle(
               fontSize: 10,
               fontFamily: 'mplus',
@@ -376,36 +377,41 @@ class _TaskWidgetState extends State<TaskWidget> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    color: Colors.blueAccent.withOpacity(0.8),
-                    child: Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Icon(
-                            Icons.linear_scale_sharp,
-                            color: Colors.white,
-                          ),
-                        ],
-                      ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "Tasks Details",
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontFamily: "mplus",
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
                     ),
                   ),
 
                   /// These are Task Widgets
                   Padding(
-                    padding: const EdgeInsets.only(left: 8, top: 10),
+                    padding: const EdgeInsets.only(left: 8, top: 30),
                     child: Row(
-                      children: const [
-                        Text(
-                          "Tasks:",
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                              fontSize: 16,
-                              fontFamily: "mplus",
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black),
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.task_alt_sharp,
+                              size: 17,
+                              color: Colors.black,
+                            ),
+                            Text(
+                              " Tasks:",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontFamily: "mplus",
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -414,9 +420,14 @@ class _TaskWidgetState extends State<TaskWidget> {
                     padding: const EdgeInsets.only(left: 8, top: 0, bottom: 4),
                     child: Row(
                       children: [
+                        Icon(
+                          Icons.task_alt_sharp,
+                          size: 17,
+                          color: Colors.transparent,
+                        ),
                         Flexible(
                           child: Text(
-                            widget.task,
+                            " ${widget.task}",
                             textAlign: TextAlign.start,
                             style: const TextStyle(
                                 fontSize: 16,
@@ -438,9 +449,14 @@ class _TaskWidgetState extends State<TaskWidget> {
                       top: 0,
                     ),
                     child: Row(
-                      children: const [
+                      children: [
+                        Icon(
+                          Icons.account_tree_rounded,
+                          size: 17,
+                          color: Colors.black,
+                        ),
                         Text(
-                          "Sub Tasks:",
+                          " Sub Tasks:",
                           textAlign: TextAlign.start,
                           style: TextStyle(
                               fontSize: 16,
@@ -462,8 +478,10 @@ class _TaskWidgetState extends State<TaskWidget> {
                     ),
                     child: Row(
                       children: const [
+                        Icon(Icons.calendar_month_outlined, size: 17, color: Colors.black,),
+
                         Text(
-                          "Reminder:",
+                          " Reminder:",
                           textAlign: TextAlign.start,
                           style: TextStyle(
                               fontSize: 16,
@@ -480,8 +498,10 @@ class _TaskWidgetState extends State<TaskWidget> {
                               const EdgeInsets.only(left: 8, top: 1, bottom: 4),
                           child: Row(
                             children: [
+                              Icon(Icons.task_alt_sharp, size: 17, color: Colors.transparent,),
+
                               Text(
-                                "No Reminder Set",
+                                " No Reminder Set",
                                 style: TextStyle(
                                     fontSize: 12,
                                     fontFamily: "mplus",
@@ -495,14 +515,7 @@ class _TaskWidgetState extends State<TaskWidget> {
                           padding: EdgeInsets.only(left: 8, top: 1, bottom: 4),
                           child: Row(
                             children: [
-                              const Text(
-                                "Reminder @ ",
-                                style: TextStyle(
-                                    fontSize: 15,
-                                    fontFamily: "mplus",
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.blueAccent),
-                              ),
+                              Icon(Icons.calendar_month_outlined, size: 17, color: Colors.transparent,),
                               reminder('true'),
                             ],
                           ),
@@ -521,8 +534,10 @@ class _TaskWidgetState extends State<TaskWidget> {
                         },
                         style: ElevatedButton.styleFrom(
                           primary: Colors.green, // background
-                          onPrimary: Colors.blue, // foreground
+                          onPrimary: Colors.blue,
+                          elevation: 0.0// foreground
                         ),
+
                         child: Text(
                           widget.isComplete == "yes"
                               ? "Mark As Incomplete"
@@ -538,7 +553,9 @@ class _TaskWidgetState extends State<TaskWidget> {
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           primary: Colors.red, // background
-                          onPrimary: Colors.blue, // foreground
+                          onPrimary: Colors.blue,
+                            elevation: 0.0// foreground
+// foreground
                         ),
                         onPressed: () => {
                           widget.deleteFunction(otherTaskCard),
@@ -568,10 +585,15 @@ class _TaskWidgetState extends State<TaskWidget> {
     if (widget.subTask == "N/A") {
       return Row(
         children: [
+          Icon(
+            Icons.task_alt_sharp,
+            size: 17,
+            color: Colors.transparent,
+          ),
           Padding(
             padding: const EdgeInsets.only(left: 8, top: 1, bottom: 4),
             child: Text(
-              "There is No Sub Task Available",
+              " There is No Sub Task Available",
               textAlign: TextAlign.start,
               style: TextStyle(
                   fontSize: 12,
@@ -595,6 +617,11 @@ class _TaskWidgetState extends State<TaskWidget> {
 
             return Row(
               children: [
+                Icon(
+                  Icons.task_alt_sharp,
+                  size: 17,
+                  color: Colors.transparent,
+                ),
                 Flexible(
                   child: Padding(
                     padding: const EdgeInsets.only(

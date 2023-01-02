@@ -133,6 +133,7 @@ class _AboutPageState extends State<AboutPage> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
+        width: MediaQuery.of(context).size.width/1.1,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
               color: Colors.blueAccent),

@@ -223,7 +223,7 @@ class _AddTaskState extends State<AddTask> {
       // placementId: "IMG_16_9_APP_INSTALL#2312433698835503_2964953543583512",
       adType: NativeAdType.NATIVE_BANNER_AD,
       bannerAdSize: NativeBannerAdSize.HEIGHT_100,
-      height: 110,
+      height:  110,
       listener: (result, value) {
         print("Native Banner Ad: $result --> $value");
       },
@@ -521,15 +521,22 @@ class _AddTaskState extends State<AddTask> {
                       }),
                       Navigator.pop(context),
                     },
-                    child: const Padding(
+                    child:  Padding(
                       padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        "Work",
-                        style: TextStyle(
-                            fontFamily: 'mplus',
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                            color: Colors.grey),
+                      child: Row(
+                        children: const [
+                          Text(
+                            "Work   ",
+                            style: TextStyle(
+                                fontFamily: 'mplus',
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                                color: Colors.grey),
+                          ),
+                          Icon(Icons.work_history_outlined,
+                          size: 15,
+                          color: Colors.grey,)
+                        ],
                       ),
                     ),
                   ),
@@ -540,16 +547,25 @@ class _AddTaskState extends State<AddTask> {
                       }),
                       Navigator.pop(context),
                     },
-                    child: const Padding(
+                    child:  Padding(
                       padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        "Personal",
-                        style: TextStyle(
-                            fontFamily: 'mplus',
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                            color: Colors.grey),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Personal   ",
+                            style: TextStyle(
+                                fontFamily: 'mplus',
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                                color: Colors.grey),
+
+                          ),
+                          Icon(Icons.person_pin_outlined,
+                            size: 15,
+                            color: Colors.grey,)
+                        ],
                       ),
+
                     ),
                   ),
                   GestureDetector(
@@ -559,15 +575,22 @@ class _AddTaskState extends State<AddTask> {
                       }),
                       Navigator.pop(context),
                     },
-                    child: const Padding(
+                    child:  Padding(
                       padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        "Watchlist",
-                        style: TextStyle(
-                            fontFamily: 'mplus',
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                            color: Colors.grey),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Watchlist   ",
+                            style: TextStyle(
+                                fontFamily: 'mplus',
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                                color: Colors.grey),
+                          ),
+                          Icon(Icons.remove_red_eye,
+                            size: 15,
+                            color: Colors.grey,)
+                        ],
                       ),
                     ),
                   ),
@@ -578,15 +601,22 @@ class _AddTaskState extends State<AddTask> {
                       }),
                       Navigator.pop(context),
                     },
-                    child: const Padding(
+                    child:  Padding(
                       padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        "Birthday",
-                        style: TextStyle(
-                            fontFamily: 'mplus',
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                            color: Colors.grey),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Birthday   ",
+                            style: TextStyle(
+                                fontFamily: 'mplus',
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                                color: Colors.grey),
+                          ),
+                          Icon(Icons.celebration,
+                            size: 15,
+                            color: Colors.grey,)
+                        ],
                       ),
                     ),
                   ),
@@ -597,15 +627,22 @@ class _AddTaskState extends State<AddTask> {
                       }),
                       Navigator.pop(context),
                     },
-                    child: const Padding(
+                    child:  Padding(
                       padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        "Urgent",
-                        style: TextStyle(
-                            fontFamily: 'mplus',
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                            color: Colors.grey),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Urgent   ",
+                            style: TextStyle(
+                                fontFamily: 'mplus',
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                                color: Colors.grey),
+                          ),
+                          Icon(Icons.label_important_outline_sharp,
+                            size: 15,
+                            color: Colors.grey,)
+                        ],
                       ),
                     ),
                   ),
@@ -616,15 +653,22 @@ class _AddTaskState extends State<AddTask> {
                       }),
                       Navigator.pop(context),
                     },
-                    child: const Padding(
+                    child:  Padding(
                       padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        "Important",
-                        style: TextStyle(
-                            fontFamily: 'mplus',
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                            color: Colors.grey),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Important   ",
+                            style: TextStyle(
+                                fontFamily: 'mplus',
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                                color: Colors.grey),
+                          ),
+                          Icon(Icons.account_tree_rounded,
+                            size: 15,
+                            color: Colors.grey,)
+                        ],
                       ),
                     ),
                   ),
@@ -635,15 +679,22 @@ class _AddTaskState extends State<AddTask> {
                       }),
                       Navigator.pop(context),
                     },
-                    child: const Padding(
+                    child:  Padding(
                       padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        "Home",
-                        style: TextStyle(
-                            fontFamily: 'mplus',
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                            color: Colors.grey),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Home  ",
+                            style: TextStyle(
+                                fontFamily: 'mplus',
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                                color: Colors.grey),
+                          ),
+                          Icon(Icons.home,
+                            size: 15,
+                            color: Colors.grey,)
+                        ],
                       ),
                     ),
                   ),
@@ -654,15 +705,22 @@ class _AddTaskState extends State<AddTask> {
                       }),
                       Navigator.pop(context),
                     },
-                    child: const Padding(
+                    child:  Padding(
                       padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        "Others",
-                        style: TextStyle(
-                            fontFamily: 'mplus',
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                            color: Colors.grey),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Others   ",
+                            style: TextStyle(
+                                fontFamily: 'mplus',
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                                color: Colors.grey),
+                          ),
+                          Icon(Icons.devices_other,
+                            size: 15,
+                            color: Colors.grey,)
+                        ],
                       ),
                     ),
                   ),
@@ -677,7 +735,7 @@ class _AddTaskState extends State<AddTask> {
         arrowWidth: 25,
         backgroundColor: Colors.white,
         barrierColor: Colors.transparent,
-        transitionDuration: Duration(milliseconds: 500));
+        transitionDuration: Duration(milliseconds: 500),);
   }
 
   Card createCard() {
