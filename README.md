@@ -25,4 +25,9 @@ Take some time to check the todo-list completion status of your daily planners o
 
 ## Screens
 
+
+<p float="left">
 <img src="https://imgur.com/3Q80y8u.png" width="280" height="450" />
+<img src="https://imgur.com/3Q80y8u.png" width="280" height="450" />
+<img src="https://imgur.com/3Q80y8u.png" width="280" height="450" />
+</p>
