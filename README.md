@@ -6,25 +6,6 @@ Task Manager and To Do List is a Schedule Manager & Task Reminder that is free a
 
 The interface of Task Manager and To Do List with task manager alarm is very simple and easy to use. We make methods in which you can track how to use.
 
-The Reasons for choosing Task reminder and task Manager and To Do List
-
-Very easy to use
-
-The interface of this application is very simple and easy to use. We make in app method in which you can track how to use.
-
-Simple but attractive theme
-
-Task Reminder and To Do List Manager has attractive simple and understandable theme and interface that can use anyone and manage daily task as well as reminders.
-
-Task Manager or we can say that task reminder and To Do List is just like Schedule Manager or to do list that provide you facility to edit your task time any time any day.
-
-Calendar view
-Task Reminder and to do manager provide Calendar to select data and you can edit it any time.
-
-Reasons for choosing this Todo-list
-✔️Easy to use and beautiful todo list themes
-The interface of the todolist application is simple and efficient. You can create multiple to do tasks lists with only 2 steps.
-Set up daily to do list widgets to let you quickly check today's to.do.list and schedule planner.
 📝To-Do List - Schedule Planner & To Do Reminder App Free📝 provide a variety of theme colors to choose. Make you feel more comfortable when managing todo-list and doing task trackers. Manage all your daily planners free.
 Will support managing to.do.list and your daily schedule planners in Night dark theme
 
@@ -48,7 +29,4 @@ You can also use it as a personal day planner free app to record birthdays and a
 📊Tracking daily planners complete status, you are getting better.
 Take some time to check the todo-list completion status of your daily planners on the "MINE" page. You will find that the days using todo-list task manager, you are getting better and better.
 
-Future updates
-We are willing to update app on weekly bases and update many options to facilitate our users. Moreover in future we will keep track your task reminders sync throughout any device.
-
-Feel free to contact us at nextleveltechnologyofficial@gmail.com if you have any further quires.
+## Screens
