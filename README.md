@@ -1,11 +1,5 @@
 # Task Reminder
 
-Did you ever forgot to do something? Did you miss your best friend birthday? If yes, don’t worry I am here to help you. Yes, I am Task Manager and To Do List friend of you.
-
-Task Manager and To Do List is a Schedule Manager & Task Reminder that is free and easy to use for daily life for time management.
-
-The interface of Task Manager and To Do List with task manager alarm is very simple and easy to use. We make methods in which you can track how to use.
-
 📝To-Do List - Schedule Planner & To Do Reminder App Free📝 provide a variety of theme colors to choose. Make you feel more comfortable when managing todo-list and doing task trackers. Manage all your daily planners free.
 Will support managing to.do.list and your daily schedule planners in Night dark theme
 
@@ -30,3 +24,5 @@ You can also use it as a personal day planner free app to record birthdays and a
 Take some time to check the todo-list completion status of your daily planners on the "MINE" page. You will find that the days using todo-list task manager, you are getting better and better.
 
 ## Screens
+
+<img src="https://imgur.com/3Q80y8u.png" width="300" height="450" />
