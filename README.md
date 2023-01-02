@@ -28,6 +28,10 @@ Take some time to check the todo-list completion status of your daily planners o
 
 <p float="left">
 <img src="https://imgur.com/3Q80y8u.png" width="280" height="450" />
-<img src="https://imgur.com/3Q80y8u.png" width="280" height="450" />
-<img src="https://imgur.com/3Q80y8u.png" width="280" height="450" />
+<img src="https://imgur.com/PaLLrMg.png" width="280" height="450" />
+<img src="https://imgur.com/b964jdW.png" width="280" height="450" />
+<img src="https://imgur.com/l4PrK15.png" width="280" height="450" />
+<img src="https://imgur.com/GUlutj4.png" width="280" height="450" />
+<img src="https://imgur.com/cldP8zi.png" width="280" height="450" />
+
 </p>
