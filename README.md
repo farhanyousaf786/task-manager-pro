@@ -31,7 +31,7 @@ Take some time to check the todo-list completion status of your daily planners o
 </p>
 
 ### Launch Here
-[Switch - Google Play](https://play.google.com/store/apps/details?id=com.ushnfay.taskreminder)
+[Task Manager - Google Play](https://play.google.com/store/apps/details?id=com.ushnfay.taskreminder)
 
 
 ## Technologies Used
