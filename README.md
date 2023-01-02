@@ -7,11 +7,6 @@ Will support managing to.do.list and your daily schedule planners in Night dark 
 📝To-Do List - Schedule Planner & To Do Reminder App Free ⭐is a todo list and task planner reminder apps free for you. You can set task reminders with alarm for important todos to avoid forgetting.
 Support repeat to.do.list reminders. For recurring task lists, turn on recurring todo tasks’ reminders to simplify todo-list task managers.
 
-⭐Manage todos with task tracker categories, highlights and checklists
-With the “To-Do List - Schedule Planner & To Do list Reminder App Free ”, you can easily set to-do list categories, task list priorities, and todos’ stars to manage the todo lists and day planners efficiently
-You can star the todo list, making important things more outstanding
-Alsom you can add to-do-lists' sub-task lists, making all todos well organized.
-
 📅Calendar view
 “To-Do List - Schedule Planner & To.Do.list Reminders ” provides a to-do list calendar perspective. Make it easier for users to have a general view of daily schedule planners, weekly/monthly tasks planners and future day planners.
 
