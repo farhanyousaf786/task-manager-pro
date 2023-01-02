@@ -264,7 +264,7 @@ class _TaskWidgetState extends State<TaskWidget> {
                       fontSize: 8,
                       fontFamily: 'mplus',
                       fontWeight: FontWeight.w600,
-                      color: Colors.deepOrange,
+                      color: Colors.purple,
                     ),
                   )
                 : Text(""),
@@ -355,7 +355,7 @@ class _TaskWidgetState extends State<TaskWidget> {
               fontSize: 8,
               fontFamily: 'mplus',
               fontWeight: FontWeight.w600,
-              color: Colors.deepOrange,
+              color: Colors.purple,
             ),
           ),
         ],
