@@ -1,4 +1,3 @@
-import 'package:facebook_audience_network/facebook_audience_network.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -82,7 +81,6 @@ class _AddTaskState extends State<AddTask> {
     addItem(taskInfo);
     print("date = >>>==  ${reminderDate.runtimeType}");
 
-    _showInterstitialAd();
     Navigator.pushAndRemoveUntil<dynamic>(
       context,
       MaterialPageRoute<dynamic>(
@@ -169,66 +167,11 @@ class _AddTaskState extends State<AddTask> {
 
   @override
   void initState() {
-    FacebookAudienceNetwork.init();
-    _loadInterstitialAd();
-    _showNativeBannerAd();
+
     super.initState();
   }
 
-  bool _isInterstitialAdLoaded = false;
 
-  void _loadInterstitialAd() {
-    FacebookInterstitialAd.loadInterstitialAd(
-      placementId: "549950063684272_549950853684193",
-      // placementId: "IMG_16_9_APP_INSTALL#2312433698835503_2650502525028617",
-
-      listener: (result, value) {
-        print(">> FAN > Interstitial Ad: $result --> $value");
-        if (result == InterstitialAdResult.LOADED)
-          _isInterstitialAdLoaded = true;
-
-        /// Once an Interstitial Ad has been dismissed and becomes invalidated,
-        /// load a fresh Ad by calling this function.
-        if (result == InterstitialAdResult.DISMISSED &&
-            value["invalidated"] == true) {
-          _isInterstitialAdLoaded = false;
-          _loadInterstitialAd();
-        }
-      },
-    );
-  }
-
-  _showInterstitialAd() {
-    if (_isInterstitialAdLoaded == true) {
-      FacebookInterstitialAd.showInterstitialAd();
-    } else {
-      print("Interstial Ad not yet loaded!");
-    }
-  }
-
-  Widget _currentAd = SizedBox(
-    width: 0.0,
-    height: 0.0,
-  );
-
-  _showNativeBannerAd() {
-    setState(() {
-      _currentAd = _nativeBannerAd();
-    });
-  }
-
-  Widget _nativeBannerAd() {
-    return FacebookNativeAd(
-      placementId: "549950063684272_549961877016424",
-      // placementId: "IMG_16_9_APP_INSTALL#2312433698835503_2964953543583512",
-      adType: NativeAdType.NATIVE_BANNER_AD,
-      bannerAdSize: NativeBannerAdSize.HEIGHT_100,
-      height:  110,
-      listener: (result, value) {
-        print("Native Banner Ad: $result --> $value");
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -250,7 +193,7 @@ class _AddTaskState extends State<AddTask> {
               padding: const EdgeInsets.all(8.0),
               child: Align(
                 alignment: Alignment(0, 1.0),
-                child: _currentAd,
+                child: Text("ads"),
               ),
             ),
             const SizedBox(

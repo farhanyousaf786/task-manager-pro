@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:taskreminder/Pages/LandingPage.dart';
 
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -21,6 +22,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  MobileAds.instance.initialize();
 
   runApp(const MyApp());
 }

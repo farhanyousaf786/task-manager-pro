@@ -1,4 +1,3 @@
-import 'package:facebook_audience_network/facebook_audience_network.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:flutter_calendar_carousel/classes/event_list.dart';
@@ -36,7 +35,7 @@ class _CalendarViewTaskState extends State<CalendarViewTask> {
   @override
   void initState() {
     addTaskToCalender();
-    _showNativeAd();
+
 
     Future.delayed(const Duration(milliseconds: 100), () {
       setState(() {
@@ -48,36 +47,6 @@ class _CalendarViewTaskState extends State<CalendarViewTask> {
   }
 
 
-  Widget _currentAd = SizedBox(
-    width: 0.0,
-    height: 0.0,
-  );
-
-  _showNativeAd() {
-    setState(() {
-      _currentAd = _nativeAd();
-    });
-  }
-
-  Widget _nativeAd() {
-    return FacebookNativeAd(
-      placementId: "549950063684272_549950677017544",
-      adType: NativeAdType.NATIVE_AD_VERTICAL,
-      width: double.infinity,
-      height: 300,
-      backgroundColor: Colors.blue,
-      titleColor: Colors.white,
-      descriptionColor: Colors.white,
-      buttonColor: Colors.deepPurple,
-      buttonTitleColor: Colors.white,
-      buttonBorderColor: Colors.white,
-      listener: (result, value) {
-        print("Native Ad: $result --> $value");
-      },
-      keepExpandedWhileLoading: true,
-      expandAnimationDuraion: 1000,
-    );
-  }
 
   String formatTimeOfDay(TimeOfDay tod) {
     final now = new DateTime.now();
@@ -294,7 +263,7 @@ class _CalendarViewTaskState extends State<CalendarViewTask> {
                       padding: const EdgeInsets.all(8.0),
                       child: Align(
                         alignment: Alignment(0, 1.0),
-                        child: _currentAd,
+                        child: Text("ads"),
                       ),
                     ),
                     //

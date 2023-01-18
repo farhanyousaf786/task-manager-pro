@@ -1,5 +1,5 @@
-import 'package:facebook_audience_network/facebook_audience_network.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
@@ -37,26 +37,24 @@ class _AllTaskState extends State<AllTask> {
   @override
   void initState() {
     initializeDateFormatting('pt_BR', null);
-    _showBannerAd();
+    myBanner.load();
+    _loadInterstitialAd();
+
+    Future.delayed(const Duration(seconds: 10), () {
+      _interstitialAd?.show();
+
+    });
     super.initState();
   }
 
-  Widget _currentAd = SizedBox(
-    width: 0.0,
-    height: 0.0,
+  final BannerAd myBanner = BannerAd(
+    adUnitId: 'ca-app-pub-5525086149175557/5362224466',
+    size: AdSize.banner,
+    request: AdRequest(),
+    listener: BannerAdListener(),
   );
 
-  _showBannerAd() {
-    _currentAd = FacebookBannerAd(
-      placementId: "549950063684272_549952740350671",
-      // placementId:
-      //     "IMG_16_9_APP_INSTALL#2312433698835503_2964944860251047", //testid
-      bannerSize: BannerSize.STANDARD,
-      listener: (result, value) {
-        print("Banner Ad: $result -->  $value");
-      },
-    );
-  }
+
 
   /// Returns the difference (in full days) between the provided date and today.
   /// Yesterday : calculateDifference(date) == -1.
@@ -85,19 +83,53 @@ class _AllTaskState extends State<AllTask> {
     }
   }
 
+
+
+  // TODO: Add _interstitialAd
+
+  InterstitialAd? _interstitialAd;
+
+  // TODO: Implement _loadInterstitialAd()
+  void _loadInterstitialAd() {
+    InterstitialAd.load(
+      adUnitId: "ca-app-pub-5525086149175557/1265398480",
+      request: AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (ad) {
+          ad.fullScreenContentCallback = FullScreenContentCallback(
+            onAdDismissedFullScreenContent: (ad) {
+
+            },
+          );
+
+          setState(() {
+            _interstitialAd = ad;
+          });
+        },
+        onAdFailedToLoad: (err) {
+          print('Failed to load an interstitial ad: ${err.message}');
+        },
+      ),
+    );
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
+
+    final AdWidget adWidget = AdWidget(ad: myBanner);
+    final Container adContainer = Container(
+      alignment: Alignment.center,
+      child: adWidget,
+      width: myBanner.size.width.toDouble(),
+      height: myBanner.size.height.toDouble(),
+    );
     return SingleChildScrollView(
       physics: AlwaysScrollableScrollPhysics(),
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Align(
-              alignment: Alignment(0, 1.0),
-              child: _currentAd,
-            ),
-          ),
+         adContainer,
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
