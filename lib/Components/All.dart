@@ -40,7 +40,7 @@ class _AllTaskState extends State<AllTask> {
     myBanner.load();
     _loadInterstitialAd();
 
-    Future.delayed(const Duration(seconds: 10), () {
+    Future.delayed(const Duration(seconds: 60), () {
       _interstitialAd?.show();
 
     });

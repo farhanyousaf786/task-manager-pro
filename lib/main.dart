@@ -4,6 +4,11 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:taskreminder/Pages/LandingPage.dart';
 
+String? version;
+
+List<String> testDeviceIds = ['1ABD59FEDD8208ABF827341092618E9D'];
+
+
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
@@ -23,7 +28,9 @@ void main() async {
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   MobileAds.instance.initialize();
-
+  RequestConfiguration configuration =
+  RequestConfiguration(testDeviceIds: testDeviceIds);
+  MobileAds.instance.updateRequestConfiguration(configuration);
   runApp(const MyApp());
 }
 
@@ -39,7 +46,8 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: LandingPage() // this page wil contain all pages along with bottom bar
+        home:
+            LandingPage() // this page wil contain all pages along with bottom bar
         );
   }
 }

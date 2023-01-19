@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:intl/intl.dart';
 import 'package:popover/popover.dart';
 import 'package:taskreminder/Database/DBModel.dart';
@@ -25,6 +26,48 @@ class _AddTaskState extends State<AddTask> {
   DateTime? reminderDate;
   TimeOfDay? reminderTime;
   String isComplete = 'no';
+
+  @override
+  void initState() {
+    myBanner.load();
+    _loadInterstitialAd();
+    super.initState();
+  }
+
+  final BannerAd myBanner = BannerAd(
+    adUnitId: 'ca-app-pub-5525086149175557/7459024322',
+    size: AdSize.banner,
+    request: AdRequest(),
+    listener: BannerAdListener(),
+  );
+
+
+
+  InterstitialAd? _interstitialAd;
+  void _loadInterstitialAd() {
+    InterstitialAd.load(
+      adUnitId: "ca-app-pub-5525086149175557/2398269331",
+      request: AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (ad) {
+          ad.fullScreenContentCallback = FullScreenContentCallback(
+            onAdDismissedFullScreenContent: (ad) {
+
+            },
+          );
+
+          setState(() {
+            _interstitialAd = ad;
+          });
+        },
+        onAdFailedToLoad: (err) {
+          print('Failed to load an interstitial ad: ${err.message}');
+        },
+      ),
+    );
+  }
+
+
 
   dataAndTimePicker() async {
     reminderDate = (await showDatePicker(
@@ -80,6 +123,8 @@ class _AddTaskState extends State<AddTask> {
 
     addItem(taskInfo);
     print("date = >>>==  ${reminderDate.runtimeType}");
+
+    _interstitialAd?.show();
 
     Navigator.pushAndRemoveUntil<dynamic>(
       context,
@@ -165,16 +210,20 @@ class _AddTaskState extends State<AddTask> {
     // );
   }
 
-  @override
-  void initState() {
-
-    super.initState();
-  }
-
 
 
   @override
   Widget build(BuildContext context) {
+
+    final AdWidget adWidget = AdWidget(ad: myBanner);
+    final Container adContainer = Container(
+      alignment: Alignment.center,
+      child: adWidget,
+      width: myBanner.size.width.toDouble(),
+      height: myBanner.size.height.toDouble(),
+    );
+
+
     return Container(
       color: Colors.transparent,
       child: Container(
@@ -193,7 +242,7 @@ class _AddTaskState extends State<AddTask> {
               padding: const EdgeInsets.all(8.0),
               child: Align(
                 alignment: Alignment(0, 1.0),
-                child: Text("ads"),
+                child: adContainer,
               ),
             ),
             const SizedBox(

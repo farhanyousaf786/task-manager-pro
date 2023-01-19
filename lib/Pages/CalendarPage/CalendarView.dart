@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:flutter_calendar_carousel/classes/event_list.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:intl/intl.dart';
 import 'package:taskreminder/Database/Constants.dart';
 import 'package:taskreminder/Database/DBModel.dart';
@@ -35,7 +36,7 @@ class _CalendarViewTaskState extends State<CalendarViewTask> {
   @override
   void initState() {
     addTaskToCalender();
-
+    loadNativeAd();
 
     Future.delayed(const Duration(milliseconds: 100), () {
       setState(() {
@@ -45,8 +46,6 @@ class _CalendarViewTaskState extends State<CalendarViewTask> {
 
     super.initState();
   }
-
-
 
   String formatTimeOfDay(TimeOfDay tod) {
     final now = new DateTime.now();
@@ -95,6 +94,24 @@ class _CalendarViewTaskState extends State<CalendarViewTask> {
                 }
             }
         });
+  }
+
+  NativeAd? nativeAd;
+  bool isNativeAdLoaded = false;
+  void loadNativeAd() {
+    nativeAd = NativeAd(
+      adUnitId: "ca-app-pub-5525086149175557/2206697644",
+      factoryId: "listTileMedium",
+      listener: NativeAdListener(onAdLoaded: (ad) {
+        setState(() {
+          isNativeAdLoaded = true;
+        });
+      }, onAdFailedToLoad: (ad, error) {
+        nativeAd!.dispose();
+      }),
+      request: AdRequest(),
+    );
+    nativeAd!.load();
   }
 
   @override
@@ -260,10 +277,20 @@ class _CalendarViewTaskState extends State<CalendarViewTask> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.only(top: 2),
                       child: Align(
                         alignment: Alignment(0, 1.0),
-                        child: Text("ads"),
+                        child: isNativeAdLoaded
+                            ? Container(
+                          decoration: const BoxDecoration(
+                            color: Colors.transparent,
+                          ),
+                          height: 300,
+                          child: AdWidget(
+                            ad: nativeAd!,
+                          ),
+                        )
+                            : SizedBox(),
                       ),
                     ),
                     //
