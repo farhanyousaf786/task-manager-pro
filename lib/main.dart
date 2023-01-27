@@ -46,8 +46,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home:
-            LandingPage() // this page wil contain all pages along with bottom bar
+        home: LandingPage() // this page wil contain all pages along with bottom bar
         );
   }
 }

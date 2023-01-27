@@ -53,7 +53,6 @@ class _TaskWidgetState extends State<TaskWidget> {
       Future.delayed(const Duration(milliseconds: 100), () {});
     }
     slipSubTask();
-
     super.initState();
   }
 

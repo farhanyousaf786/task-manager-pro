@@ -41,9 +41,8 @@ class _AddTaskState extends State<AddTask> {
     listener: BannerAdListener(),
   );
 
-
-
   InterstitialAd? _interstitialAd;
+
   void _loadInterstitialAd() {
     InterstitialAd.load(
       adUnitId: "ca-app-pub-5525086149175557/2398269331",
@@ -51,9 +50,7 @@ class _AddTaskState extends State<AddTask> {
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (ad) {
           ad.fullScreenContentCallback = FullScreenContentCallback(
-            onAdDismissedFullScreenContent: (ad) {
-
-            },
+            onAdDismissedFullScreenContent: (ad) {},
           );
 
           setState(() {
@@ -66,8 +63,6 @@ class _AddTaskState extends State<AddTask> {
       ),
     );
   }
-
-
 
   dataAndTimePicker() async {
     reminderDate = (await showDatePicker(
@@ -125,7 +120,6 @@ class _AddTaskState extends State<AddTask> {
     print("date = >>>==  ${reminderDate.runtimeType}");
 
     _interstitialAd?.show();
-
     Navigator.pushAndRemoveUntil<dynamic>(
       context,
       MaterialPageRoute<dynamic>(
@@ -153,8 +147,8 @@ class _AddTaskState extends State<AddTask> {
       taskController.text,
       'To Do Notification',
       // 'Do the task',
-      priority: Priority.max,
-      importance: Importance.max,
+      priority: Priority.high,
+      importance: Importance.high,
       largeIcon: const DrawableResourceAndroidBitmap("@mipmap/ic_launcher"),
       styleInformation: const MediaStyleInformation(
         htmlFormatContent: true,
@@ -210,11 +204,8 @@ class _AddTaskState extends State<AddTask> {
     // );
   }
 
-
-
   @override
   Widget build(BuildContext context) {
-
     final AdWidget adWidget = AdWidget(ad: myBanner);
     final Container adContainer = Container(
       alignment: Alignment.center,
@@ -222,7 +213,6 @@ class _AddTaskState extends State<AddTask> {
       width: myBanner.size.width.toDouble(),
       height: myBanner.size.height.toDouble(),
     );
-
 
     return Container(
       color: Colors.transparent,
@@ -493,241 +483,256 @@ class _AddTaskState extends State<AddTask> {
 
   _subTask() {
     showPopover(
-        shadow: <BoxShadow>[
-          const BoxShadow(
-            color: Colors.transparent,
-            blurRadius: 0,
-            offset: Offset(0, 0),
-          ),
-        ],
-        context: context,
-        bodyBuilder: (context) => SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  GestureDetector(
-                    onTap: () => {
-                      setState(() {
-                        categoryName = "Work";
-                      }),
-                      Navigator.pop(context),
-                    },
-                    child:  Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Row(
-                        children: const [
-                          Text(
-                            "Work   ",
-                            style: TextStyle(
-                                fontFamily: 'mplus',
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                                color: Colors.grey),
-                          ),
-                          Icon(Icons.work_history_outlined,
-                          size: 15,
-                          color: Colors.grey,)
-                        ],
-                      ),
+      shadow: <BoxShadow>[
+        const BoxShadow(
+          color: Colors.transparent,
+          blurRadius: 0,
+          offset: Offset(0, 0),
+        ),
+      ],
+      context: context,
+      bodyBuilder: (context) => SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            GestureDetector(
+              onTap: () => {
+                setState(() {
+                  categoryName = "Work";
+                }),
+                Navigator.pop(context),
+              },
+              child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Row(
+                  children: const [
+                    Text(
+                      "Work   ",
+                      style: TextStyle(
+                          fontFamily: 'mplus',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                          color: Colors.grey),
                     ),
-                  ),
-                  GestureDetector(
-                    onTap: () => {
-                      setState(() {
-                        categoryName = "Personal";
-                      }),
-                      Navigator.pop(context),
-                    },
-                    child:  Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Text(
-                            "Personal   ",
-                            style: TextStyle(
-                                fontFamily: 'mplus',
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                                color: Colors.grey),
-
-                          ),
-                          Icon(Icons.person_pin_outlined,
-                            size: 15,
-                            color: Colors.grey,)
-                        ],
-                      ),
-
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () => {
-                      setState(() {
-                        categoryName = "Watchlist";
-                      }),
-                      Navigator.pop(context),
-                    },
-                    child:  Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Text(
-                            "Watchlist   ",
-                            style: TextStyle(
-                                fontFamily: 'mplus',
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                                color: Colors.grey),
-                          ),
-                          Icon(Icons.remove_red_eye,
-                            size: 15,
-                            color: Colors.grey,)
-                        ],
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () => {
-                      setState(() {
-                        categoryName = "Birthday";
-                      }),
-                      Navigator.pop(context),
-                    },
-                    child:  Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Text(
-                            "Birthday   ",
-                            style: TextStyle(
-                                fontFamily: 'mplus',
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                                color: Colors.grey),
-                          ),
-                          Icon(Icons.celebration,
-                            size: 15,
-                            color: Colors.grey,)
-                        ],
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () => {
-                      setState(() {
-                        categoryName = "Urgent";
-                      }),
-                      Navigator.pop(context),
-                    },
-                    child:  Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Text(
-                            "Urgent   ",
-                            style: TextStyle(
-                                fontFamily: 'mplus',
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                                color: Colors.grey),
-                          ),
-                          Icon(Icons.label_important_outline_sharp,
-                            size: 15,
-                            color: Colors.grey,)
-                        ],
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () => {
-                      setState(() {
-                        categoryName = "Important";
-                      }),
-                      Navigator.pop(context),
-                    },
-                    child:  Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Text(
-                            "Important   ",
-                            style: TextStyle(
-                                fontFamily: 'mplus',
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                                color: Colors.grey),
-                          ),
-                          Icon(Icons.account_tree_rounded,
-                            size: 15,
-                            color: Colors.grey,)
-                        ],
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () => {
-                      setState(() {
-                        categoryName = "Home";
-                      }),
-                      Navigator.pop(context),
-                    },
-                    child:  Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Text(
-                            "Home  ",
-                            style: TextStyle(
-                                fontFamily: 'mplus',
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                                color: Colors.grey),
-                          ),
-                          Icon(Icons.home,
-                            size: 15,
-                            color: Colors.grey,)
-                        ],
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () => {
-                      setState(() {
-                        categoryName = "Others";
-                      }),
-                      Navigator.pop(context),
-                    },
-                    child:  Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Text(
-                            "Others   ",
-                            style: TextStyle(
-                                fontFamily: 'mplus',
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                                color: Colors.grey),
-                          ),
-                          Icon(Icons.devices_other,
-                            size: 15,
-                            color: Colors.grey,)
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
+                    Icon(
+                      Icons.work_history_outlined,
+                      size: 15,
+                      color: Colors.grey,
+                    )
+                  ],
+                ),
               ),
             ),
-        onPop: () => print('Popover was popped!'),
-        direction: PopoverDirection.bottom,
-        width: 120,
-        height: MediaQuery.of(context).size.height / 3,
-        arrowHeight: 15,
-        arrowWidth: 25,
-        backgroundColor: Colors.white,
-        barrierColor: Colors.transparent,
-        transitionDuration: Duration(milliseconds: 500),);
+            GestureDetector(
+              onTap: () => {
+                setState(() {
+                  categoryName = "Personal";
+                }),
+                Navigator.pop(context),
+              },
+              child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Text(
+                      "Personal   ",
+                      style: TextStyle(
+                          fontFamily: 'mplus',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                          color: Colors.grey),
+                    ),
+                    Icon(
+                      Icons.person_pin_outlined,
+                      size: 15,
+                      color: Colors.grey,
+                    )
+                  ],
+                ),
+              ),
+            ),
+            GestureDetector(
+              onTap: () => {
+                setState(() {
+                  categoryName = "Watchlist";
+                }),
+                Navigator.pop(context),
+              },
+              child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Text(
+                      "Watchlist   ",
+                      style: TextStyle(
+                          fontFamily: 'mplus',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                          color: Colors.grey),
+                    ),
+                    Icon(
+                      Icons.remove_red_eye,
+                      size: 15,
+                      color: Colors.grey,
+                    )
+                  ],
+                ),
+              ),
+            ),
+            GestureDetector(
+              onTap: () => {
+                setState(() {
+                  categoryName = "Birthday";
+                }),
+                Navigator.pop(context),
+              },
+              child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Text(
+                      "Birthday   ",
+                      style: TextStyle(
+                          fontFamily: 'mplus',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                          color: Colors.grey),
+                    ),
+                    Icon(
+                      Icons.celebration,
+                      size: 15,
+                      color: Colors.grey,
+                    )
+                  ],
+                ),
+              ),
+            ),
+            GestureDetector(
+              onTap: () => {
+                setState(() {
+                  categoryName = "Urgent";
+                }),
+                Navigator.pop(context),
+              },
+              child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Text(
+                      "Urgent   ",
+                      style: TextStyle(
+                          fontFamily: 'mplus',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                          color: Colors.grey),
+                    ),
+                    Icon(
+                      Icons.label_important_outline_sharp,
+                      size: 15,
+                      color: Colors.grey,
+                    )
+                  ],
+                ),
+              ),
+            ),
+            GestureDetector(
+              onTap: () => {
+                setState(() {
+                  categoryName = "Important";
+                }),
+                Navigator.pop(context),
+              },
+              child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Text(
+                      "Important   ",
+                      style: TextStyle(
+                          fontFamily: 'mplus',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                          color: Colors.grey),
+                    ),
+                    Icon(
+                      Icons.account_tree_rounded,
+                      size: 15,
+                      color: Colors.grey,
+                    )
+                  ],
+                ),
+              ),
+            ),
+            GestureDetector(
+              onTap: () => {
+                setState(() {
+                  categoryName = "Home";
+                }),
+                Navigator.pop(context),
+              },
+              child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Text(
+                      "Home  ",
+                      style: TextStyle(
+                          fontFamily: 'mplus',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                          color: Colors.grey),
+                    ),
+                    Icon(
+                      Icons.home,
+                      size: 15,
+                      color: Colors.grey,
+                    )
+                  ],
+                ),
+              ),
+            ),
+            GestureDetector(
+              onTap: () => {
+                setState(() {
+                  categoryName = "Others";
+                }),
+                Navigator.pop(context),
+              },
+              child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Text(
+                      "Others   ",
+                      style: TextStyle(
+                          fontFamily: 'mplus',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                          color: Colors.grey),
+                    ),
+                    Icon(
+                      Icons.devices_other,
+                      size: 15,
+                      color: Colors.grey,
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      onPop: () => print('Popover was popped!'),
+      direction: PopoverDirection.bottom,
+      width: 120,
+      height: MediaQuery.of(context).size.height / 3,
+      arrowHeight: 15,
+      arrowWidth: 25,
+      backgroundColor: Colors.white,
+      barrierColor: Colors.transparent,
+      transitionDuration: Duration(milliseconds: 500),
+    );
   }
 
   Card createCard() {

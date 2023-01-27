@@ -38,12 +38,17 @@ class _AllTaskState extends State<AllTask> {
   void initState() {
     initializeDateFormatting('pt_BR', null);
     myBanner.load();
-    _loadInterstitialAd();
 
-    Future.delayed(const Duration(seconds: 60), () {
-      _interstitialAd?.show();
-
-    });
+    if (Constants.adCount == 0) {
+      print(
+          ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> outer: ${Constants.adCount}");
+      _loadInterstitialAd();
+      Future.delayed(const Duration(seconds: 60), () {
+        print(
+            ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> inner: ${Constants.adCount}");
+        _interstitialAd?.show();
+      });
+    }
     super.initState();
   }
 
@@ -53,8 +58,6 @@ class _AllTaskState extends State<AllTask> {
     request: AdRequest(),
     listener: BannerAdListener(),
   );
-
-
 
   /// Returns the difference (in full days) between the provided date and today.
   /// Yesterday : calculateDifference(date) == -1.
@@ -83,8 +86,6 @@ class _AllTaskState extends State<AllTask> {
     }
   }
 
-
-
   // TODO: Add _interstitialAd
 
   InterstitialAd? _interstitialAd;
@@ -97,27 +98,23 @@ class _AllTaskState extends State<AllTask> {
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (ad) {
           ad.fullScreenContentCallback = FullScreenContentCallback(
-            onAdDismissedFullScreenContent: (ad) {
-
-            },
+            onAdDismissedFullScreenContent: (ad) {},
           );
-
           setState(() {
             _interstitialAd = ad;
+            Constants.adCount = 1;
           });
         },
         onAdFailedToLoad: (err) {
+          Constants.adCount = 0;
           print('Failed to load an interstitial ad: ${err.message}');
         },
       ),
     );
   }
 
-
-
   @override
   Widget build(BuildContext context) {
-
     final AdWidget adWidget = AdWidget(ad: myBanner);
     final Container adContainer = Container(
       alignment: Alignment.center,
@@ -129,7 +126,7 @@ class _AllTaskState extends State<AllTask> {
       physics: AlwaysScrollableScrollPhysics(),
       child: Column(
         children: [
-         adContainer,
+          adContainer,
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
